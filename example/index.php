@@ -4,24 +4,13 @@ error_reporting (E_ALL);
 
 require_once '../vendor/autoload.php';
 
+// Initialize router
 $router = new \Neuron\Router ();
 
-$router->get ('/response', function () {
+// Add the signin module
+$signin = new \CatLab\Signin\ModuleController ();
+$signin->addAuthenticator (new Password ());
 
-    return \Neuron\Net\Response::json (array ('test'));
-
-});
-
-$router->get ('/string', function () {
-
-    return 'String';
-
-});
-
-$router->get ('/void', function () {
-
-    echo 'void';
-
-});
+$router->module ('/login', $signin);
 
 $router->run ();

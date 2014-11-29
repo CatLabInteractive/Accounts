@@ -26,8 +26,8 @@
     }
   ],
   "autoload": {
-    "psr-0" : {
-      "CatLab/Signin" : "src"
+    "psr-4" : {
+      "CatLab\\Signin\\" : "src/CatLab/Signin"
     }
   }
 }
