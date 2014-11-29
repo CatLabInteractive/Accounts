@@ -1,4 +1,6 @@
-<?php $this->layout ('index.phpt'); ?>
+<?php
+	$this->layout ('index.phpt');
+?>
 
 		<p>Welcome to the world of tomorrow!</p>
 

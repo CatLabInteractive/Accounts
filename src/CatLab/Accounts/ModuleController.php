@@ -26,7 +26,10 @@ class ModuleController
      */
     public function initialize ()
     {
-        Template::addPath (dirname (__FILE__) . '/templates/', 'CatLab/Signin/');
+        Template::addPath (__DIR__ . '/templates/', 'CatLab/Accounts/');
+
+        // Add locales
+        \Neuron\Tools\Text::getInstance ()->addPath ('catlab.accounts', __DIR__ . '/locales/');
 
         // Add helper methods
         $helper = new LoginForm ($this);

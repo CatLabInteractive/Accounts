@@ -9,15 +9,19 @@
 namespace CatLab\Accounts\Helpers;
 
 use CatLab\Accounts\ModuleController;
+use Neuron\Core\Template;
+use Neuron\Core\Tools;
 
 class LoginForm {
+
+	private $moduleController;
 
 	/**
 	 * @param ModuleController $controller
 	 */
 	public function __construct (ModuleController $controller)
 	{
-
+		$this->moduleController = $controller;
 	}
 
 	/**
@@ -25,6 +29,11 @@ class LoginForm {
 	 */
 	public function smallForm ()
 	{
+		$template = new Template ('CatLab/Accounts/helpers/form-small.phpt');
 
+		$template->set ('action', '');
+		$template->set ('email', Tools::getInput ($_POST, 'email', 'varchar'));
+
+		return $template->parse ();
 	}
 }

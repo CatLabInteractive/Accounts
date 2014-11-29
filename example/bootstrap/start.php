@@ -30,5 +30,8 @@ switch ($hostname)
 // Set the template folder
 \Neuron\Core\Template::addPath (__DIR__ . '/../templates/');
 
+// Always set a locale
+$app->setLocale ('nl_BE.utf8');
+
 // Return app
 return $app;
