@@ -5,9 +5,9 @@
  * Date: 29/11/14
  * Time: 11:46
  */
-namespace CatLab\Signin\Authenticators;
+namespace CatLab\Accounts\Authenticators;
 
-use CatLab\Signin\Interfaces\Authenticator;
+use CatLab\Accounts\Interfaces\Authenticator;
 
 class Password
 	implements Authenticator

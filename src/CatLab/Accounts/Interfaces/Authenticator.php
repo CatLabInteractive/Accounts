@@ -6,7 +6,7 @@
  * Time: 11:47
  */
 
-namespace CatLab\Signin\Interfaces;
+namespace CatLab\Accounts\Interfaces;
 
 interface Authenticator {
 

@@ -6,7 +6,7 @@
  * Time: 10:49
  */
 
-namespace CatLab\Signin\Controllers;
+namespace CatLab\Accounts\Controllers;
 
 use Neuron\Core\Template;
 use Neuron\Net\Response;

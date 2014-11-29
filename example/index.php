@@ -8,8 +8,8 @@ require_once '../vendor/autoload.php';
 $router = new \Neuron\Router ();
 
 // Add the signin module
-$signin = new \CatLab\Signin\ModuleController ();
-$signin->addAuthenticator (new \CatLab\Signin\Authenticators\Password ());
+$signin = new \CatLab\Accounts\ModuleController ();
+$signin->addAuthenticator (new \CatLab\Accounts\Authenticators\Password ());
 
 $router->module ('/login', $signin);
 

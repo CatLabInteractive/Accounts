@@ -6,9 +6,9 @@
  * Time: 14:34
  */
 
-namespace CatLab\Signin;
+namespace CatLab\Accounts;
 
-use CatLab\Signin\Interfaces\Authenticator;
+use CatLab\Accounts\Interfaces\Authenticator;
 use Neuron\Core\Template;
 use Neuron\Interfaces\Module;
 use Neuron\Router;
@@ -33,8 +33,8 @@ class ModuleController
      */
     public function setRoutes (Router $router, $prefix)
     {
-        $router->match ('GET|POST', $prefix . '/login', '\CatLab\Signin\Controllers\LoginController@login');
-        $router->match ('GET|POST', $prefix . '/register', '\CatLab\Signin\Controllers\RegisterController@register');
+        $router->match ('GET|POST', $prefix . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
+        $router->match ('GET|POST', $prefix . '/register', '\CatLab\Accounts\Controllers\RegisterController@register');
     }
 
     /**
