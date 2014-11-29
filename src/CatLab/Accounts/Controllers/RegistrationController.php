@@ -12,19 +12,14 @@ use Neuron\Core\Template;
 use Neuron\Net\Response;
 use Neuron\URLBuilder;
 
-class LoginController {
+class RegistrationController {
 
-    public function login ()
+    public function register ()
     {
-        $template = new Template ('CatLab/Signin/login.phpt');
-        $template->set ('action', URLBuilder::getURL ('login/login'));
-        return Response::template ($template);
-    }
+        $template = new Template ('CatLab/Signin/register.phpt');
 
-    public function logout ()
-    {
-        $template = new Template ('CatLab/Signin/logout.phpt');
         $template->set ('action', URLBuilder::getURL ('login/login'));
+
         return Response::template ($template);
     }
 

@@ -8,6 +8,7 @@
 
 namespace CatLab\Accounts;
 
+use CatLab\Accounts\Helpers\LoginForm;
 use CatLab\Accounts\Interfaces\Authenticator;
 use Neuron\Core\Template;
 use Neuron\Interfaces\Module;
@@ -16,13 +17,21 @@ use Neuron\Router;
 class ModuleController
     implements Module
 {
+    /** @var Authenticator[] $authenticators */
+    private $authenticators = array ();
+
     /**
      * Set template paths, config vars, etc
      * @return void
      */
     public function initialize ()
     {
-        Template::addTemplatePath (dirname (__FILE__) . '/templates/', 'CatLab/Signin/');
+        Template::addPath (dirname (__FILE__) . '/templates/', 'CatLab/Signin/');
+
+        // Add helper methods
+        $helper = new LoginForm ($this);
+
+        Template::addHelper ('CatLab.Accounts.LoginForm', $helper);
     }
 
     /**
@@ -34,7 +43,9 @@ class ModuleController
     public function setRoutes (Router $router, $prefix)
     {
         $router->match ('GET|POST', $prefix . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
-        $router->match ('GET|POST', $prefix . '/register', '\CatLab\Accounts\Controllers\RegisterController@register');
+        $router->match ('GET', $prefix . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
+
+        $router->match ('GET|POST', $prefix . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
     }
 
     /**
@@ -43,6 +54,6 @@ class ModuleController
      */
     public function addAuthenticator (Authenticator $authenticator)
     {
-
+        $this->authenticators[] = $authenticator;
     }
 }
