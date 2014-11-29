@@ -9,7 +9,7 @@ $router = new \Neuron\Router ();
 
 // Add the signin module
 $signin = new \CatLab\Signin\ModuleController ();
-$signin->addAuthenticator (new Password ());
+$signin->addAuthenticator (new \CatLab\Signin\Authenticators\Password ());
 
 $router->module ('/login', $signin);
 
