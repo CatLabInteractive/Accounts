@@ -1,25 +1,22 @@
 <?php $this->textdomain ('catlab.accounts'); ?>
 
-<form method="post" action="<?php echo $action; ?>">
-	<fieldset>
+<form method="post" action="<?php echo $action; ?>" role="form" class="form-inline">
 
-		<legend><?php echo sprintf ($this->gettext ('Welcome, %s'), 'Guest'); ?></legend>
+	<div class="form-group">
+		<label for="email"><?php echo $this->gettext ('Email address'); ?></label>
+		<input type="text" class="form-control" id="email" name="email" value="<?php echo $email; ?>" placeholder="<?php echo $this->gettext ('Enter email'); ?>" />
+	</div>
 
-		<ol>
-			<li>
-				<label for="email"><?php echo $this->gettext ('Email'); ?></label>
-				<input type="text" id="email" name="email" value="<?php echo $email; ?>" placeholder="<?php echo $this->gettext ('Email'); ?>" />
-			</li>
+	<div class="form-group">
+		<label for="password"><?php echo $this->gettext ('Password'); ?></label>
+		<input type="password" class="form-control" id="password" name="password" placeholder="<?php echo $this->gettext ('Password'); ?>" />
+	</div>
 
-			<li>
-				<label for="password"><?php echo $this->gettext ('Password'); ?></label>
-				<input type="password" id="password" name="password" placeholder="<?php echo $this->gettext ('Password'); ?>" />
-			</li>
+	<div class="checkbox">
+		<label>
+			<input type="checkbox" name="rememberme" id="rememberme"> Remember me
+		</label>
+	</div>
 
-			<li>
-				<button type="submit"><?php echo $this->gettext ('Login'); ?></button>
-			</li>
-		</ol>
-
-	</fieldset>
+	<button type="submit"><?php echo $this->gettext ('Login'); ?></button>
 </form>

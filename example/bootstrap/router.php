@@ -8,6 +8,7 @@ $signinmodule = new \CatLab\Accounts\ModuleController ();
 
 $password = new \CatLab\Accounts\Authenticators\Password ();
 $signinmodule->addAuthenticator ($password);
+$signinmodule->setLayout ('index-account.phpt');
 
 // Make the module available on /account
 $router->module ('/account', $signinmodule);

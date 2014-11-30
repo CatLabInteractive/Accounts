@@ -13,13 +13,14 @@ use Neuron\Core\Tools;
 use Neuron\Net\Response;
 use Neuron\URLBuilder;
 
-class RegistrationController {
+class RegistrationController
+    extends Base {
 
     public function register ()
     {
         $template = new Template ('CatLab/Accounts/register.phpt');
 
-        $template->set ('action', URLBuilder::getURL ('login/register'));
+        $template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/register'));
         $template->set ('email', Tools::getInput ($_POST, 'email', 'varchar'));
 
         return Response::template ($template);

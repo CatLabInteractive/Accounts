@@ -13,6 +13,7 @@ use CatLab\Accounts\Interfaces\Authenticator;
 use Neuron\Core\Template;
 use Neuron\Interfaces\Module;
 use Neuron\Router;
+use Neuron\Tools\Text;
 
 class ModuleController
     implements Module
@@ -20,16 +21,27 @@ class ModuleController
     /** @var Authenticator[] $authenticators */
     private $authenticators = array ();
 
+    /** @var string $layout */
+    private $layout = 'index.phpt';
+
+    /** @var string $routepath */
+    private $routepath;
+
     /**
      * Set template paths, config vars, etc
+     * @param string $routepath The prefix that should be added to all route paths.
      * @return void
      */
-    public function initialize ()
+    public function initialize ($routepath)
     {
+        // Set path
+        $this->routepath = $routepath;
+
+        // Add templates
         Template::addPath (__DIR__ . '/templates/', 'CatLab/Accounts/');
 
         // Add locales
-        \Neuron\Tools\Text::getInstance ()->addPath ('catlab.accounts', __DIR__ . '/locales/');
+        Text::getInstance ()->addPath ('catlab.accounts', __DIR__ . '/locales/');
 
         // Add helper methods
         $helper = new LoginForm ($this);
@@ -38,17 +50,24 @@ class ModuleController
     }
 
     /**
+     * @return string
+     */
+    public function getRoutePath ()
+    {
+        return $this->routepath;
+    }
+
+    /**
      * Register the routes required for this module.
      * @param Router $router
-     * @param $prefix
      * @return mixed
      */
-    public function setRoutes (Router $router, $prefix)
+    public function setRoutes (Router $router)
     {
-        $router->match ('GET|POST', $prefix . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
-        $router->match ('GET', $prefix . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
+        $router->match ('GET|POST', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
+        $router->match ('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
 
-        $router->match ('GET|POST', $prefix . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
+        $router->match ('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
     }
 
     /**
@@ -58,5 +77,22 @@ class ModuleController
     public function addAuthenticator (Authenticator $authenticator)
     {
         $this->authenticators[] = $authenticator;
+    }
+
+    /**
+     * Set a layout that will be used for all pages
+     * @param string $layout
+     */
+    public function setLayout ($layout)
+    {
+        $this->layout = $layout;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLayout ()
+    {
+        return $this->layout;
     }
 }
