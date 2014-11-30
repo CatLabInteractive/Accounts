@@ -8,15 +8,16 @@
 
 namespace CatLab\Accounts\Controllers;
 
-use CatLab\Accounts\MapperFactory;
 use Neuron\Core\Template;
-use Neuron\Core\Tools;
 use Neuron\Net\Response;
 use Neuron\URLBuilder;
 
 class LoginController
 	extends Base
 {
+    /**
+     * @return Response
+     */
 	public function login ()
 	{
 		$template = new Template ('CatLab/Accounts/login.phpt');
@@ -36,6 +37,10 @@ class LoginController
 		return Response::template ($template);
 	}
 
+    /**
+     * @param $token
+     * @return Response
+     */
 	public function authenticator ($token)
 	{
 		$authenticator = $this->module->getAuthenticators ()->getFromToken ($token);
@@ -47,7 +52,7 @@ class LoginController
 
         $authenticator->setRequest ($this->request);
 
-        return $authenticator->process ();
+        return $authenticator->login ();
 	}
 
 	private function postLoginRedirect ()

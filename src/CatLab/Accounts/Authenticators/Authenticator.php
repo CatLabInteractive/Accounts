@@ -11,6 +11,7 @@ namespace CatLab\Accounts\Authenticators;
 
 use CatLab\Accounts\Module;
 use Neuron\Net\Request;
+use Neuron\Net\Response;
 
 abstract class Authenticator {
 
@@ -58,7 +59,15 @@ abstract class Authenticator {
 		return $this->token;
 	}
 
-	public abstract function process ();
+	/**
+	 * @return Response
+	 */
+	public function register ()
+	{
+		return Response::error ('Authenticator does not have register method.', Response::STATUS_NOTFOUND);
+	}
+
+	public abstract function login ();
 
 	public abstract function getForm ();
 }

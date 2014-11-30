@@ -26,7 +26,7 @@ class Password
 		return $template->parse ();
 	}
 
-	public function process ()
+	public function login ()
 	{
 		$template = new Template ('CatLab/Accounts/authenticators/password/page.phpt');
 

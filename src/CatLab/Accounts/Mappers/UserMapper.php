@@ -7,7 +7,11 @@
  */
 namespace CatLab\Accounts\Mappers;
 
-class UserMapper {
+use CatLab\Accounts\Models\User;
+
+class UserMapper
+	implements \CatLab\Accounts\Interfaces\UserMapper
+{
 
 	/**
 	 * @param $email
@@ -28,4 +32,12 @@ class UserMapper {
 		return null;
 	}
 
+	/**
+	 * @param User $user
+	 * @return User
+	 */
+	public function create (User $user)
+	{
+		// TODO: Implement create() method.
+	}
 }
