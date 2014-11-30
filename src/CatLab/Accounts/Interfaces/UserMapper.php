@@ -19,6 +19,12 @@ interface UserMapper {
 	public function create (User $user);
 
 	/**
+	 * @param User $user
+	 * @return User
+	 */
+	public function update (User $user);
+
+	/**
 	 * @param $email
 	 * @param $password
 	 * @return \CatLab\Accounts\Models\User|null

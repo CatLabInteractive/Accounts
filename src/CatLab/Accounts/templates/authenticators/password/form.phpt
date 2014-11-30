@@ -18,4 +18,8 @@
 
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $this->gettext ('Sign in'); ?></button>
 
+	<p class="register">
+		<a href="<?php echo $register; ?>"><?php echo $this->gettext ('Register a new account'); ?></a>
+	</p>
+
 </form>

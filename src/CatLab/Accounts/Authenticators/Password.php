@@ -21,6 +21,8 @@ class Password
 		$template = new Template ('CatLab/Accounts/authenticators/password/form.phpt');
 
 		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ()));
+		$template->set ('register', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken ()));
+
 		$template->set ('email', $this->request->input ('email'));
 
 		return $template->parse ();
@@ -50,7 +52,10 @@ class Password
 		}
 
 		$template->set ('layout', $this->module->getLayout ());
+
 		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ()));
+		$template->set ('register', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken ()));
+
 		$template->set ('email', $this->request->input ('email'));
 
 		return Response::template ($template);

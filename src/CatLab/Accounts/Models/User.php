@@ -19,6 +19,9 @@ class User {
 	/** @var string $password */
 	private $password;
 
+	/** @var string $passwordhash */
+	private $passwordhash;
+
 	public function __construct ()
 	{
 
@@ -72,5 +75,19 @@ class User {
 		$this->password = $password;
 	}
 
+	/**
+	 * @param string $hash
+	 */
+	public function setPasswordHash ($hash)
+	{
+		$this->passwordhash = $hash;
+	}
 
+	/**
+	 * @return string
+	 */
+	public function getPasswordHash ()
+	{
+		return $this->passwordhash;
+	}
 }

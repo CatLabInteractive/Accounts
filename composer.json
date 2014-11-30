@@ -14,7 +14,8 @@
   ],
 
   "require": {
-    "catlabinteractive/neuron": "dev-master"
+    "catlabinteractive/neuron": "dev-master",
+    "ircmaxell/password-compat" : "dev-master"
   },
 
   "authors" : [
