@@ -1,8 +1,9 @@
 <?php
 	$this->layout ('index.phpt');
+	$this->textdomain ('example');
 ?>
 
-		<p>Welcome to the world of tomorrow!</p>
+		<p><?php echo $this->gettext ('Welcome to the world of tomorrow!'); ?></p>
 
 		<ul>
 			<li>

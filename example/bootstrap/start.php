@@ -33,5 +33,8 @@ switch ($hostname)
 // Always set a locale
 $app->setLocale ('nl_BE.utf8');
 
+// Set the local language folder
+\Neuron\Tools\Text::getInstance ()->addPath ('example', __DIR__ . '/../locales/');
+
 // Return app
 return $app;
