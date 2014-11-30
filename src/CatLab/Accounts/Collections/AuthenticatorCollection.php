@@ -13,6 +13,7 @@ use Neuron\Collections\TokenizedCollection;
 class AuthenticatorCollection
 	extends TokenizedCollection
 {
+	private $library = array ();
 
 	public function __construct ()
 	{
@@ -20,11 +21,23 @@ class AuthenticatorCollection
 		$this->on ('add', array ($this, 'onAdd'));
 	}
 
+	public function getFromToken ($token)
+	{
+		if (isset ($this->library[$token]))
+		{
+			return $this[$this->library[$token]];
+		}
+	}
+
 	/**
 	 * @param Authenticator $authenticator
+	 * @param $index
 	 */
-	protected function onAdd (Authenticator $authenticator)
+	protected function onAdd (Authenticator $authenticator, $index)
 	{
-		$authenticator->setToken ($this->generateToken ($authenticator));
+		$token = $this->generateToken ($authenticator);
+
+		$authenticator->setToken ($token);
+		$this->library[$token] = $index;
 	}
 }

@@ -57,4 +57,8 @@ abstract class Authenticator {
 	{
 		return $this->token;
 	}
+
+	public abstract function process ();
+
+	public abstract function getForm ();
 }

@@ -72,7 +72,9 @@ class Module
      */
     public function setRoutes (Router $router)
     {
-        $router->match ('GET|POST', $this->routepath . '/login/{authenticator?}', '\CatLab\Accounts\Controllers\LoginController@login');
+        $router->match ('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
+        $router->match ('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
+
         $router->match ('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
 
         $router->match ('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
@@ -89,7 +91,7 @@ class Module
     }
 
     /**
-     * @return Authenticator[]
+     * @return AuthenticatorCollection
      */
     public function getAuthenticators ()
     {

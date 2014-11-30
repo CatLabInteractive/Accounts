@@ -15,58 +15,53 @@ use Neuron\Net\Response;
 use Neuron\URLBuilder;
 
 class LoginController
-    extends Base
+	extends Base
 {
-    public function login ($authenticatorToken = null)
-    {
-        $template = new Template ('CatLab/Accounts/login.phpt');
+	public function login ()
+	{
+		$template = new Template ('CatLab/Accounts/login.phpt');
 
-        if ($this->request->isPost ())
+		$template->set ('layout', $this->module->getLayout ());
+		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login'));
+		$template->set ('email', $this->request->input ('email'));
+
+		$authenticators = $this->module->getAuthenticators ();
+		foreach ($authenticators as $v)
+		{
+			$v->setRequest ($this->request);
+		}
+
+		$template->set ('authenticators', $authenticators);
+
+		return Response::template ($template);
+	}
+
+	public function authenticator ($token)
+	{
+		$authenticator = $this->module->getAuthenticators ()->getFromToken ($token);
+
+        if (!$authenticator)
         {
-            $email = $this->request->input ('email', 'email');
-            $password = $this->request->input ('password');
-
-            if ($email && $password)
-            {
-                $response = $this->processLogin ($email, $password);
-                if ($response instanceof Response)
-                {
-                    return $response;
-                }
-                else if (is_string ($response))
-                {
-                    $template->set ('error', $response);
-                }
-            }
+            return Response::error ('Authenticator not found', Response::STATUS_NOTFOUND);
         }
 
-        $template->set ('layout', $this->module->getLayout ());
-        $template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login'));
-        $template->set ('email', $this->request->input ('email'));
+        $authenticator->setRequest ($this->request);
 
-        $authenticators = $this->module->getAuthenticators ();
-        foreach ($authenticators as $v)
-        {
-            $v->setRequest ($this->request);
-        }
+        return $authenticator->process ();
+	}
 
-        $template->set ('authenticators', $authenticators);
+	private function postLoginRedirect ()
+	{
+		return Response::redirect (URLBuilder::getURL ('/'));
+	}
 
-        return Response::template ($template);
-    }
+	public function logout ()
+	{
+		$template = new Template ('CatLab/Accounts/logout.phpt');
 
-    private function postLoginRedirect ()
-    {
-        return Response::redirect (URLBuilder::getURL ('/'));
-    }
+		$template->set ('layout', $this->module->getLayout ());
+		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login'));
 
-    public function logout ()
-    {
-        $template = new Template ('CatLab/Accounts/logout.phpt');
-
-        $template->set ('layout', $this->module->getLayout ());
-        $template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login'));
-
-        return Response::template ($template);
-    }
+		return Response::template ($template);
+	}
 }

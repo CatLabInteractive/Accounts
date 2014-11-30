@@ -20,6 +20,16 @@ class Password
 	{
 		$template = new Template ('CatLab/Accounts/authenticators/password/form.phpt');
 
+		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ()));
+		$template->set ('email', $this->request->input ('email'));
+
+		return $template->parse ();
+	}
+
+	public function process ()
+	{
+		$template = new Template ('CatLab/Accounts/authenticators/password/page.phpt');
+
 		if ($this->request->isPost ())
 		{
 			$email = $this->request->input ('email', 'email');
@@ -42,9 +52,8 @@ class Password
 		$template->set ('layout', $this->module->getLayout ());
 		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ()));
 		$template->set ('email', $this->request->input ('email'));
-		$template->set ('authenticators', $this->module->getAuthenticators ());
 
-		return $template->parse ();
+		return Response::template ($template);
 	}
 
 	/**
