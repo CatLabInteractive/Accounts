@@ -4,7 +4,7 @@
 $router = new \Neuron\Router ();
 
 // Accounts module
-$signinmodule = new \CatLab\Accounts\ModuleController ();
+$signinmodule = new \CatLab\Accounts\Module ();
 
 $password = new \CatLab\Accounts\Authenticators\Password ();
 $signinmodule->addAuthenticator ($password);

@@ -17,7 +17,7 @@ use Neuron\URLBuilder;
 class LoginController
     extends Base
 {
-    public function login ()
+    public function login ($authenticatorToken = null)
     {
         $template = new Template ('CatLab/Accounts/login.phpt');
 
@@ -44,36 +44,15 @@ class LoginController
         $template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login'));
         $template->set ('email', $this->request->input ('email'));
 
-        return Response::template ($template);
-    }
-
-    /**
-     * Return an error (string) or redirect
-     * @param $email
-     * @param $password
-     * @return string|Response
-     */
-    private function processLogin ($email, $password)
-    {
-        $user = MapperFactory::getUserMapper ()->getFromLogin ($email, $password);
-
-        if ($user)
+        $authenticators = $this->module->getAuthenticators ();
+        foreach ($authenticators as $v)
         {
-            // Everything okay
-            return $this->postLoginRedirect ();
+            $v->setRequest ($this->request);
         }
 
-        else {
-            // Check if we have this email address
-            $user = MapperFactory::getUserMapper ()->getFromEmail ($email);
-            if ($user)
-            {
-                return 'PASSWORD_INCORRECT';
-            }
-            else {
-                return 'USER_NOT_FOUND';
-            }
-        }
+        $template->set ('authenticators', $authenticators);
+
+        return Response::template ($template);
     }
 
     private function postLoginRedirect ()

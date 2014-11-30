@@ -8,17 +8,16 @@
 
 namespace CatLab\Accounts\Controllers;
 
-use CatLab\Accounts\ModuleController;
+use CatLab\Accounts\Module;
 use Neuron\Exceptions\InvalidParameter;
 use Neuron\Interfaces\Controller;
-use Neuron\Interfaces\Module;
 use Neuron\Net\Request;
 
 abstract class Base
 	implements Controller
 {
 
-	/** @var ModuleController $module */
+	/** @var Module $module */
 	protected $module;
 
 	/** @var  Request $request */
@@ -26,12 +25,12 @@ abstract class Base
 
 	/**
 	 * Controllers must know what module they are from.
-	 * @param Module $module
+	 * @param \Neuron\Interfaces\Module $module
 	 * @throws InvalidParameter
 	 */
-	public function __construct (Module $module = null)
+	public function __construct (\Neuron\Interfaces\Module $module = null)
 	{
-		if (! ($module instanceof ModuleController))
+		if (! ($module instanceof Module))
 		{
 			throw new InvalidParameter ("Controller must be instanciated with a \\CatLab\\Accounts\\ModuleController. Instance of " . get_class ($module) . " given.");
 		}

@@ -8,24 +8,32 @@
 
 namespace CatLab\Accounts;
 
+use CatLab\Accounts\Collections\AuthenticatorCollection;
 use CatLab\Accounts\Helpers\LoginForm;
-use CatLab\Accounts\Interfaces\Authenticator;
+use CatLab\Accounts\Authenticators\Authenticator;
 use Neuron\Core\Template;
-use Neuron\Interfaces\Module;
 use Neuron\Router;
 use Neuron\Tools\Text;
 
-class ModuleController
-    implements Module
+class Module
+    implements \Neuron\Interfaces\Module
 {
-    /** @var Authenticator[] $authenticators */
-    private $authenticators = array ();
+    /** @var AuthenticatorCollection $authenticators */
+    private $authenticators;
 
     /** @var string $layout */
     private $layout = 'index.phpt';
 
     /** @var string $routepath */
     private $routepath;
+
+    /**
+     *
+     */
+    public function __construct ()
+    {
+        $this->authenticators = new AuthenticatorCollection ();
+    }
 
     /**
      * Set template paths, config vars, etc
@@ -76,7 +84,16 @@ class ModuleController
      */
     public function addAuthenticator (Authenticator $authenticator)
     {
+        $authenticator->setModule ($this);
         $this->authenticators[] = $authenticator;
+    }
+
+    /**
+     * @return Authenticator[]
+     */
+    public function getAuthenticators ()
+    {
+        return $this->authenticators;
     }
 
     /**

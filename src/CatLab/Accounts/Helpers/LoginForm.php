@@ -8,7 +8,7 @@
 
 namespace CatLab\Accounts\Helpers;
 
-use CatLab\Accounts\ModuleController;
+use CatLab\Accounts\Module;
 use Neuron\Core\Template;
 use Neuron\Core\Tools;
 
@@ -17,9 +17,9 @@ class LoginForm {
 	private $moduleController;
 
 	/**
-	 * @param ModuleController $controller
+	 * @param Module $controller
 	 */
-	public function __construct (ModuleController $controller)
+	public function __construct (Module $controller)
 	{
 		$this->moduleController = $controller;
 	}
