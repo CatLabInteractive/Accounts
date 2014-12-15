@@ -14,7 +14,7 @@
   ],
 
   "require": {
-    "catlabinteractive/neuron": "2.*",
+    "catlabinteractive/neuron": "dev-master",
     "ircmaxell/password-compat" : "*"
   },
 
