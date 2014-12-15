@@ -1,5 +1,5 @@
 {
-  "name": "catlabinteractive/signin",
+  "name": "catlabinteractive/accounts",
   "type": "library",
   "description": "Very light php framework. Should probably not be used.",
   "keywords": ["framework"],
