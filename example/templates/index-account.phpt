@@ -13,7 +13,5 @@
 			<?php echo $content; ?>
 		</div>
 
-		<div id="debug"><?php var_dump (\Neuron\Application::getInstance()->getRouter ()->getRequest ()->getSession ()->all ()); ?></div>
-
 	</body>
 </html>

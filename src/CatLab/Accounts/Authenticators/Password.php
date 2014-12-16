@@ -93,6 +93,7 @@ class Password
 			}
 		}
 
+		$template->set ('layout', $this->module->getLayout ());
 		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken ()));
 		$template->set ('email', $this->request->input ('email', 'string'));
 		$template->set ('username', $this->request->input ('username', 'string'));

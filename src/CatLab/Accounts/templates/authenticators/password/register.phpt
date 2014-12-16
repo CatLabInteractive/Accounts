@@ -1,5 +1,5 @@
 <?php
-	$this->layout ('index.phpt');
+	$this->layout ($layout);
 	$this->textdomain ('catlab.accounts');
 ?>
 
