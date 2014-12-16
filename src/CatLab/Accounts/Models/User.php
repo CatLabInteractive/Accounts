@@ -8,7 +8,9 @@
 
 namespace CatLab\Accounts\Models;
 
-class User {
+class User
+	implements \Neuron\Interfaces\Models\User
+{
 
 	/** @var int $id */
 	private $id;
@@ -21,6 +23,9 @@ class User {
 
 	/** @var string $passwordhash */
 	private $passwordhash;
+
+	/** @var string $username */
+	private $username;
 
 	public function __construct ()
 	{
@@ -89,5 +94,21 @@ class User {
 	public function getPasswordHash ()
 	{
 		return $this->passwordhash;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUsername ()
+	{
+		return $this->username;
+	}
+
+	/**
+	 * @param string $username
+	 */
+	public function setUsername ($username)
+	{
+		$this->username = $username;
 	}
 }

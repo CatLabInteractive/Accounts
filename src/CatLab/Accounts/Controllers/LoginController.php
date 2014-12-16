@@ -20,6 +20,10 @@ class LoginController
      */
 	public function login ()
 	{
+		// Check if already registered
+		if ($user = $this->request->getUser ())
+			return $this->module->postLogin ($this->request, $user);
+
 		$template = new Template ('CatLab/Accounts/login.phpt');
 
 		$template->set ('layout', $this->module->getLayout ());
@@ -55,18 +59,17 @@ class LoginController
         return $authenticator->login ();
 	}
 
-	private function postLoginRedirect ()
-	{
-		return Response::redirect (URLBuilder::getURL ('/'));
-	}
-
 	public function logout ()
 	{
+		/*
 		$template = new Template ('CatLab/Accounts/logout.phpt');
 
 		$template->set ('layout', $this->module->getLayout ());
 		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login'));
 
 		return Response::template ($template);
+		*/
+
+		return $this->module->logout ($this->request);
 	}
 }

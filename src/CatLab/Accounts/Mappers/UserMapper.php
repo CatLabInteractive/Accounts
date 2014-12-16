@@ -18,9 +18,33 @@ class UserMapper
 {
 	private $table_users;
 
+	/** @var string $error */
+	private $error;
+
 	public function __construct ()
 	{
 		$this->table_users = $this->getTableName ('users');
+	}
+
+	/**
+	 * @param int $id
+	 * @return \CatLab\Accounts\Models\User|null
+	 */
+	public function getFromId ($id)
+	{
+		$query = new Query
+		("
+			SELECT
+				*
+			FROM
+				{$this->table_users}
+			WHERE
+				u_id = ?
+		");
+
+		$query->bindValue (1, $id, Query::PARAM_NUMBER);
+
+		return $this->getSingle ($query->execute ());
 	}
 
 	/**
@@ -40,6 +64,27 @@ class UserMapper
 		");
 
 		$query->bindValue (1, $email);
+
+		return $this->getSingle ($query->execute ());
+	}
+
+	/**
+	 * @param $username
+	 * @return \CatLab\Accounts\Models\User|null
+	 */
+	public function getFromUsername ($username)
+	{
+		$query = new Query
+		("
+			SELECT
+				*
+			FROM
+				{$this->table_users}
+			WHERE
+				u_username = ?
+		");
+
+		$query->bindValue (1, $username);
 
 		return $this->getSingle ($query->execute ());
 	}
@@ -87,6 +132,10 @@ class UserMapper
 		else if ($hash = $user->getPasswordHash ())
 			$data['u_password'] = $hash;
 
+		// Username
+		if ($username = $user->getUsername ())
+			$data['u_username'] = $username;
+
 		return $data;
 	}
 
@@ -104,7 +153,10 @@ class UserMapper
 		$data = $this->prepareFields ($user);
 
 		// Insert
-		Query::insert ($this->table_users, $data)->execute ();
+		$id = Query::insert ($this->table_users, $data)->execute ();
+		$user->setId ($id);
+
+		return $user;
 	}
 
 	/**
@@ -132,6 +184,17 @@ class UserMapper
 		if ($data['u_password'])
 			$user->setPasswordHash ($data['u_password']);
 
+		if ($data['u_username'])
+			$user->setUsername ($data['u_username']);
+
 		return $user;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getError ()
+	{
+		return $this->error;
 	}
 }

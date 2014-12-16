@@ -12,6 +12,10 @@
 
 			<?php echo $this->gettext ('The password you have provided is incorrect.'); ?>
 
+		<?php } else { ?>
+
+			<?php echo $error; ?>
+
 		<?php } ?>
 	</div>
 <?php } ?>

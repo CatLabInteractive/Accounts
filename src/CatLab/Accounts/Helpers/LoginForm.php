@@ -9,8 +9,10 @@
 namespace CatLab\Accounts\Helpers;
 
 use CatLab\Accounts\Module;
+use Neuron\Application;
 use Neuron\Core\Template;
 use Neuron\Core\Tools;
+use Neuron\URLBuilder;
 
 class LoginForm {
 
@@ -29,11 +31,23 @@ class LoginForm {
 	 */
 	public function smallForm ()
 	{
-		$template = new Template ('CatLab/Accounts/helpers/form-small.phpt');
+		$request = Application::getInstance ()->getRouter ()->getRequest ();
 
-		$template->set ('action', '');
-		$template->set ('email', Tools::getInput ($_POST, 'email', 'varchar'));
+		if ($user = $request->getUser ())
+		{
+			$template = new Template ('CatLab/Accounts/helpers/welcome.phpt');
+			$template->set ('user', $user);
+			$template->set ('logout', URLBuilder::getURL ($this->moduleController->getRoutePath ()  . '/logout'));
+			return $template;
+		}
+		else {
 
-		return $template->parse ();
+			$template = new Template ('CatLab/Accounts/helpers/form-small.phpt');
+
+			$template->set ('action', URLBuilder::getURL ($this->moduleController->getRoutePath () . '/login/password', array ('return' => $request->getUrl ())));
+			$template->set ('email', Tools::getInput ($_POST, 'email', 'varchar'));
+
+			return $template;
+		}
 	}
 }

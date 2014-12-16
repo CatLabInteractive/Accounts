@@ -11,9 +11,14 @@ namespace CatLab\Accounts;
 use CatLab\Accounts\Collections\AuthenticatorCollection;
 use CatLab\Accounts\Helpers\LoginForm;
 use CatLab\Accounts\Authenticators\Authenticator;
+use CatLab\Accounts\Models\User;
+use Neuron\Application;
 use Neuron\Core\Template;
+use Neuron\Net\Request;
+use Neuron\Net\Response;
 use Neuron\Router;
 use Neuron\Tools\Text;
+use Neuron\URLBuilder;
 
 class Module
     implements \Neuron\Interfaces\Module
@@ -51,10 +56,80 @@ class Module
         // Add locales
         Text::getInstance ()->addPath ('catlab.accounts', __DIR__ . '/locales/');
 
+        // Set session variable
+        Application::getInstance ()->on ('dispatch:before', array ($this, 'setRequestUser'));
+
         // Add helper methods
         $helper = new LoginForm ($this);
 
         Template::addHelper ('CatLab.Accounts.LoginForm', $helper);
+    }
+
+    /**
+     * Set user from session
+     * @param Request $request
+     */
+    public function setRequestUser (Request $request)
+    {
+        $request->setUserCallback (function (Request $request) {
+
+            $userid = $request->getSession ()->get ('catlab-user-id');
+
+            if ($userid)
+            {
+                $user = MapperFactory::getUserMapper ()->getFromId ($userid);
+                if ($user)
+                    return $user;
+            }
+
+            return null;
+        });
+    }
+
+    /**
+     * Login a specific user
+     * @param Request $request
+     * @param User $user
+     * @return \Neuron\Net\Response
+     */
+    public function login (Request $request, User $user)
+    {
+        $request->getSession ()->set ('catlab-user-id', $user->getId ());
+        return $this->postLogin ($request, $user);
+    }
+
+    /**
+     * Logout user
+     * @param Request $request
+     * @throws \Neuron\Exceptions\DataNotSet
+     * @return \Neuron\Net\Response
+     */
+    public function logout (Request $request)
+    {
+        $request->getSession ()->set ('catlab-user-id', null);
+        return $this->postLogout ($request);
+    }
+
+    /**
+     * Called right after a user is logged in.
+     * Should be a redirect.
+     * @param Request $request
+     * @param \Neuron\Interfaces\Models\User $user
+     * @return \Neuron\Net\Response
+     */
+    public function postLogin (Request $request, \Neuron\Interfaces\Models\User $user)
+    {
+        return Response::redirect (URLBuilder::getURL ('/'));
+    }
+
+    /**
+     * Called after a redirect
+     * @param Request $request
+     * @return Response
+     */
+    public function postLogout (Request $request)
+    {
+        return Response::redirect (URLBuilder::getURL ('/'));
     }
 
     /**
@@ -77,6 +152,7 @@ class Module
 
         $router->match ('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
 
+        $router->match ('GET|POST', $this->routepath . '/register/{authenticator}', '\CatLab\Accounts\Controllers\RegistrationController@authenticator');
         $router->match ('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
     }
 
