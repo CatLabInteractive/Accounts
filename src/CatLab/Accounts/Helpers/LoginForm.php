@@ -29,7 +29,7 @@ class LoginForm {
 	/**
 	 * @return string
 	 */
-	public function smallForm ()
+	public function helper ()
 	{
 		$request = Application::getInstance ()->getRouter ()->getRequest ();
 
