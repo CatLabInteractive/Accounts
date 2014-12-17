@@ -160,6 +160,8 @@ class Module
 
         $router->match ('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
 
+        $router->match ('GET', $this->routepath . '/cancel', '\CatLab\Accounts\Controllers\LoginController@cancel');
+
         $router->match ('GET|POST', $this->routepath . '/register/{authenticator}', '\CatLab\Accounts\Controllers\RegistrationController@authenticator');
         $router->match ('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
     }
