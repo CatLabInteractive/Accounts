@@ -81,6 +81,9 @@ class LoginController
 
 		if ($cancel)
 		{
+			$this->request->getSession ()->set ('post-login-redirect', null);
+			$this->request->getSession ()->set ('cancel-login-redirect', null);
+
 			return Response::redirect ($cancel);
 		}
 		else {

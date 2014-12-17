@@ -121,6 +121,9 @@ class Module
     {
         if ($redirect = $request->getSession ()->get ('post-login-redirect'))
         {
+            $request->getSession ()->set ('post-login-redirect', null);
+            $request->getSession ()->set ('cancel-login-redirect', null);
+
             return Response::redirect ($redirect);
         }
 
