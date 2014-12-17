@@ -119,6 +119,11 @@ class Module
      */
     public function postLogin (Request $request, \Neuron\Interfaces\Models\User $user)
     {
+        if ($redirect = $request->getSession ()->get ('post-login-redirect'))
+        {
+            return Response::redirect ($redirect);
+        }
+
         return Response::redirect (URLBuilder::getURL ('/'));
     }
 
