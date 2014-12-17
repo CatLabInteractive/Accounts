@@ -26,6 +26,12 @@ class LoginController
 			$this->request->getSession ()->set ('post-login-redirect', $return);
 		}
 
+		// Check for cancel tag
+		if ($return = $this->request->input ('cancel'))
+		{
+			$this->request->getSession ()->set ('cancel-login-redirect', $return);
+		}
+
 		// Check if already registered
 		if ($user = $this->request->getUser ())
 			return $this->module->postLogin ($this->request, $user);
@@ -35,6 +41,10 @@ class LoginController
 		$template->set ('layout', $this->module->getLayout ());
 		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login'));
 		$template->set ('email', $this->request->input ('email'));
+
+		if ($this->request->getSession ()->get ('cancel-login-redirect')) {
+			$template->set ('cancel', URLBuilder::getURL ($this->module->getRoutePath () . '/cancel'));
+		}
 
 		$authenticators = $this->module->getAuthenticators ();
 		foreach ($authenticators as $v)
@@ -63,6 +73,19 @@ class LoginController
         $authenticator->setRequest ($this->request);
 
         return $authenticator->login ();
+	}
+
+	public function cancel ()
+	{
+		$cancel = $this->request->getSession ()->get ('cancel-login-redirect');
+
+		if ($cancel)
+		{
+			return Response::redirect ($cancel);
+		}
+		else {
+			return Response::redirect (URLBuilder::getURL ('/'));
+		}
 	}
 
 	public function logout ()

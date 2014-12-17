@@ -124,7 +124,7 @@ class Module
             return Response::redirect ($redirect);
         }
 
-        return Response::redirect (URLBuilder::getURL ('/'));
+        //return Response::redirect (URLBuilder::getURL ('/'));
     }
 
     /**
