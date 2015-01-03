@@ -169,13 +169,19 @@ class UserMapper
 		Query::update ($this->table_users, $data, array ('u_id' => $user->getId ()))->execute ();
 	}
 
+	protected function getModelInstance ()
+	{
+		return new User ();
+	}
+
 	/**
 	 * @param $data
 	 * @return User
 	 */
 	protected function getObjectFromData ($data)
 	{
-		$user = new User ();
+		$user = $this->getModelInstance ();
+
 		$user->setId ($data['u_id']);
 
 		if ($data['u_email'])
