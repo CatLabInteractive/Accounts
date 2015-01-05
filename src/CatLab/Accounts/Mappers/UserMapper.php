@@ -182,7 +182,7 @@ class UserMapper
 	{
 		$user = $this->getModelInstance ();
 
-		$user->setId ($data['u_id']);
+		$user->setId (intval ($data['u_id']));
 
 		if ($data['u_email'])
 			$user->setEmail ($data['u_email']);
