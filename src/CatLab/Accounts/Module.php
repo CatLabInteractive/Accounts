@@ -11,9 +11,11 @@ namespace CatLab\Accounts;
 use CatLab\Accounts\Collections\AuthenticatorCollection;
 use CatLab\Accounts\Helpers\LoginForm;
 use CatLab\Accounts\Authenticators\Authenticator;
+use CatLab\Accounts\Mappers\UserMapper;
 use CatLab\Accounts\Models\User;
 use Neuron\Application;
 use Neuron\Core\Template;
+use Neuron\MapperFactory;
 use Neuron\Net\Request;
 use Neuron\Net\Response;
 use Neuron\Router;
@@ -58,6 +60,9 @@ class Module
 
         // Set session variable
         Application::getInstance ()->on ('dispatch:before', array ($this, 'setRequestUser'));
+
+        // Set the global user mapper
+        MapperFactory::getInstance ()->setMapper ('user', new UserMapper ());
 
         // Add helper methods
         $helper = new LoginForm ($this);

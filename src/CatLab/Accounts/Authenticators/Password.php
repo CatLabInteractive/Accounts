@@ -7,7 +7,9 @@
  */
 namespace CatLab\Accounts\Authenticators;
 
-use CatLab\Accounts\MapperFactory;
+use CatLab\Accounts\Mappers\UserMapper;
+use Neuron\Exceptions\ExpectedType;
+use Neuron\MapperFactory;
 use CatLab\Accounts\Models\User;
 use Neuron\Core\Template;
 use Neuron\Core\Tools;
@@ -109,7 +111,10 @@ class Password
 	 */
 	private function processLogin ($email, $password)
 	{
-		$user = MapperFactory::getUserMapper ()->getFromLogin ($email, $password);
+		$mapper = MapperFactory::getUserMapper ();
+		ExpectedType::check ($mapper, UserMapper::class);
+
+		$user = $mapper->getFromLogin ($email, $password);
 
 		if ($user)
 		{
@@ -119,7 +124,7 @@ class Password
 
 		else {
 			// Check if we have this email address
-			$user = MapperFactory::getUserMapper ()->getFromEmail ($email);
+			$user = $mapper->getFromEmail ($email);
 			if ($user)
 			{
 				return 'PASSWORD_INCORRECT';
@@ -139,6 +144,9 @@ class Password
 	 */
 	private function processRegister ($email, $username, $password)
 	{
+		$mapper = MapperFactory::getUserMapper ();
+		ExpectedType::check ($mapper, UserMapper::class);
+
 		// Check email invalid
 		if (!$email)
 		{
@@ -158,14 +166,14 @@ class Password
 		}
 
 		// Check if email is unique
-		$user = MapperFactory::getUserMapper ()->getFromEmail ($email);
+		$user = $mapper->getFromEmail ($email);
 		if ($user)
 		{
 			return 'EMAIL_DUPLICATE';
 		}
 
 		// Check if username is unique
-		$user = MapperFactory::getUserMapper ()->getFromUsername ($username);
+		$user = $mapper->getFromUsername ($username);
 		if ($user)
 		{
 			return 'USERNAME_DUPLICATE';
@@ -177,13 +185,13 @@ class Password
 		$user->setUsername ($username);
 		$user->setPassword ($password);
 
-		$user = MapperFactory::getUserMapper ()->create ($user);
+		$user = $mapper->create ($user);
 		if ($user)
 		{
 			return $this->module->login ($this->request, $user);
 		}
 		else {
-			return MapperFactory::getUserMapper ()->getError ();
+			return $mapper->getError ();
 		}
 	}
 
