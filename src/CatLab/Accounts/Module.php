@@ -15,6 +15,8 @@ use CatLab\Accounts\Mappers\UserMapper;
 use CatLab\Accounts\Models\User;
 use Neuron\Application;
 use Neuron\Core\Template;
+use Neuron\Exceptions\DataNotSet;
+use Neuron\Exceptions\ExpectedType;
 use Neuron\MapperFactory;
 use Neuron\Net\Request;
 use Neuron\Net\Response;
@@ -61,8 +63,8 @@ class Module
         // Set session variable
         Application::getInstance ()->on ('dispatch:before', array ($this, 'setRequestUser'));
 
-        // Set the global user mapper
-        MapperFactory::getInstance ()->setMapper ('user', new UserMapper ());
+        // Set the global user mapper, unless one is set already
+        Application::getInstance ()->on ('dispatch:first', array ($this, 'setUserMapper'));
 
         // Add helper methods
         $helper = new LoginForm ($this);
@@ -89,6 +91,18 @@ class Module
 
             return null;
         });
+    }
+
+    public function setUserMapper ()
+    {
+        try {
+            $mapper = MapperFactory::getUserMapper ();
+            ExpectedType::check ($mapper, UserMapper::class);
+        }
+        catch (DataNotSet $e)
+        {
+            MapperFactory::getInstance ()->setMapper ('user', new UserMapper ());
+        }
     }
 
     /**
