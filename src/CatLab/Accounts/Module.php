@@ -71,7 +71,7 @@ class Module
      */
     public function setRequestUser (Request $request)
     {
-        $request->addUserCallback ('default', function (Request $request) {
+        $request->addUserCallback ('accounts', function (Request $request) {
 
             $userid = $request->getSession ()->get ('catlab-user-id');
 
