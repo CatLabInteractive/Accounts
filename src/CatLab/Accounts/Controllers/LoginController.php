@@ -21,14 +21,12 @@ class LoginController
 	public function login ()
 	{
 		// Check for return tag
-		if ($return = $this->request->input ('return'))
-		{
+		if ($return = $this->request->input ('return')) {
 			$this->request->getSession ()->set ('post-login-redirect', $return);
 		}
 
 		// Check for cancel tag
-		if ($return = $this->request->input ('cancel'))
-		{
+		if ($return = $this->request->input ('cancel')) {
 			$this->request->getSession ()->set ('cancel-login-redirect', $return);
 		}
 
