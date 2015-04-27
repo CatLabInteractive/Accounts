@@ -44,6 +44,15 @@ class Password
 
 		if ($this->request->isPost ())
 		{
+			$button = $this->request->input ('submit');
+			if ($button) {
+				switch ($button) {
+					case 'register':
+						return $this->register ();
+					break;
+				}
+			}
+
 			$email = $this->request->input ('email', 'email');
 			$password = $this->request->input ('password');
 
