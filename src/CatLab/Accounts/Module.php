@@ -174,6 +174,10 @@ class Module
      */
     public function setRoutes (Router $router)
     {
+	    // Filter
+	    $router->addFilter ('authenticated', array ($this, 'routerVerifier'));
+
+	    // Routes
         $router->match ('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
         $router->match ('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
 
@@ -219,4 +223,13 @@ class Module
     {
         return $this->layout;
     }
+
+	public function routerVerifier (\Neuron\Models\Router\Filter $filter)
+	{
+		if ($filter->getRequest ()->getUser ()) {
+			return true;
+		}
+
+		return Response::error ('You must be authenticated', Response::STATUS_UNAUTHORIZED);
+	}
 }
