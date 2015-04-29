@@ -10,12 +10,6 @@
 	<label for="inputPassword" class="sr-only"><?php echo $this->gettext ('Password'); ?></label>
 	<input type="password" class="form-control" id="inputPassword" name="password" placeholder="<?php echo $this->gettext ('Password'); ?>" required />
 
-	<div class="checkbox">
-		<label>
-			<input type="checkbox" name="rememberme" id="rememberme"> Remember me
-		</label>
-	</div>
-
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $this->gettext ('Sign in'); ?></button>
 
 	<p class="register">

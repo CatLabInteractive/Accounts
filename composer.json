@@ -6,17 +6,11 @@
   "homepage":"http://github.com/catlabinteractive/neuron",
   "license": "MIT",
 
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/catlabinteractive/neuron"
-    }
-  ],
-
   "require": {
     "php": ">=5.5.0",
     "catlabinteractive/neuron": "dev-master",
-    "ircmaxell/password-compat" : "*"
+    "ircmaxell/password-compat" : "*",
+	"facebook/php-sdk-v4": "@stable"
   },
 
   "authors" : [
