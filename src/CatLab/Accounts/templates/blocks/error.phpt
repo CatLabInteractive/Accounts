@@ -12,6 +12,30 @@
 
 			<?php echo $this->gettext ('The password you have provided is incorrect.'); ?>
 
+		<?php } else if ($error === 'EMAIL_DUPLICATE') { ?>
+
+			<?php echo $this->gettext ('This email address is already registered in our database.'); ?>
+
+			<?php if (isset ($deligated) && $deligated) { ?>
+				<?php echo sprintf (
+					$this->gettext (
+						'If you already have an account here, you can %s.'),
+					'<a href="' . $connect . '">' . $this->gettext ('link it up') . '</a>'
+				); ?>
+			<?php } ?>
+
+		<?php } else if ($error === 'USERNAME_DUPLICATE') { ?>
+
+			<?php echo $this->gettext ('This username is already in use.'); ?>
+
+			<?php if (isset ($deligated) && $deligated) { ?>
+				<?php echo sprintf (
+					$this->gettext (
+						'If you already have an account here, you can %s.'),
+					'<a href="' . $connect . '">' . $this->gettext ('link it up') . '</a>'
+				); ?>
+			<?php } ?>
+
 		<?php } else { ?>
 
 			<?php echo $error; ?>

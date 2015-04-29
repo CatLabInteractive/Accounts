@@ -29,4 +29,10 @@
 	</div>
 
 	<button type="submit" class="btn btn-default"><?php echo $this->gettext ('Register'); ?></button>
+
+	<?php if (isset ($connect)) { ?>
+		<p>
+			<a href="<?php echo $connect; ?>"><?php echo $this->gettext ('Connect existing account'); ?></a>
+		</p>
+	<?php } ?>
 </form>

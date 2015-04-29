@@ -62,9 +62,11 @@ abstract class DeligatedAuthenticator
 	}
 
 	/**
+	 * @param DeligatedUser $deligatedUser
 	 * @param $email
 	 * @param $username
 	 * @return bool|string
+	 * @throws ExpectedType
 	 * @throws \Neuron\Exceptions\InvalidParameter
 	 */
 	private function processRegister (DeligatedUser $deligatedUser, $email, $username)
@@ -131,7 +133,17 @@ abstract class DeligatedAuthenticator
 			return $this->module->login ($this->request, $deligatedUser->getUser ());
 		}
 
+		// Check for linking request
+		if ($this->request->input ('link')) {
+			return $this->linkExitingAccount ($deligatedUser);
+		}
+
 		$page = new Template ('CatLab/Accounts/authenticators/deligated/register.phpt');
+
+		$page->set ('deligated', true);
+		$page->set ('connect', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken (), array ('link' => 1)));
+		$page->set ('layout', $this->module->getLayout ());
+		$page->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken ()));
 
 		// Check for input.
 		if ($this->request->isPost ())
@@ -149,9 +161,6 @@ abstract class DeligatedAuthenticator
 				$page->set ('error', $response);
 			}
 		}
-
-		$page->set ('layout', $this->module->getLayout ());
-		$page->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken ()));
 
 		// Name
 		if ($name = $deligatedUser->getWelcomeName ()) {
@@ -185,6 +194,92 @@ abstract class DeligatedAuthenticator
 		}
 
 		return Response::template ($page);
+	}
+
+	/**
+	 * Return an error (string) or redirect
+	 * @param DeligatedUser $deligatedUser
+	 * @param $email
+	 * @param $password
+	 * @return Response|string
+	 * @throws ExpectedType
+	 */
+	private function processLogin (DeligatedUser $deligatedUser, $email, $password)
+	{
+		$mapper = \Neuron\MapperFactory::getUserMapper ();
+		ExpectedType::check ($mapper, UserMapper::class);
+
+		$user = $mapper->getFromLogin ($email, $password);
+
+		if ($user)
+		{
+			// Everything okay
+
+			// Link the deligated user to this user.
+			$deligatedUser->setUser ($user);
+			MapperFactory::getDeligatedMapper ()->update ($deligatedUser);
+
+			return $this->module->login ($this->request, $user);
+		}
+
+		else {
+			// Check if we have this email address
+			$user = $mapper->getFromEmail ($email);
+			if ($user)
+			{
+				return 'PASSWORD_INCORRECT';
+			}
+			else {
+				return 'USER_NOT_FOUND';
+			}
+		}
+	}
+
+	private function linkExitingAccount (DeligatedUser $deligatedUser) {
+
+		$page = new Template ('CatLab/Accounts/authenticators/deligated/link.phpt');
+
+		if ($this->request->isPost ()) {
+
+			$email = $this->request->input ('email');
+			$password = $this->request->input ('password');
+
+			$response = $this->processLogin ($deligatedUser, $email, $password);
+			if ($response instanceof Response)
+			{
+				return $response;
+			}
+			else if (is_string ($response))
+			{
+				$page->set ('error', $response);
+			}
+
+		}
+
+		$page->set ('layout', $this->module->getLayout ());
+		$page->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken (), array ('link' => 1)));
+		$page->set ('return', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken ()));
+
+		// Name
+		if ($name = $deligatedUser->getWelcomeName ()) {
+			$page->set ('name', $name);
+		}
+
+		// Email.
+		if ($email = $this->request->input ('email')) {
+			$page->set ('email', $email);
+		}
+
+		else if ($email = $deligatedUser->getEmail ()) {
+			$page->set ('email', $email);
+		}
+
+		else {
+			$page->set ('email', '');
+		}
+
+		return Response::template ($page);
+
 	}
 
 }
