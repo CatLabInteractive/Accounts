@@ -288,7 +288,12 @@ abstract class DeligatedAuthenticator
 
 	public function getForm ()
 	{
-		return '<p><a href="' . URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ()) . '">Login with ' . $this->getName () . '</a></p>';
+		$url = URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ());
+		$text = sprintf (\Neuron\Tools\Text::getInstance ()->getText ('Login with %s'), $this->getName ());
+
+		return '<p class="authenticator ' . $this->getToken () . '">' .
+			'<a href="' . $url . '">' . $text . '</a>' .
+			'</p>';
 	}
 
 }
