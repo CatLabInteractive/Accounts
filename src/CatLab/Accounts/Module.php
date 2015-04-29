@@ -156,6 +156,14 @@ class Module
      */
     public function postLogout (Request $request)
     {
+	    if ($redirect = $request->getSession ()->get ('post-login-redirect'))
+	    {
+		    $request->getSession ()->set ('post-login-redirect', null);
+		    $request->getSession ()->set ('cancel-login-redirect', null);
+
+		    return Response::redirect ($redirect);
+	    }
+
         return Response::redirect (URLBuilder::getURL ('/'));
     }
 
