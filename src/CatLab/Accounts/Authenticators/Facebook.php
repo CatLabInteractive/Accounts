@@ -64,7 +64,7 @@ class Facebook
 			if ($session) {
 
 				// Check if this user is already registered.
-				$request = new FacebookRequest($session, 'GET', '/me', array ('fields' => 'id,name,gender,verified,locale,timezone,email,birthday'));
+				$request = new FacebookRequest($session, 'GET', '/me', array ('fields' => 'id,name,gender,verified,locale,timezone,email,birthday,first_name,last_name'));
 				$response = $request->execute ();
 				$graphObject = $response->getGraphObject ();
 
@@ -102,6 +102,12 @@ class Facebook
 						$user->setBirthday (Carbon::createFromDate ($parts[2], $parts[0], $parts[1]));
 					}
 				}
+
+				if (isset ($data['first_name']))
+					$user->setFirstname ($data['first_name']);
+
+				if (isset ($data['last_name']))
+					$user->setLastname ($data['last_name']);
 
 				$user->setAvatar ('https://graph.facebook.com/' . $user->getUniqueId () . '/picture?type=large');
 

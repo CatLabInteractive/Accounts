@@ -97,6 +97,12 @@ class DeligatedMapper
 		if ($avatar = $user->getAvatar ())
 			$out['ud_avatar'] = $avatar;
 
+		if ($firstname = $user->getFirstname ())
+			$out['ud_firstname'] = $firstname;
+
+		if ($lastname = $user->getLastname ())
+			$out['ud_lastname'] = $lastname;
+
 		$out['updated_at'] = new DateTime ();
 
 		return $out;
@@ -140,36 +146,49 @@ class DeligatedMapper
 	protected function getObjectFromData ($data)
 	{
 
-		$user = new DeligatedUser ();
-		$user->setId (intval ($data['ud_id']));
-		$user->setType ($data['ud_type']);
-		$user->setUniqueId ($data['ud_unique_id']);
+		$deligatedUser = new DeligatedUser ();
+		$deligatedUser->setId (intval ($data['ud_id']));
+		$deligatedUser->setType ($data['ud_type']);
+		$deligatedUser->setUniqueId ($data['ud_unique_id']);
 
 		if ($data['ud_name'])
-			$user->setName ($data['ud_name']);
+			$deligatedUser->setName ($data['ud_name']);
 
 		if ($data['ud_access_token'])
-			$user->setAccessToken ($data['ud_access_token']);
+			$deligatedUser->setAccessToken ($data['ud_access_token']);
 
 		if ($data['ud_gender'])
-			$user->setGender ($data['ud_gender']);
+			$deligatedUser->setGender ($data['ud_gender']);
 
 		if ($data['ud_email'])
-			$user->setEmail ($data['ud_email']);
+			$deligatedUser->setEmail ($data['ud_email']);
 
 		if ($data['ud_birthday']) {
-			$user->setBirthday (new Carbon ($data['ud_birthday']));
+			$deligatedUser->setBirthday (new Carbon ($data['ud_birthday']));
 		}
 
 		if ($data['ud_locale'])
-			$user->setLocale ($data['ud_locale']);
+			$deligatedUser->setLocale ($data['ud_locale']);
 
 		if ($data['ud_avatar'])
-			$user->setAvatar ($data['ud_avatar']);
+			$deligatedUser->setAvatar ($data['ud_avatar']);
 
-		$user->setCreatedAt (strtotime ($data['created_at']));
-		$user->setUpdatedAt (strtotime ($data['updated_at']));
+		if ($data['ud_firstname'])
+			$deligatedUser->setFirstname ($data['ud_firstname']);
 
-		return $user;
+		if ($data['ud_lastname'])
+			$deligatedUser->setLastname ($data['ud_lastname']);
+
+		if ($data['u_id']) {
+			$user = \Neuron\MapperFactory::getUserMapper ()->getFromId ($data['u_id']);
+			if ($user) {
+				$deligatedUser->setUser ($user);
+			}
+		}
+
+		$deligatedUser->setCreatedAt (strtotime ($data['created_at']));
+		$deligatedUser->setUpdatedAt (strtotime ($data['updated_at']));
+
+		return $deligatedUser;
 	}
 }
