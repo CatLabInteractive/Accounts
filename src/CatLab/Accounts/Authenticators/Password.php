@@ -7,6 +7,7 @@
  */
 namespace CatLab\Accounts\Authenticators;
 
+use CatLab\Accounts\Authenticators\Base\Authenticator;
 use CatLab\Accounts\Mappers\UserMapper;
 use Neuron\Exceptions\ExpectedType;
 use Neuron\MapperFactory;

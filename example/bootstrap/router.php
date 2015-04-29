@@ -13,6 +13,9 @@ $signinmodule->addAuthenticator ($password);
 $facebook = new \CatLab\Accounts\Authenticators\Facebook ();
 $signinmodule->addAuthenticator ($facebook);
 
+$steam = new \CatLab\Accounts\Authenticators\Steam ();
+$signinmodule->addAuthenticator ($steam);
+
 // Make the module available on /account
 $router->module ('/account', $signinmodule);
 

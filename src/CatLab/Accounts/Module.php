@@ -8,9 +8,9 @@
 
 namespace CatLab\Accounts;
 
+use CatLab\Accounts\Authenticators\Base\Authenticator;
 use CatLab\Accounts\Collections\AuthenticatorCollection;
 use CatLab\Accounts\Helpers\LoginForm;
-use CatLab\Accounts\Authenticators\Authenticator;
 use CatLab\Accounts\Mappers\UserMapper;
 use CatLab\Accounts\Models\User;
 use Neuron\Application;

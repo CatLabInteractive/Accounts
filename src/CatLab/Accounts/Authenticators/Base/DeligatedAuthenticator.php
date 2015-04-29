@@ -6,7 +6,7 @@
  * Time: 18:14
  */
 
-namespace CatLab\Accounts\Authenticators;
+namespace CatLab\Accounts\Authenticators\Base;
 
 
 use CatLab\Accounts\Mappers\UserMapper;
@@ -280,6 +280,15 @@ abstract class DeligatedAuthenticator
 
 		return Response::template ($page);
 
+	}
+
+	public function getName () {
+		return ucfirst ($this->getToken ());
+	}
+
+	public function getForm ()
+	{
+		return '<p><a href="' . URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ()) . '">Login with ' . $this->getName () . '</a></p>';
 	}
 
 }

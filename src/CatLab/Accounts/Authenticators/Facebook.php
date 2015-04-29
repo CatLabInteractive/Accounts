@@ -10,6 +10,7 @@ namespace CatLab\Accounts\Authenticators;
 
 use Carbon\Carbon;
 
+use CatLab\Accounts\Authenticators\Base\DeligatedAuthenticator;
 use CatLab\Accounts\Models\DeligatedUser;
 
 use Facebook\FacebookRedirectLoginHelper;
@@ -119,10 +120,5 @@ class Facebook
 			}
 
 		}
-	}
-
-	public function getForm ()
-	{
-		return '<a href="' . URLBuilder::getURL ($this->module->getRoutePath () . '/login/facebook') . '">Login with facebook</a>';
 	}
 }

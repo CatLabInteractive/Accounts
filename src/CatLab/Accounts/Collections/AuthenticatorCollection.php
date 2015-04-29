@@ -7,7 +7,7 @@
  */
 namespace CatLab\Accounts\Collections;
 
-use CatLab\Accounts\Authenticators\Authenticator;
+use CatLab\Accounts\Authenticators\Base\Authenticator;
 use Neuron\Collections\TokenizedCollection;
 
 class AuthenticatorCollection

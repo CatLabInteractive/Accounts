@@ -6,7 +6,7 @@
  * Time: 16:11
  */
 
-namespace CatLab\Accounts\Authenticators;
+namespace CatLab\Accounts\Authenticators\Base;
 
 
 use CatLab\Accounts\Module;
