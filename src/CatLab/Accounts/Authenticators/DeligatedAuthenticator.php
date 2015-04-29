@@ -56,9 +56,6 @@ abstract class DeligatedAuthenticator
 
 	public function register () {
 
-		var_dump ($this->getDeligatedUser ());
-		exit;
-
 		$this->initialize ();
 
 		$deligatedUser = $this->getDeligatedUser ();
