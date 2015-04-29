@@ -75,6 +75,8 @@ class Facebook
 				$user->setType ('facebook');
 				$user->setUniqueId ($data['id']);
 
+				$user->setAccessToken ((string)$session->getAccessToken ());
+
 				if (isset ($data['name'])) {
 					$user->setName ($data['name']);
 				}
