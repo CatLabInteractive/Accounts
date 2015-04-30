@@ -289,21 +289,23 @@ abstract class DeligatedAuthenticator
 	public function getForm ()
 	{
 		$url = URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ());
-		$text = sprintf (\Neuron\Tools\Text::getInstance ()->getText ('Login with %s'), $this->getName ());
 
-		return '<p class="authenticator ' . $this->getToken () . '">' .
-			'<a href="' . $url . '">' . $text . '</a>' .
-			'</p>';
+		$page = new Template ('CatLab/Accounts/authenticators/deligated/form.phpt');
+		$page->set ('url', $url);
+		$page->set ('authenticator', $this);
+
+		return $page;
 	}
 
 	public function getInlineForm ()
 	{
 		$url = URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ());
-		$text = sprintf (\Neuron\Tools\Text::getInstance ()->getText ('Login with %s'), $this->getName ());
 
-		return '<p class="authenticator inline navbar-text navbar-left' . $this->getToken () . '">' .
-		'<a href="' . $url . '">' . $text . '</a>' .
-		'</p>';
+		$page = new Template ('CatLab/Accounts/authenticators/deligated/inlineform.phpt');
+		$page->set ('url', $url);
+		$page->set ('authenticator', $this);
+
+		return $page;
 	}
 
 }
