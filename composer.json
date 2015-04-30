@@ -6,13 +6,6 @@
   "homepage":"http://github.com/catlabinteractive/neuron",
   "license": "MIT",
 
-  "repositories" : [
-	{
-	  "type" : "vcs",
-	  "url" : "https://github.com/openid/php-openid.git"
-	}
-  ],
-
   "require": {
     "php": ">=5.5.0",
     "catlabinteractive/neuron": "dev-master",
