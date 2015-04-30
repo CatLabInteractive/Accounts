@@ -301,7 +301,7 @@ abstract class DeligatedAuthenticator
 		$url = URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ());
 		$text = sprintf (\Neuron\Tools\Text::getInstance ()->getText ('Login with %s'), $this->getName ());
 
-		return '<p class="authenticator inline ' . $this->getToken () . '">' .
+		return '<p class="authenticator inline navbar-text navbar-left' . $this->getToken () . '">' .
 		'<a href="' . $url . '">' . $text . '</a>' .
 		'</p>';
 	}

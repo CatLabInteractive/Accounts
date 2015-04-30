@@ -1,7 +1,7 @@
-<form method="post" action="<?php echo $action; ?>" role="form" class="form-inline">
+<form method="post" action="<?php echo $action; ?>" role="form" class="navbar-form navbar-left">
 
 	<div class="form-group">
-		<label for="email"><?php echo $this->gettext ('Email address'); ?></label>
+		<label for="email"><?php echo $this->gettext ('Email'); ?></label>
 		<input type="text" class="form-control" id="email" name="email" value="<?php echo $email; ?>" placeholder="<?php echo $this->gettext ('Enter email'); ?>" />
 	</div>
 
