@@ -44,8 +44,10 @@ class LoginForm {
 
 			$template = new Template ('CatLab/Accounts/helpers/form-small.phpt');
 
-			$template->set ('action', URLBuilder::getURL ($this->moduleController->getRoutePath () . '/login/password', array ('return' => $request->getUrl ())));
-			$template->set ('email', Tools::getInput ($_POST, 'email', 'varchar'));
+			$authenticators = $this->moduleController->getAuthenticators ();
+			$authenticators->setRequest ($request);
+
+			$template->set ('authenticators', $authenticators);
 
 			return $template;
 		}

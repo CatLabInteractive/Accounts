@@ -296,4 +296,14 @@ abstract class DeligatedAuthenticator
 			'</p>';
 	}
 
+	public function getInlineForm ()
+	{
+		$url = URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ());
+		$text = sprintf (\Neuron\Tools\Text::getInstance ()->getText ('Login with %s'), $this->getName ());
+
+		return '<p class="authenticator inline ' . $this->getToken () . '">' .
+		'<a href="' . $url . '">' . $text . '</a>' .
+		'</p>';
+	}
+
 }

@@ -70,4 +70,6 @@ abstract class Authenticator {
 	public abstract function login ();
 
 	public abstract function getForm ();
+
+	public abstract function getInlineForm ();
 }

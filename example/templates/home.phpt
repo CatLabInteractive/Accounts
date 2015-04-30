@@ -20,5 +20,5 @@
 		</ul>
 
 		<div>
-			<?php echo $this->help ('CatLab.Accounts.LoginForm', 'smallForm'); ?>
+			<?php echo $this->help ('CatLab.Accounts.LoginForm'); ?>
 		</div>

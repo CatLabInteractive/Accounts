@@ -205,4 +205,14 @@ class Password
 		}
 	}
 
+	public function getInlineForm () {
+
+		$template = new Template ('CatLab/Accounts/authenticators/password/inlineform.phpt');
+
+		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login/password', array ('return' => $this->request->getUrl ())));
+		$template->set ('email', Tools::getInput ($_POST, 'email', 'varchar'));
+
+		return $template;
+	}
+
 }
