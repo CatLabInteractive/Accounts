@@ -11,4 +11,5 @@
 	</div>
 
 	<button type="submit"><?php echo $this->gettext ('Login'); ?></button>
+	<button type="submit" value="register" name="submit"><?php echo $this->gettext ('Register'); ?></button>
 </form>
