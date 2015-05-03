@@ -9,6 +9,7 @@
 namespace CatLab\Accounts\Models;
 
 use CatLab\Accounts\MapperFactory;
+use Neuron\Collections\Collection;
 
 class User
 	implements \Neuron\Interfaces\Models\User
@@ -114,7 +115,11 @@ class User
 		$this->username = $username;
 	}
 
-	public function getDeligatedAccounts () {
-		return MapperFactory::getDeligatedMapper ()->getFromUser ($this);
+	/**
+	 * @param null $type The type of user we are requesting.
+	 * @return Collection
+	 */
+	public function getDeligatedAccounts ($type = null) {
+		return MapperFactory::getDeligatedMapper ()->getFromUser ($this, $type);
 	}
 }

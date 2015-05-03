@@ -52,13 +52,20 @@ class DeligatedMapper
 		return $this->getSingle ($query->execute ());
 	}
 
-	public function getFromUser (User $user) {
+	public function getFromUser (User $user, $type = null) {
+
+		$where = array (
+			'u_id' => $user->getId ()
+		);
+
+		if ($type) {
+			$where['ud_type'] = $type;
+		}
+
 		$query = Query::select (
 			'neuron_users_deligated',
 			array ('*'),
-			array (
-				'u_id' => $user->getId ()
-			)
+			$where
 		);
 
 		return $this->getObjectsFromData ($query->execute ());
