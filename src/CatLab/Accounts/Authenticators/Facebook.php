@@ -27,6 +27,9 @@ class Facebook
 
 	private $loaded = false;
 
+	/** @var string[] */
+	private $scopes = array ('user_birthday', 'email');
+
 	protected function initialize () {
 
 		if (!$this->loaded) {
@@ -39,14 +42,33 @@ class Facebook
 
 	}
 
+	/**
+	 * @param string[] $scope
+	 */
+	public function setScopes (array $scope) {
+		$this->scopes = $scope;
+	}
+
+	/**
+	 * @param string $scope
+	 */
+	public function addScope ($scope) {
+		$this->scopes[] = $scope;
+	}
+
 	public function login ()
 	{
 		$this->initialize ();
 
-		$helper = new FacebookRedirectLoginHelper (URLBuilder::getAbsoluteURL ($this->module->getRoutePath () . '/login/' . $this->getToken (), array ('next' => 1)));
+		$helper = new FacebookRedirectLoginHelper (
+			URLBuilder::getAbsoluteURL (
+				$this->module->getRoutePath () . '/login/' . $this->getToken (),
+				array ('next' => 1)
+			)
+		);
 
 		if (!$this->request->input ('next')) {
-			$loginUrl = $helper->getLoginUrl(array ('user_birthday', 'email'));
+			$loginUrl = $helper->getLoginUrl($this->scopes);
 			return Response::redirect ($loginUrl);
 		}
 
