@@ -7,3 +7,6 @@
 	<p><?php echo $this->gettext ('Welcome to the world of tomorrow!'); ?></p>
 
 
+	<p>
+		<a href="<?php echo \Neuron\URLBuilder::getURL ('thirdparty'); ?>">Third party accounts</a>
+	</p>

@@ -19,6 +19,15 @@ $signinmodule->addAuthenticator ($steam);
 // Make the module available on /account
 $router->module ('/account', $signinmodule);
 
+$router->get ('/thirdparty', function () {
+
+	$request = \Neuron\Application::getInstance ()->getRouter ()->getRequest ();
+
+	$deligatedAccounts = $request->getUser ()->getDeligatedAccounts ();
+	return \Neuron\Net\Response::template ('thirdparty.phpt', array ('accounts' => $deligatedAccounts));
+
+})->filter ('authenticated');
+
 // Catch the default route
 $router->get ('/', function () {
 	return \Neuron\Net\Response::template ('home.phpt');

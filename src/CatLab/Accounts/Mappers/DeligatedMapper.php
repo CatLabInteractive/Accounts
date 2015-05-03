@@ -11,6 +11,7 @@ namespace CatLab\Accounts\Mappers;
 
 use Carbon\Carbon;
 use CatLab\Accounts\Models\DeligatedUser;
+use CatLab\Accounts\Models\User;
 use DateTime;
 use Neuron\DB\Query;
 use Neuron\Exceptions\InvalidParameter;
@@ -49,6 +50,18 @@ class DeligatedMapper
 		);
 
 		return $this->getSingle ($query->execute ());
+	}
+
+	public function getFromUser (User $user) {
+		$query = Query::select (
+			'neuron_users_deligated',
+			array ('*'),
+			array (
+				'u_id' => $user->getId ()
+			)
+		);
+
+		return $this->getObjectsFromData ($query->execute ());
 	}
 
 	public function update (DeligatedUser $user) {

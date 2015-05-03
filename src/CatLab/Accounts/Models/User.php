@@ -8,6 +8,8 @@
 
 namespace CatLab\Accounts\Models;
 
+use CatLab\Accounts\MapperFactory;
+
 class User
 	implements \Neuron\Interfaces\Models\User
 {
@@ -110,5 +112,9 @@ class User
 	public function setUsername ($username)
 	{
 		$this->username = $username;
+	}
+
+	public function getDeligatedAccounts () {
+		return MapperFactory::getDeligatedMapper ()->getFromUser ($this);
 	}
 }
