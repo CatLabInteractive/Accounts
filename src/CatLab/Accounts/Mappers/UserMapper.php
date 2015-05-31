@@ -136,6 +136,8 @@ class UserMapper
 		if ($username = $user->getUsername ())
 			$data['u_username'] = $username;
 
+		$data['u_emailVerified'] = $user->isEmailVerified () ? 1 : 0;
+
 		return $data;
 	}
 
@@ -192,6 +194,8 @@ class UserMapper
 
 		if ($data['u_username'])
 			$user->setUsername ($data['u_username']);
+
+		$user->setEmailVerified ($data['u_emailVerified'] == 1);
 
 		return $user;
 	}

@@ -10,9 +10,6 @@ $loader->add ('Example\\', __DIR__ . '/../app/');
 // Start the app
 $app = \Neuron\Application::getInstance ();
 
-// Load the router
-$app->setRouter (include ('router.php'));
-
 // Set config folder
 \Neuron\Config::folder (__DIR__ . '/../config/');
 
@@ -23,6 +20,7 @@ switch ($hostname)
 {
 	case 'my-computer':
 	case 'thijs-home-i7':
+	case 'thijs-i7':
 		\Neuron\Config::environment ('development');
 	break;
 }
@@ -35,6 +33,9 @@ $app->setLocale ('nl_BE.utf8');
 
 // Set the local language folder
 \Neuron\Tools\Text::getInstance ()->addPath ('example', __DIR__ . '/../locales/');
+
+// Load the router
+$app->setRouter (include ('router.php'));
 
 // Return app
 return $app;

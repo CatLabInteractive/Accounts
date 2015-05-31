@@ -3,12 +3,13 @@
   "type": "library",
   "description": "Authentication module for Neuron.",
   "keywords": ["framework"],
-  "homepage":"http://github.com/catlabinteractive/neuron",
+  "homepage":"http://github.com/catlabinteractive/accounts",
   "license": "MIT",
 
   "require": {
     "php": ">=5.5.0",
     "catlabinteractive/neuron": "dev-master",
+	"catlabinteractive/mailer": "dev-master",
     "ircmaxell/password-compat" : "*",
 	"facebook/php-sdk-v4": "@stable",
 	"openid/php-openid" : "dev-master",

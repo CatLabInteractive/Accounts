@@ -196,9 +196,8 @@ class Password
 		$user->setPassword ($password);
 
 		$user = $mapper->create ($user);
-		if ($user)
-		{
-			return $this->module->login ($this->request, $user);
+		if ($user) {
+			return $this->module->register ($this->request, $user);
 		}
 		else {
 			return $mapper->getError ();

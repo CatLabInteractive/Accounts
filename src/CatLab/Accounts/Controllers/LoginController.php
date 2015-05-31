@@ -1,14 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: daedeloth
- * Date: 29/11/14
- * Time: 10:49
- */
 
 namespace CatLab\Accounts\Controllers;
 
+use CatLab\Accounts\Models\User;
+use CatLab\Accounts\MapperFactory;
 use Neuron\Core\Template;
+use Neuron\Exceptions\InvalidParameter;
 use Neuron\Net\Response;
 use Neuron\URLBuilder;
 
@@ -45,12 +42,83 @@ class LoginController
 		}
 
 		$authenticators = $this->module->getAuthenticators ();
-		foreach ($authenticators as $v)
-		{
+		foreach ($authenticators as $v) {
 			$v->setRequest ($this->request);
 		}
 
 		$template->set ('authenticators', $authenticators);
+
+		return Response::template ($template);
+	}
+
+	/**
+	 * @param $id
+	 * @return Response
+	 * @throws InvalidParameter
+	 */
+	public function verify ($id) {
+
+		$email = MapperFactory::getEmailMapper ()->getFromId ($id);
+
+		if (!$email)
+			return Response::error ('Invalid email verification', Response::STATUS_NOTFOUND);
+
+		$token = $this->request->input ('token');
+		if ($email->getToken () !== $token)
+			return Response::error ('Invalid email verification', Response::STATUS_UNAUTHORIZED);
+
+		if ($email->getUser ()->getEmail () !== $email->getEmail ())
+			return Response::error ('Invalid email verification: email mismatch', Response::STATUS_INVALID_INPUT);
+
+		if ($email->isExpired ())
+			return Response::error ('Invalid email verification: token expired', Response::STATUS_INVALID_INPUT);
+
+		$user = $email->getUser ();
+		if (! ($user instanceof User)) {
+			throw new InvalidParameter ("User type mismatch.");
+		}
+
+		$user->setEmailVerified (true);
+		$mapper = \Neuron\MapperFactory::getUserMapper ();
+		if (! ($mapper instanceof \CatLab\Accounts\Mappers\UserMapper)) {
+			throw new InvalidParameter ("Mapper must be UserMapper instance.");
+		}
+
+		$mapper->update ($user);
+
+		return $this->module->login ($this->request, $user);
+	}
+
+	/**
+	 * @return Response
+	 */
+	public function requiresVerification ()
+	{
+		$user = null;
+
+		$userId = $this->request->getSession ()->get ('catlab-non-verified-user-id');
+		if ($userId) {
+			$user = \Neuron\MapperFactory::getUserMapper ()->getFromId ($userId);
+		}
+
+		if (!$user || !($user instanceof User)) {
+			return Response::error ('You are not logged in.');
+		}
+
+		if ($user->isEmailVerified ()) {
+			return $this->module->login ($this->request, $user);
+		}
+
+		$template = new Template ('CatLab/Accounts/notverified.phpt');
+
+		// Send verification.
+		if ($this->request->input ('retry')) {
+			$user->sendVerificationEmail ($this->module);
+		}
+
+		$template->set ('layout', $this->module->getLayout ());
+		$template->set ('user', $user);
+		$template->set ('resend_url', URLBuilder::getURL ($this->module->getRoutePath() . '/notverified', array ('retry' => 1)));
 
 		return Response::template ($template);
 	}
@@ -91,15 +159,6 @@ class LoginController
 
 	public function logout ()
 	{
-		/*
-		$template = new Template ('CatLab/Accounts/logout.phpt');
-
-		$template->set ('layout', $this->module->getLayout ());
-		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login'));
-
-		return Response::template ($template);
-		*/
-
 		// Check for return tag
 		if ($return = $this->request->input ('return')) {
 			$this->request->getSession ()->set ('post-login-redirect', $return);

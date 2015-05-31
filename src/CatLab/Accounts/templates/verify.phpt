@@ -3,4 +3,4 @@
 	$this->textdomain ('catlab.accounts');
 ?>
 
-<p><?php echo $this->gettext ('You are now logged out.'); ?></p>
+<p>Email needs to be verified.</p>

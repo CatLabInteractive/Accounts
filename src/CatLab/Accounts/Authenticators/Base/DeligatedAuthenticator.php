@@ -88,15 +88,13 @@ abstract class DeligatedAuthenticator
 
 		// Check if email is unique
 		$user = $mapper->getFromEmail ($email);
-		if ($user)
-		{
+		if ($user) {
 			return 'EMAIL_DUPLICATE';
 		}
 
 		// Check if username is unique
 		$user = $mapper->getFromUsername ($username);
-		if ($user)
-		{
+		if ($user) {
 			return 'USERNAME_DUPLICATE';
 		}
 
@@ -111,9 +109,8 @@ abstract class DeligatedAuthenticator
 		$deligatedUser->setUser ($user);
 		MapperFactory::getDeligatedMapper ()->update ($deligatedUser);
 
-		if ($user)
-		{
-			return $this->module->login ($this->request, $user);
+		if ($user) {
+			return $this->module->register ($this->request, $user);
 		}
 		else {
 			return $mapper->getError ();

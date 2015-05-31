@@ -5,7 +5,8 @@ $router = new \Neuron\Router ();
 
 // Accounts module
 $signinmodule = new \CatLab\Accounts\Module ();
-$signinmodule->setLayout ('index-account.phpt');
+$signinmodule->requireEmailValidation ();
+//$signinmodule->setLayout ('index-account.phpt');
 
 $password = new \CatLab\Accounts\Authenticators\Password ();
 $signinmodule->addAuthenticator ($password);
@@ -15,6 +16,9 @@ $signinmodule->addAuthenticator ($facebook);
 
 $steam = new \CatLab\Accounts\Authenticators\Steam ();
 $signinmodule->addAuthenticator ($steam);
+
+$mailer = new \CatLab\Mailer\Module ();
+$router->module ('/mailer', $mailer);
 
 // Make the module available on /account
 $router->module ('/account', $signinmodule);

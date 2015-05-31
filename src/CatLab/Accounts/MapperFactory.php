@@ -41,4 +41,11 @@ class MapperFactory {
 	public static function getDeligatedMapper () {
 		return self::getInstance ()->getMapper ('deligated', '\CatLab\Accounts\Mappers\DeligatedMapper');
 	}
+
+	/**
+	 * @return \CatLab\Accounts\Mappers\EmailMapper
+	 */
+	public static function getEmailMapper () {
+		return self::getInstance ()->getMapper ('emails', '\CatLab\Accounts\Mappers\EmailMapper');
+	}
 }

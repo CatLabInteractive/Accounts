@@ -36,6 +36,11 @@ class Module
     /** @var string $routepath */
     private $routepath;
 
+	/**
+	 * @var bool
+	 */
+	private $requireEmailValidation = false;
+
     /**
      *
      */
@@ -105,6 +110,25 @@ class Module
         }
     }
 
+	/**
+	 * @param Request $request
+	 * @param User $user
+	 * @return Response
+	 */
+	public function register (Request $request, User $user)
+	{
+		// New account. Needs verification?
+		if ($this->requiresEmailValidation ()) {
+			$user->sendVerificationEmail ($this);
+		}
+
+		else {
+			$user->sendConfirmationEmail ($this);
+		}
+
+		return $this->login ($request, $user);
+	}
+
     /**
      * Login a specific user
      * @param Request $request
@@ -113,6 +137,14 @@ class Module
      */
     public function login (Request $request, User $user)
     {
+		// Check for email validation
+		if ($this->requiresEmailValidation ()) {
+			if (!$user->isEmailVerified ()) {
+				$request->getSession ()->set ('catlab-non-verified-user-id', $user->getId ());
+				return Response::redirect (URLBuilder::getURL ($this->routepath . '/notverified'));
+			}
+		}
+
         $request->getSession ()->set ('catlab-user-id', $user->getId ());
         return $this->postLogin ($request, $user);
     }
@@ -126,6 +158,7 @@ class Module
     public function logout (Request $request)
     {
         $request->getSession ()->set ('catlab-user-id', null);
+		$request->getSession ()->set ('catlab-non-verified-user-id', null);
         return $this->postLogout ($request);
     }
 
@@ -189,12 +222,16 @@ class Module
         $router->match ('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
         $router->match ('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
 
+		$router->match ('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
+
         $router->match ('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
 
         $router->match ('GET', $this->routepath . '/cancel', '\CatLab\Accounts\Controllers\LoginController@cancel');
 
         $router->match ('GET|POST', $this->routepath . '/register/{authenticator}', '\CatLab\Accounts\Controllers\RegistrationController@authenticator');
         $router->match ('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
+
+		$router->get ($this->routepath . '/verify/{id}', '\CatLab\Accounts\Controllers\LoginController@verify');
     }
 
     /**
@@ -239,5 +276,23 @@ class Module
 		}
 
 		return Response::error ('You must be authenticated', Response::STATUS_UNAUTHORIZED);
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function requiresEmailValidation ()
+	{
+		return $this->requireEmailValidation;
+	}
+
+	/**
+	 * @param boolean $requireEmailValidation
+	 * @return self
+	 */
+	public function requireEmailValidation ($requireEmailValidation = true)
+	{
+		$this->requireEmailValidation = $requireEmailValidation;
+		return $this;
 	}
 }
