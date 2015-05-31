@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: localhost
--- Gegenereerd op: 31 mei 2015 om 15:28
+-- Gegenereerd op: 31 mei 2015 om 19:03
 -- Serverversie: 5.6.24-0ubuntu2
 -- PHP-versie: 5.6.4-4ubuntu6
 
@@ -71,7 +71,8 @@ CREATE TABLE IF NOT EXISTS `neuron_users_emails` (
   `u_id` int(11) NOT NULL,
   `ue_email` varchar(255) NOT NULL,
   `ue_verified` tinyint(4) NOT NULL DEFAULT '0',
-  `ue_token` varchar(32) NOT NULL
+  `ue_token` varchar(32) NOT NULL,
+  `ue_expires` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -106,7 +107,7 @@ ALTER TABLE `neuron_users_deligated`
 -- Indexen voor tabel `neuron_users_emails`
 --
 ALTER TABLE `neuron_users_emails`
- ADD PRIMARY KEY (`ue_id`), ADD UNIQUE KEY `ue_email` (`ue_email`), ADD KEY `u_id` (`u_id`);
+ ADD PRIMARY KEY (`ue_id`), ADD KEY `u_id` (`u_id`);
 
 --
 -- Indexen voor tabel `sessions`
