@@ -155,6 +155,8 @@ class User
 
 	public function sendVerificationEmail (Module $module)
 	{
+	    return;
+
 		$email = new Email ();
 		$email->setEmail ($this->getEmail ());
 		$email->setExpires (new DateTime ('next week'));
@@ -180,6 +182,8 @@ class User
 
 	public function sendConfirmationEmail (Module $module)
 	{
+        return;
+
 		$template = new Template ('CatLab/Accounts/mails/confirmation.phpt');
 		$template->set ('user', $this);
 
