@@ -12,7 +12,7 @@
 	"catlabinteractive/mailer": ">=0.1.4",
     "ircmaxell/password-compat" : "*",
 	"facebook/php-sdk-v4": "@stable",
-	"openid/php-openid" : "dev-master",
+	"openid/php-openid" : ">=2.3.0",
 
 	"ext-mbstring": "*"
   },
