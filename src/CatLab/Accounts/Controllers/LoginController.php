@@ -15,6 +15,32 @@ class LoginController
     /**
      * @return Response
      */
+    public function welcome()
+    {
+        $template = new Template ('CatLab/Accounts/welcome.phpt');
+
+        $user = $this->request->getUser();
+        $template->set('name', $user->getUsername());
+        $template->set('layout', $this->module->getLayout());
+
+        if ($redirect = $this->request->getSession ()->get ('post-login-redirect'))
+        {
+            $this->request->getSession ()->set ('post-login-redirect', null);
+            $this->request->getSession ()->set ('cancel-login-redirect', null);
+
+            return Response::redirect ($redirect);
+        } else {
+            $redirect = '/';
+        }
+
+        $template->set('redirect_url', $redirect);
+
+        return Response::template ($template);
+    }
+
+    /**
+     * @return Response
+     */
 	public function login ()
 	{
 		// Check for return tag

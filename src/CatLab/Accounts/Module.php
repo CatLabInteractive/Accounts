@@ -171,15 +171,7 @@ class Module
      */
     public function postLogin (Request $request, \Neuron\Interfaces\Models\User $user)
     {
-        if ($redirect = $request->getSession ()->get ('post-login-redirect'))
-        {
-            $request->getSession ()->set ('post-login-redirect', null);
-            $request->getSession ()->set ('cancel-login-redirect', null);
-
-            return Response::redirect ($redirect);
-        }
-
-        return Response::redirect (URLBuilder::getURL ('/'));
+        return Response::redirect (URLBuilder::getURL ($this->getRoutePath() . '/welcome'));
     }
 
     /**
@@ -221,6 +213,7 @@ class Module
 	    // Routes
         $router->match ('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
         $router->match ('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
+        $router->match ('GET', $this->routepath . '/welcome', '\CatLab\Accounts\Controllers\LoginController@welcome')->filter('authenticated');
 
 		$router->match ('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
 
