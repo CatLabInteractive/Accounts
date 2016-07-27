@@ -8,8 +8,8 @@
 
   "require": {
     "php": ">=5.5.0",
-    "catlabinteractive/neuron": "dev-master",
-	"catlabinteractive/mailer": "dev-master",
+    "catlabinteractive/neuron": ">=2.0.3",
+	"catlabinteractive/mailer": ">=0.1.4",
     "ircmaxell/password-compat" : "*",
 	"facebook/php-sdk-v4": "@stable",
 	"openid/php-openid" : "dev-master",
