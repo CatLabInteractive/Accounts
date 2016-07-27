@@ -28,7 +28,7 @@ class LoginController
             $this->request->getSession ()->set ('post-login-redirect', null);
             $this->request->getSession ()->set ('cancel-login-redirect', null);
 
-            return Response::redirect ($redirect);
+            //return Response::redirect ($redirect);
         } else {
             $redirect = '/';
         }
