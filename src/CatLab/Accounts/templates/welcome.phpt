@@ -10,5 +10,5 @@
     var redirect_url = '<?php echo $redirect_url; ?>';
     setTimeout(function() {
         window.location = redirect_url;
-    }, 1000);
+    }, 5000);
 </script>
