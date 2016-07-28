@@ -33,7 +33,13 @@ class LoginController
             $redirect = '/';
         }
 
+        // Tracker
+        $tracker = array(
+            'event' => $this->request->input('registered') ? 'registration' : 'login'
+        );
+
         $template->set('redirect_url', $redirect);
+        $template->set('tracker', $tracker);
 
         return Response::template ($template);
     }
@@ -55,7 +61,7 @@ class LoginController
 
 		// Check if already registered
 		if ($user = $this->request->getUser ('accounts'))
-			return $this->module->postLogin ($this->request, $user);
+			return $this->module->postLogin($this->request, $user);
 
 		$template = new Template ('CatLab/Accounts/login.phpt');
 
