@@ -126,27 +126,28 @@ class Module
 			$user->sendConfirmationEmail ($this);
 		}
 
-		return $this->login ($request, $user);
+		return $this->login($request, $user, true);
 	}
 
     /**
      * Login a specific user
      * @param Request $request
      * @param User $user
+     * @param bool $registration
      * @return \Neuron\Net\Response
      */
-    public function login (Request $request, User $user)
+    public function login (Request $request, User $user, $registration = false)
     {
 		// Check for email validation
-		if ($this->requiresEmailValidation ()) {
-			if (!$user->isEmailVerified ()) {
-				$request->getSession ()->set ('catlab-non-verified-user-id', $user->getId ());
-				return Response::redirect (URLBuilder::getURL ($this->routepath . '/notverified'));
+		if ($this->requiresEmailValidation()) {
+			if (!$user->isEmailVerified()) {
+				$request->getSession()->set ('catlab-non-verified-user-id', $user->getId());
+				return Response::redirect(URLBuilder::getURL($this->routepath . '/notverified'));
 			}
 		}
 
-        $request->getSession ()->set ('catlab-user-id', $user->getId ());
-        return $this->postLogin ($request, $user);
+        $request->getSession()->set('catlab-user-id', $user->getId());
+        return $this->postLogin($request, $user, $registration);
     }
 
     /**
@@ -167,11 +168,22 @@ class Module
      * Should be a redirect.
      * @param Request $request
      * @param \Neuron\Interfaces\Models\User $user
+     * @param boolean $registered
      * @return \Neuron\Net\Response
      */
-    public function postLogin (Request $request, \Neuron\Interfaces\Models\User $user)
+    public function postLogin (Request $request, \Neuron\Interfaces\Models\User $user, $registered = false)
     {
-        return Response::redirect (URLBuilder::getURL ($this->getRoutePath() . '/welcome'));
+        $parameters = array();
+        if ($registered) {
+            $parameters['registered'] = 1;
+        }
+
+        return Response::redirect(
+            URLBuilder::getURL(
+                $this->getRoutePath() . '/welcome',
+                $parameters
+            )
+        );
     }
 
     /**

@@ -33,7 +33,13 @@ class LoginController
             $redirect = '/';
         }
 
+        // Tracker
+        $tracker = array(
+            'event' => $this->request->input('registered') ? 'registration' : 'login'
+        );
+
         $template->set('redirect_url', $redirect);
+        $template->set('tracker', $tracker);
 
         return Response::template ($template);
     }

@@ -11,7 +11,7 @@
     "catlabinteractive/neuron": ">=2.0.3",
 	"catlabinteractive/mailer": ">=0.1.4",
     "ircmaxell/password-compat" : "*",
-	"facebook/php-sdk-v4": "@stable",
+	"facebook/php-sdk-v4": "~4.0",
 	"openid/php-openid" : ">=2.3.0",
 
 	"ext-mbstring": "*"

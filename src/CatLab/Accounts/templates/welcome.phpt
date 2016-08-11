@@ -7,8 +7,10 @@
 <p>We're sending you back to the application.</p>
 
 <script>
+    dataLayer = [<?php echo json_encode($tracker); ?>];
+
     var redirect_url = '<?php echo $redirect_url; ?>';
     setTimeout(function() {
         window.location = redirect_url;
-    }, 1000);
+    }, 2000);
 </script>
