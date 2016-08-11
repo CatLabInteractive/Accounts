@@ -54,8 +54,17 @@ class LoginController
 		}
 
 		// Check if already registered
-		if ($user = $this->request->getUser ('accounts'))
-			return $this->module->postLogin ($this->request, $user);
+		if ($user = $this->request->getUser ('accounts')) {
+            return $this->module->postLogin($this->request, $user);
+        }
+
+        // Check if this is our first visit
+        $cookies = $this->request->getCookies();
+        if (!isset($cookies['fv'])) {
+            $response = Response::redirect($this->module->getRoutePath () . '/register');
+            $response->setCookies(array( 'fv' => time() ));
+            return $response;
+        }
 
 		$template = new Template ('CatLab/Accounts/login.phpt');
 
