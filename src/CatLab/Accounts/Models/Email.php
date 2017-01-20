@@ -163,6 +163,10 @@ class Email
 		return $this->getExpires ()->getTimestamp () < time ();
 	}
 
+    /**
+     * @param $rootPath
+     * @return string
+     */
 	public function getVerifyURL ($rootPath)
 	{
 		$params = array (

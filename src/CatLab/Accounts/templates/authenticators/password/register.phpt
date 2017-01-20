@@ -5,7 +5,7 @@
 
 <form method="post" action="<?php echo $action; ?>" role="form">
 
-    <h2>Welcome, stranger</h2>
+    <h2><?php echo $this->gettext('Welcome, stranger'); ?></h2>
     <?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>
 
 	<div class="form-group">

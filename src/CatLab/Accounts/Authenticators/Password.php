@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: daedeloth
- * Date: 29/11/14
- * Time: 11:46
- */
+
 namespace CatLab\Accounts\Authenticators;
 
 use CatLab\Accounts\Authenticators\Base\Authenticator;
@@ -17,201 +12,279 @@ use Neuron\Core\Tools;
 use Neuron\Net\Response;
 use Neuron\URLBuilder;
 
-class Password
-	extends Authenticator
+/**
+ * Class Password
+ * @package CatLab\Accounts\Authenticators
+ */
+class Password extends Authenticator
 {
-	/**
-	 * @return string
-	 * @throws \Neuron\Exceptions\DataNotSet
-	 */
-	public function getForm ()
-	{
-		$template = new Template ('CatLab/Accounts/authenticators/password/form.phpt');
+    /**
+     * @return string
+     * @throws \Neuron\Exceptions\DataNotSet
+     */
+    public function getForm()
+    {
+        $template = $this->getLoginForm();
+        return $template->parse();
+    }
 
-		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ()));
-		$template->set ('register', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken ()));
+    /**
+     * @return Response|string
+     */
+    public function login()
+    {
+        // Check for lost password form
+        if ($this->request->input('lostPassword')) {
+            return $this->lostPassword();
+        }
 
-		$template->set ('email', $this->request->input ('email'));
+        $template = $this->getLoginForm('CatLab/Accounts/authenticators/password/page.phpt');
 
-		return $template->parse ();
-	}
+        if ($this->request->isPost()) {
+            $button = $this->request->input('submit');
+            if ($button) {
+                switch ($button) {
+                    case 'register':
+                        return $this->register();
+                        break;
+                }
+            }
 
-	/**
-	 * @return Response|string
-	 */
-	public function login ()
-	{
-		$template = new Template ('CatLab/Accounts/authenticators/password/page.phpt');
+            $email = $this->request->input('email', 'email');
+            $password = $this->request->input('password');
 
-		if ($this->request->isPost ())
-		{
-			$button = $this->request->input ('submit');
-			if ($button) {
-				switch ($button) {
-					case 'register':
-						return $this->register ();
-					break;
-				}
-			}
+            if ($email && $password) {
+                $response = $this->processLogin($email, $password);
+                if ($response instanceof Response) {
+                    return $response;
+                } else if (is_string($response)) {
+                    $template->set('error', $response);
+                }
+            }
+        }
 
-			$email = $this->request->input ('email', 'email');
-			$password = $this->request->input ('password');
+        return Response::template($template);
+    }
 
-			if ($email && $password)
-			{
-				$response = $this->processLogin ($email, $password);
-				if ($response instanceof Response)
-				{
-					return $response;
-				}
-				else if (is_string ($response))
-				{
-					$template->set ('error', $response);
-				}
-			}
-		}
+    public function lostPassword()
+    {
+        $template = new Template('CatLab/Accounts/authenticators/password/page.phpt');
+        $template->set('layout', $this->module->getLayout());
+        $template->set('formTemplate', 'CatLab/Accounts/authenticators/password/lostPassword.phpt');
 
-		$template->set ('layout', $this->module->getLayout ());
+        $template->set(
+            'action',
+            URLBuilder::getURL
+            (
+                $this->module->getRoutePath() . '/login/' . $this->getToken(),
+                array(
+                    'lostPassword' => 1
+                )
+            )
+        );
 
-		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login/' . $this->getToken ()));
-		$template->set ('register', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken ()));
+        $template->set('email', $this->request->input('email'));
 
-		$template->set ('email', $this->request->input ('email'));
+        $template->set('login', URLBuilder::getURL(
+            $this->module->getRoutePath() . '/login/' . $this->getToken())
+        );
 
-		return Response::template ($template);
-	}
+        if ($this->request->isPost()) {
+            $email = $this->request->input('email', 'email');
 
-	/**
-	 * @return bool|Response|string
-	 */
-	public function register ()
-	{
-		$template = new Template ('CatLab/Accounts/authenticators/password/register.phpt');
+            $response = $this->processRecoverPassword($email);
+            if ($response instanceof Response) {
+                return $response;
+            } else if (is_string($response)) {
+                $template->set('error', $response);
+            }
+        }
 
-		if ($this->request->isPost ())
-		{
-			$email = $this->request->input ('email', 'email');
-			$username = $this->request->input ('username', 'username');
-			$password = $this->request->input ('password');
+        return Response::template($template);
+    }
 
-			$response = $this->processRegister ($email, $username, $password);
-			if ($response instanceof Response)
-			{
-				return $response;
-			}
-			else if (is_string ($response))
-			{
-				$template->set ('error', $response);
-			}
-		}
+    /**
+     * @return bool|Response|string
+     */
+    public function register()
+    {
+        $template = new Template ('CatLab/Accounts/authenticators/password/register.phpt');
 
-		$template->set ('layout', $this->module->getLayout ());
-		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $this->getToken ()));
-		$template->set ('email', $this->request->input ('email', 'string'));
-		$template->set ('username', $this->request->input ('username', 'string'));
+        if ($this->request->isPost()) {
+            $email = $this->request->input('email', 'email');
+            $username = $this->request->input('username', 'username');
+            $password = $this->request->input('password');
 
-		return Response::template ($template);
-	}
+            $response = $this->processRegister($email, $username, $password);
+            if ($response instanceof Response) {
+                return $response;
+            } else if (is_string($response)) {
+                $template->set('error', $response);
+            }
+        }
 
-	/**
-	 * Return an error (string) or redirect
-	 * @param $email
-	 * @param $password
-	 * @return string|Response
-	 */
-	private function processLogin ($email, $password)
-	{
-		$mapper = MapperFactory::getUserMapper ();
-		ExpectedType::check ($mapper, UserMapper::class);
+        $template->set('layout', $this->module->getLayout());
+        $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/register/' . $this->getToken()));
+        $template->set('email', $this->request->input('email', 'string'));
+        $template->set('username', $this->request->input('username', 'string'));
 
-		$user = $mapper->getFromLogin ($email, $password);
+        return Response::template($template);
+    }
 
-		if ($user)
-		{
-			// Everything okay
-			return $this->module->login ($this->request, $user);
-		}
+    /**
+     * Return an error (string) or redirect
+     * @param $email
+     * @param $password
+     * @return string|Response
+     */
+    private function processLogin($email, $password)
+    {
+        $mapper = MapperFactory::getUserMapper();
+        ExpectedType::check($mapper, UserMapper::class);
 
-		else {
-			// Check if we have this email address
-			$user = $mapper->getFromEmail ($email);
-			if ($user)
-			{
-				return 'PASSWORD_INCORRECT';
-			}
-			else {
-				return 'USER_NOT_FOUND';
-			}
-		}
-	}
+        $user = $mapper->getFromLogin($email, $password);
 
-	/**
-	 * @param $email
-	 * @param $username
-	 * @param $password
-	 * @return bool|string
-	 * @throws \Neuron\Exceptions\InvalidParameter
-	 */
-	private function processRegister ($email, $username, $password)
-	{
-		$mapper = MapperFactory::getUserMapper ();
-		ExpectedType::check ($mapper, UserMapper::class);
+        if ($user) {
+            // Everything okay
+            return $this->module->login($this->request, $user);
+        } else {
+            // Check if we have this email address
+            $user = $mapper->getFromEmail($email);
+            if ($user) {
+                return 'PASSWORD_INCORRECT';
+            } else {
+                return 'USER_NOT_FOUND';
+            }
+        }
+    }
 
-		// Check email invalid
-		if (!$email)
-		{
-			return 'EMAIL_INVALID';
-		}
+    /**
+     * @param $email
+     * @param $username
+     * @param $password
+     * @return bool|string
+     * @throws \Neuron\Exceptions\InvalidParameter
+     */
+    private function processRegister($email, $username, $password)
+    {
+        /** @var UserMapper $mapper */
+        $mapper = MapperFactory::getUserMapper();
+        ExpectedType::check($mapper, UserMapper::class);
 
-		// Check username input
-		if (!$username)
-		{
-			return 'USERNAME_INVALID';
-		}
+        // Check email invalid
+        if (!$email) {
+            return 'EMAIL_INVALID';
+        }
 
-		// Check if password is good
-		if (!Tools::checkInput ($password, 'password'))
-		{
-			return 'PASSWORD_INVALID';
-		}
+        // Check username input
+        if (!$username) {
+            return 'USERNAME_INVALID';
+        }
 
-		// Check if email is unique
-		$user = $mapper->getFromEmail ($email);
-		if ($user)
-		{
-			return 'EMAIL_DUPLICATE';
-		}
+        // Check if password is good
+        if (!Tools::checkInput($password, 'password')) {
+            return 'PASSWORD_INVALID';
+        }
 
-		// Check if username is unique
-		$user = $mapper->getFromUsername ($username);
-		if ($user)
-		{
-			return 'USERNAME_DUPLICATE';
-		}
+        // Check if email is unique
+        $user = $mapper->getFromEmail($email);
+        if ($user) {
+            return 'EMAIL_DUPLICATE';
+        }
 
-		// Create the user
-		$user = new User ();
-		$user->setEmail ($email);
-		$user->setUsername ($username);
-		$user->setPassword ($password);
+        // Check if username is unique
+        $user = $mapper->getFromUsername($username);
+        if ($user) {
+            return 'USERNAME_DUPLICATE';
+        }
 
-		$user = $mapper->create ($user);
-		if ($user) {
-			return $this->module->register ($this->request, $user);
-		}
-		else {
-			return $mapper->getError ();
-		}
-	}
+        // Create the user
+        $user = new User ();
+        $user->setEmail($email);
+        $user->setUsername($username);
+        $user->setPassword($password);
 
-	public function getInlineForm () {
+        $user = $mapper->create($user);
+        if ($user) {
+            return $this->module->register($this->request, $user);
+        } else {
+            return $mapper->getError();
+        }
+    }
 
-		$template = new Template ('CatLab/Accounts/authenticators/password/inlineform.phpt');
+    /**
+     * @param $email
+     * @return Response|string
+     */
+    private function processRecoverPassword($email)
+    {
+        /** @var UserMapper $mapper */
+        $mapper = MapperFactory::getUserMapper();
+        ExpectedType::check($mapper, UserMapper::class);
 
-		$template->set ('action', URLBuilder::getURL ($this->module->getRoutePath () . '/login/password', array ('return' => $this->request->getUrl ())));
-		$template->set ('email', Tools::getInput ($_POST, 'email', 'varchar'));
+        // Check email invalid
+        if (!$email) {
+            return 'EMAIL_INVALID';
+        }
 
-		return $template;
-	}
+        $template = new Template('CatLab/Accounts/authenticators/password/page.phpt');
+        $template->set('layout', $this->module->getLayout());
+        $template->set('formTemplate', 'CatLab/Accounts/authenticators/password/passwordSent.phpt');
+        $template->set('login', URLBuilder::getURL(
+            $this->module->getRoutePath() . '/login/' . $this->getToken())
+        );
+
+        $user = $mapper->getFromEmail($email);
+        if ($user) {
+            $user->sendPasswordRecoveryEmail($this->module);
+        }
+
+        return Response::template($template);
+    }
+
+    public function getInlineForm()
+    {
+
+        $template = new Template ('CatLab/Accounts/authenticators/password/inlineform.phpt');
+
+        $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/login/password', array('return' => $this->request->getUrl())));
+        $template->set('email', Tools::getInput($_POST, 'email', 'varchar'));
+
+        return $template;
+    }
+
+    /**
+     * @param string $templatePath
+     * @return Template
+     */
+    private function getLoginForm($templatePath = 'CatLab/Accounts/authenticators/password/form.phpt')
+    {
+        $template = new Template($templatePath);
+
+        $template->set('action', URLBuilder::getURL(
+            $this->module->getRoutePath() . '/login/' . $this->getToken())
+        );
+
+        $template->set('register', URLBuilder::getURL(
+            $this->module->getRoutePath() . '/register/' . $this->getToken())
+        );
+
+        $template->set(
+            'lostPassword',
+            URLBuilder::getURL
+            (
+                $this->module->getRoutePath() . '/login/' . $this->getToken(),
+                array(
+                    'lostPassword' => 1
+                )
+            )
+        );
+
+        $template->set('email', $this->request->input('email'));
+        $template->set('layout', $this->module->getLayout());
+        $template->set('formTemplate', 'CatLab/Accounts/authenticators/password/form.phpt');
+
+        return $template;
+    }
 
 }

@@ -10,6 +10,8 @@
 	<label for="inputPassword" class="sr-only"><?php echo $this->gettext ('Password'); ?></label>
 	<input type="password" class="form-control" id="inputPassword" name="password" placeholder="<?php echo $this->gettext ('Password'); ?>" required />
 
+    <p><a href="<?php echo $lostPassword; ?>"><?php echo $this->gettext('Lost password'); ?></a></p>
+
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $this->gettext ('Sign in'); ?></button>
 
 	<p class="register">
