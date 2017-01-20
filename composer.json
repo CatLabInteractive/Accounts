@@ -9,7 +9,7 @@
   "require": {
     "php": ">=5.5.0",
     "catlabinteractive/neuron": ">=2.0.3",
-	"catlabinteractive/mailer": ">=0.1.4",
+	"catlabinteractive/mailer": ">=0.1.6",
     "ircmaxell/password-compat" : "*",
 	"facebook/php-sdk-v4": "~4.0",
 	"openid/php-openid" : ">=2.3.0",
