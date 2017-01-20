@@ -21,22 +21,34 @@ use Neuron\URLBuilder;
 class User implements \Neuron\Interfaces\Models\User
 {
 
-    /** @var int $id */
+    /**
+     * @var int $id
+     */
     private $id;
 
-    /** @var string $email */
+    /**
+     * @var string $email
+     */
     private $email;
 
-    /** @var string $password */
+    /**
+     * @var string $password
+     */
     private $password;
 
-    /** @var string $passwordhash */
+    /**
+     * @var string $passwordhash
+     */
     private $passwordhash;
 
-    /** @var string $username */
+    /**
+     * @var string $username
+     */
     private $username;
 
-    /** @var boolean */
+    /**
+     * @var boolean
+     */
     private $emailVerified;
 
     public function __construct()
@@ -205,11 +217,16 @@ class User implements \Neuron\Interfaces\Models\User
      */
     public function sendPasswordRecoveryEmail(Module $module)
     {
-        return;
+        $passwordRecoveryRequest = new PasswordRecovery();
+        $passwordRecoveryRequest->setExpires(new DateTime ('next week'));
+        $passwordRecoveryRequest->setToken(TokenGenerator::getSimplifiedToken(24));
+        $passwordRecoveryRequest->setUser($this);
 
-        $template = new Template ('CatLab/Accounts/mails/passwordRecovery.phpt');
+        MapperFactory::getPasswordRecoveryMapper()->create($passwordRecoveryRequest);
+
+        $template = new Template('CatLab/Accounts/mails/passwordRecovery.phpt');
         $template->set('user', $this);
-        $template->set('recovery_url', $email->getVerifyURL($module->getRoutePath()));
+        $template->set('recovery_url', $passwordRecoveryRequest->getUrl($module->getRoutePath()));
 
         $mail = new Mail ();
         $mail->setSubject(Text::getInstance()->getText('Password recovery'));

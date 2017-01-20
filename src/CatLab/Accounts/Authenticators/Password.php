@@ -3,6 +3,7 @@
 namespace CatLab\Accounts\Authenticators;
 
 use CatLab\Accounts\Authenticators\Base\Authenticator;
+use CatLab\Accounts\Enums\Errors;
 use CatLab\Accounts\Mappers\UserMapper;
 use Neuron\Exceptions\ExpectedType;
 use Neuron\MapperFactory;
@@ -10,6 +11,7 @@ use CatLab\Accounts\Models\User;
 use Neuron\Core\Template;
 use Neuron\Core\Tools;
 use Neuron\Net\Response;
+use Neuron\Tools\Text;
 use Neuron\URLBuilder;
 
 /**
@@ -66,7 +68,28 @@ class Password extends Authenticator
         return Response::template($template);
     }
 
+    /**
+     * @return Response
+     */
     public function lostPassword()
+    {
+        $step = $this->request->input('lostPassword');
+
+        switch ($step) {
+
+            case 2:
+                return $this->getChangePasswordForm();
+
+            case 1:
+            default:
+                return $this->getLostPasswordForm();
+        }
+    }
+
+    /**
+     * @return Response
+     */
+    private function getLostPasswordForm()
     {
         $template = new Template('CatLab/Accounts/authenticators/password/page.phpt');
         $template->set('layout', $this->module->getLayout());
@@ -93,6 +116,62 @@ class Password extends Authenticator
             $email = $this->request->input('email', 'email');
 
             $response = $this->processRecoverPassword($email);
+            if ($response instanceof Response) {
+                return $response;
+            } else if (is_string($response)) {
+                $template->set('error', $response);
+            }
+        }
+
+        return Response::template($template);
+    }
+
+    /**
+     * @return Response
+     */
+    private function getChangePasswordForm()
+    {
+        $id = $this->request->input('id');
+        $token = $this->request->input('token');
+
+        $passwordRecovery = \CatLab\Accounts\MapperFactory::getPasswordRecoveryMapper()->getFromId($id);
+        if ($passwordRecovery) {
+            if (
+                $passwordRecovery->isExpired() ||
+                $passwordRecovery->getToken() !== $token
+            ) {
+                $passwordRecovery = null;
+            }
+        }
+
+        if (!$passwordRecovery) {
+            return Response::error(
+                Text::get('The password recovery link you have clicked is not valid.'),
+                Response::STATUS_NOTFOUND
+            );
+        }
+
+        // Password recovery token is valid.
+        $template = new Template('CatLab/Accounts/authenticators/password/page.phpt');
+        $template->set('layout', $this->module->getLayout());
+        $template->set('formTemplate', 'CatLab/Accounts/authenticators/password/changePassword.phpt');
+        $template->set('action', URLBuilder::getURL(
+            $this->module->getRoutePath() . '/login/password',
+            array(
+                'lostPassword' => 2,
+                'id' => $id,
+                'token' => $token
+            )
+        ));
+
+        $user = $passwordRecovery->getUser();
+        $template->set('user', $user);
+
+        if ($this->request->isPost()) {
+            $password = $this->request->input('password', 'password');
+            $confirmPassword = $this->request->input('password_confirmation', 'password');
+
+            $response = $this->processChangePassword($user, $password, $confirmPassword);
             if ($response instanceof Response) {
                 return $response;
             } else if (is_string($response)) {
@@ -139,6 +218,7 @@ class Password extends Authenticator
      */
     private function processLogin($email, $password)
     {
+        /** @var UserMapper $mapper */
         $mapper = MapperFactory::getUserMapper();
         ExpectedType::check($mapper, UserMapper::class);
 
@@ -151,9 +231,9 @@ class Password extends Authenticator
             // Check if we have this email address
             $user = $mapper->getFromEmail($email);
             if ($user) {
-                return 'PASSWORD_INCORRECT';
+                return Errors::PASSWORD_INCORRECT;
             } else {
-                return 'USER_NOT_FOUND';
+                return Errors::USER_NOT_FOUND;
             }
         }
     }
@@ -173,29 +253,29 @@ class Password extends Authenticator
 
         // Check email invalid
         if (!$email) {
-            return 'EMAIL_INVALID';
+            return Errors::EMAIL_INVALID;
         }
 
         // Check username input
         if (!$username) {
-            return 'USERNAME_INVALID';
+            return Errors::USERNAME_INVALID;
         }
 
         // Check if password is good
         if (!Tools::checkInput($password, 'password')) {
-            return 'PASSWORD_INVALID';
+            return Errors::PASSWORD_INVALID;
         }
 
         // Check if email is unique
         $user = $mapper->getFromEmail($email);
         if ($user) {
-            return 'EMAIL_DUPLICATE';
+            return Errors::EMAIL_DUPLICATE;
         }
 
         // Check if username is unique
         $user = $mapper->getFromUsername($username);
         if ($user) {
-            return 'USERNAME_DUPLICATE';
+            return Errors::USERNAME_DUPLICATE;
         }
 
         // Create the user
@@ -224,7 +304,7 @@ class Password extends Authenticator
 
         // Check email invalid
         if (!$email) {
-            return 'EMAIL_INVALID';
+            return Errors::EMAIL_INVALID;
         }
 
         $template = new Template('CatLab/Accounts/authenticators/password/page.phpt');
@@ -242,9 +322,38 @@ class Password extends Authenticator
         return Response::template($template);
     }
 
+    /**
+     * Change the password of a user and sent them on their way.
+     * @param User $user
+     * @param $password
+     * @param $confirmPassword
+     * @return string
+     */
+    private function processChangePassword(User $user, $password, $confirmPassword)
+    {
+        if (empty($password)) {
+            return Errors::PASSWORD_INVALID;
+        }
+
+        if ($password !== $confirmPassword) {
+            return Errors::CONFIRM_PASSWORD_INVALID;
+        }
+
+        /** @var UserMapper $mapper */
+        $mapper = MapperFactory::getUserMapper();
+
+        $user->setPassword($password);
+        $mapper->update($user);
+
+        // Now login this user.
+        return $this->module->login($this->request, $user);
+    }
+
+    /**
+     * @return Template
+     */
     public function getInlineForm()
     {
-
         $template = new Template ('CatLab/Accounts/authenticators/password/inlineform.phpt');
 
         $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/login/password', array('return' => $this->request->getUrl())));
@@ -271,8 +380,7 @@ class Password extends Authenticator
 
         $template->set(
             'lostPassword',
-            URLBuilder::getURL
-            (
+            URLBuilder::getURL(
                 $this->module->getRoutePath() . '/login/' . $this->getToken(),
                 array(
                     'lostPassword' => 1

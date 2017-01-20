@@ -3,20 +3,14 @@
 namespace CatLab\Accounts\Models;
 
 use DateTime;
-use Neuron\Interfaces\Models\User;
-use Neuron\Interfaces\Model;
 use Neuron\URLBuilder;
 
 /**
- * Class Email
- *
- * Represent an email address.
- *
+ * Class PasswordRecovery
  * @package CatLab\Accounts\Models
  */
-class Email implements Model
+class PasswordRecovery
 {
-
     /**
      * @var int
      */
@@ -30,29 +24,12 @@ class Email implements Model
     /**
      * @var string
      */
-    private $email;
-
-    /**
-     * @var boolean
-     */
-    private $verified;
-
-    /**
-     * @var string
-     */
     private $token;
 
     /**
      * @var DateTime
      */
     private $expires;
-
-    public function __construct($id = null)
-    {
-        if (isset ($id)) {
-            $this->setId($id);
-        }
-    }
 
     /**
      * @return int
@@ -64,7 +41,7 @@ class Email implements Model
 
     /**
      * @param int $id
-     * @return self
+     * @return PasswordRecovery
      */
     public function setId($id)
     {
@@ -82,47 +59,11 @@ class Email implements Model
 
     /**
      * @param User $user
-     * @return self
+     * @return PasswordRecovery
      */
     public function setUser($user)
     {
         $this->user = $user;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     * @return self
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isVerified()
-    {
-        return $this->verified;
-    }
-
-    /**
-     * @param boolean $verified
-     * @return self
-     */
-    public function setVerified($verified)
-    {
-        $this->verified = $verified;
         return $this;
     }
 
@@ -136,7 +77,7 @@ class Email implements Model
 
     /**
      * @param string $token
-     * @return self
+     * @return PasswordRecovery
      */
     public function setToken($token)
     {
@@ -154,7 +95,7 @@ class Email implements Model
 
     /**
      * @param DateTime $expires
-     * @return self
+     * @return PasswordRecovery
      */
     public function setExpires($expires)
     {
@@ -174,13 +115,14 @@ class Email implements Model
      * @param $rootPath
      * @return string
      */
-    public function getVerifyURL($rootPath)
+    public function getUrl($rootPath)
     {
         $params = array(
+            'lostPassword' => 2,
+            'id' => $this->getId(),
             'token' => $this->getToken()
         );
 
-        return URLBuilder::getAbsoluteURL($rootPath . '/verify/' . $this->getId(), $params);
+        return URLBuilder::getAbsoluteURL($rootPath . '/login/password', $params);
     }
-
 }

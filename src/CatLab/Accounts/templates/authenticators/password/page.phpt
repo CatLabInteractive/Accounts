@@ -1,5 +1,6 @@
 <?php
-	$this->layout ($layout);
+    $this->layout($layout);
+    $this->textdomain('catlab.accounts');
 ?>
 
-<?php echo $this->template ($formTemplate); ?>
+<?php echo $this->template($formTemplate); ?>

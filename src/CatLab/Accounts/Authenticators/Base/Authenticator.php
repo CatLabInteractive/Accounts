@@ -20,15 +20,24 @@ abstract class Authenticator {
 
 	}
 
-	/** @var Request $request */
+	/**
+     * @var Request $request
+     */
 	protected $request;
 
-	/** @var Module $module */
+	/**
+     * @var Module $module
+     */
 	protected $module;
 
-	/** @var string $token */
+	/**
+     * @var string $token
+     */
 	private $token;
 
+    /**
+     * @param Module $module
+     */
 	public function setModule (Module $module)
 	{
 		$this->module = $module;

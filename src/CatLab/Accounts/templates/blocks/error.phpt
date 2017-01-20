@@ -1,18 +1,24 @@
+<?php
+
+use CatLab\Accounts\Enums\Errors;
+
+?>
+
 <?php if (isset ($error)) { ?>
 	<div class="alert alert-danger" role="alert">
 
 		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 		<span class="sr-only">Error:</span>
 
-		<?php if ($error === 'USER_NOT_FOUND') { ?>
+		<?php if ($error === Errors::USER_NOT_FOUND) { ?>
 
 			<?php echo $this->gettext ('We don\'t know anyone with that email address.'); ?>
 
-		<?php } else if ($error === 'PASSWORD_INCORRECT') { ?>
+		<?php } else if ($error === Errors::PASSWORD_INCORRECT) { ?>
 
 			<?php echo $this->gettext ('The password you have provided is incorrect.'); ?>
 
-		<?php } else if ($error === 'EMAIL_DUPLICATE') { ?>
+		<?php } else if ($error === Errors::EMAIL_DUPLICATE) { ?>
 
 			<?php echo $this->gettext ('This email address is already registered in our database.'); ?>
 
@@ -24,7 +30,7 @@
 				); ?>
 			<?php } ?>
 
-		<?php } else if ($error === 'USERNAME_DUPLICATE') { ?>
+		<?php } else if ($error === Errors::USERNAME_DUPLICATE) { ?>
 
 			<?php echo $this->gettext ('This username is already in use.'); ?>
 
@@ -36,7 +42,16 @@
 				); ?>
 			<?php } ?>
 
-		<?php } else { ?>
+        <?php } else if ($error === Errors::CONFIRM_PASSWORD_INVALID) { ?>
+
+            <?php echo $this->gettext ('Your passwords do not match.'); ?>
+
+        <?php } else if ($error === Errors::PASSWORD_INVALID) { ?>
+
+            <?php echo $this->gettext ('This password does not match our security requirements.'); ?>
+            <?php echo $this->gettext ('Please choose a different password.'); ?>
+
+        <?php } else { ?>
 
 			<?php echo $error; ?>
 
