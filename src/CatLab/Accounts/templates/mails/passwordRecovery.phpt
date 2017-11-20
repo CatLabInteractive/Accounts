@@ -6,7 +6,7 @@
 <p><?php echo $this->gettext('If you have submitted this request, please click the link below:'); ?></p>
 
 <p>
-    <a href="<?php echo $recovery_url; ?>"><?php echo $this->gettext('Recover your password'); ?></a>
+    <a href="<?php echo $recovery_url; ?>"><?php echo $recovery_url; ?></a>
 </p>
 
 <p><?php echo $this->gettext('If you did not submit this request, please ignore this email.'); ?></p>
