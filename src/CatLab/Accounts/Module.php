@@ -178,6 +178,7 @@ class Module extends Observable
         }
 
         $this->trigger('user:login', [
+            'request' => $request,
             'user' => $user,
             'registered' => $registered
         ]);
