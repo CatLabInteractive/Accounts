@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: daedeloth
- * Date: 16/11/14
- * Time: 14:34
- */
 
 namespace CatLab\Accounts;
 
@@ -22,9 +16,14 @@ use Neuron\Net\Request;
 use Neuron\Net\Response;
 use Neuron\Router;
 use Neuron\Tools\Text;
+use Neuron\Models\Observable;
 use Neuron\URLBuilder;
 
-class Module
+/**
+ * Class Module
+ * @package CatLab\Accounts
+ */
+class Module extends Observable
     implements \Neuron\Interfaces\Module
 {
     /** @var AuthenticatorCollection $authenticators */
@@ -36,10 +35,10 @@ class Module
     /** @var string $routepath */
     private $routepath;
 
-	/**
-	 * @var bool
-	 */
-	private $requireEmailValidation = false;
+    /**
+     * @var bool
+     */
+    private $requireEmailValidation = false;
 
     /**
      *
@@ -110,24 +109,24 @@ class Module
         }
     }
 
-	/**
-	 * @param Request $request
-	 * @param User $user
-	 * @return Response
-	 */
-	public function register (Request $request, User $user)
-	{
-		// New account. Needs verification?
-		if ($this->requiresEmailValidation ()) {
-			$user->sendVerificationEmail ($this);
-		}
+    /**
+     * @param Request $request
+     * @param User $user
+     * @return Response
+     */
+    public function register (Request $request, User $user)
+    {
+        // New account. Needs verification?
+        if ($this->requiresEmailValidation ()) {
+            $user->sendVerificationEmail ($this);
+        }
 
-		else {
-			$user->sendConfirmationEmail ($this);
-		}
+        else {
+            $user->sendConfirmationEmail ($this);
+        }
 
-		return $this->login($request, $user, true);
-	}
+        return $this->login($request, $user, true);
+    }
 
     /**
      * Login a specific user
@@ -138,13 +137,13 @@ class Module
      */
     public function login (Request $request, User $user, $registration = false)
     {
-		// Check for email validation
-		if ($this->requiresEmailValidation()) {
-			if (!$user->isEmailVerified()) {
-				$request->getSession()->set ('catlab-non-verified-user-id', $user->getId());
-				return Response::redirect(URLBuilder::getURL($this->routepath . '/notverified'));
-			}
-		}
+        // Check for email validation
+        if ($this->requiresEmailValidation()) {
+            if (!$user->isEmailVerified()) {
+                $request->getSession()->set ('catlab-non-verified-user-id', $user->getId());
+                return Response::redirect(URLBuilder::getURL($this->routepath . '/notverified'));
+            }
+        }
 
         $request->getSession()->set('catlab-user-id', $user->getId());
         return $this->postLogin($request, $user, $registration);
@@ -159,7 +158,7 @@ class Module
     public function logout (Request $request)
     {
         $request->getSession ()->set ('catlab-user-id', null);
-		$request->getSession ()->set ('catlab-non-verified-user-id', null);
+        $request->getSession ()->set ('catlab-non-verified-user-id', null);
         return $this->postLogout ($request);
     }
 
@@ -178,6 +177,20 @@ class Module
             $parameters['registered'] = 1;
         }
 
+        $this->trigger('user:login', [
+            'user' => $user,
+            'registered' => $registered
+        ]);
+
+        return $this->redirectToWelcome ();
+    }
+
+    /**
+     * Redirect user to welcome page.
+     * @return Response
+     */
+    public function redirectToWelcome ()
+    {
         return Response::redirect(
             URLBuilder::getURL(
                 $this->getRoutePath() . '/welcome',
@@ -193,13 +206,13 @@ class Module
      */
     public function postLogout (Request $request)
     {
-	    if ($redirect = $request->getSession ()->get ('post-login-redirect'))
-	    {
-		    $request->getSession ()->set ('post-login-redirect', null);
-		    $request->getSession ()->set ('cancel-login-redirect', null);
+        if ($redirect = $request->getSession ()->get ('post-login-redirect'))
+        {
+            $request->getSession ()->set ('post-login-redirect', null);
+            $request->getSession ()->set ('cancel-login-redirect', null);
 
-		    return Response::redirect ($redirect);
-	    }
+            return Response::redirect ($redirect);
+        }
 
         return Response::redirect (URLBuilder::getURL ('/'));
     }
@@ -219,15 +232,15 @@ class Module
      */
     public function setRoutes (Router $router)
     {
-	    // Filter
-	    $router->addFilter ('authenticated', array ($this, 'routerVerifier'));
+        // Filter
+        $router->addFilter ('authenticated', array ($this, 'routerVerifier'));
 
-	    // Routes
+        // Routes
         $router->match ('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
         $router->match ('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
         $router->match ('GET', $this->routepath . '/welcome', '\CatLab\Accounts\Controllers\LoginController@welcome')->filter('authenticated');
 
-		$router->match ('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
+        $router->match ('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
 
         $router->match ('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
 
@@ -236,7 +249,7 @@ class Module
         $router->match ('GET|POST', $this->routepath . '/register/{authenticator}', '\CatLab\Accounts\Controllers\RegistrationController@authenticator');
         $router->match ('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
 
-		$router->get ($this->routepath . '/verify/{id}', '\CatLab\Accounts\Controllers\LoginController@verify');
+        $router->get ($this->routepath . '/verify/{id}', '\CatLab\Accounts\Controllers\LoginController@verify');
     }
 
     /**
@@ -274,30 +287,30 @@ class Module
         return $this->layout;
     }
 
-	public function routerVerifier (\Neuron\Models\Router\Filter $filter)
-	{
-		if ($filter->getRequest ()->getUser ()) {
-			return true;
-		}
+    public function routerVerifier (\Neuron\Models\Router\Filter $filter)
+    {
+        if ($filter->getRequest ()->getUser ()) {
+            return true;
+        }
 
-		return Response::error ('You must be authenticated', Response::STATUS_UNAUTHORIZED);
-	}
+        return Response::error ('You must be authenticated', Response::STATUS_UNAUTHORIZED);
+    }
 
-	/**
-	 * @return boolean
-	 */
-	public function requiresEmailValidation ()
-	{
-		return $this->requireEmailValidation;
-	}
+    /**
+     * @return boolean
+     */
+    public function requiresEmailValidation ()
+    {
+        return $this->requireEmailValidation;
+    }
 
-	/**
-	 * @param boolean $requireEmailValidation
-	 * @return self
-	 */
-	public function requireEmailValidation ($requireEmailValidation = true)
-	{
-		$this->requireEmailValidation = $requireEmailValidation;
-		return $this;
-	}
+    /**
+     * @param boolean $requireEmailValidation
+     * @return self
+     */
+    public function requireEmailValidation ($requireEmailValidation = true)
+    {
+        $this->requireEmailValidation = $requireEmailValidation;
+        return $this;
+    }
 }
