@@ -183,14 +183,21 @@ class Module extends Observable
             'registered' => $registered
         ]);
 
-        return $this->redirectToWelcome ();
+        // Should skip welcome screen?
+        if ($request->getSession()->set('skip-welcome-redirect')) {
+            $redirectUrl = $this->getAndClearPostLoginRedirect($request);
+            return Response::redirect($redirectUrl);
+        }
+
+        return $this->redirectToWelcome ([]);
     }
 
     /**
      * Redirect user to welcome page.
+     * @param $parameters
      * @return Response
      */
-    public function redirectToWelcome ()
+    public function redirectToWelcome ($parameters)
     {
         return Response::redirect(
             URLBuilder::getURL(
@@ -313,5 +320,24 @@ class Module extends Observable
     {
         $this->requireEmailValidation = $requireEmailValidation;
         return $this;
+    }
+
+    /**
+     * @param Request $request
+     * @return string
+     */
+    public function getAndClearPostLoginRedirect(Request $request)
+    {
+        if ($redirect = $request->getSession ()->get ('post-login-redirect'))
+        {
+            $request->getSession ()->set ('post-login-redirect', null);
+            $request->getSession ()->set ('cancel-login-redirect', null);
+
+            //return Response::redirect ($redirect);
+        } else {
+            $redirect = '/';
+        }
+
+        return $redirect;
     }
 }

@@ -23,15 +23,7 @@ class LoginController
         $template->set('name', $user->getUsername());
         $template->set('layout', $this->module->getLayout());
 
-        if ($redirect = $this->request->getSession ()->get ('post-login-redirect'))
-        {
-            $this->request->getSession ()->set ('post-login-redirect', null);
-            $this->request->getSession ()->set ('cancel-login-redirect', null);
-
-            //return Response::redirect ($redirect);
-        } else {
-            $redirect = '/';
-        }
+        $redirect = $this->module->getAndClearPostLoginRedirect($this->request);
 
         // Tracker
         $tracker = array(
@@ -58,6 +50,10 @@ class LoginController
 		if ($return = $this->request->input ('cancel')) {
 			$this->request->getSession ()->set ('cancel-login-redirect', $return);
 		}
+
+		if ($this->request->input('skipWelcome')) {
+		    $this->request->getSession()->set('skip-welcome-redirect', $this->request->input('skipWelcome') ? 1 : 0);
+        }
 
 		// Check if already registered
 		if ($user = $this->request->getUser ('accounts')) {
