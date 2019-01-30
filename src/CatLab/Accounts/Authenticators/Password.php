@@ -204,7 +204,11 @@ class Password extends Authenticator
     {
         $template = new Template ('CatLab/Accounts/authenticators/password/register.phpt');
 
-        if ($this->request->isPost()) {
+        $receivedToken = $this->request->input('token');
+        if (
+            $this->request->isPost() &&
+            $receivedToken
+        ) {
             $email = $this->request->input('email', 'email');
             $username = $this->request->input('username', 'username');
             $password = $this->request->input('password');
@@ -240,6 +244,7 @@ class Password extends Authenticator
      * @param $password
      * @return string|Response
      * @throws ExpectedType
+     * @throws \Neuron\Exceptions\DataNotSet
      */
     private function processLogin($email, $password)
     {
@@ -367,6 +372,7 @@ class Password extends Authenticator
      * @param $password
      * @param $confirmPassword
      * @return string
+     * @throws \Neuron\Exceptions\DataNotSet
      */
     private function processChangePassword(User $user, $password, $confirmPassword)
     {
