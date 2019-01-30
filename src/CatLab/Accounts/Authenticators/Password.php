@@ -10,8 +10,11 @@ use Neuron\MapperFactory;
 use CatLab\Accounts\Models\User;
 use Neuron\Core\Template;
 use Neuron\Core\Tools;
+use Neuron\Net\Client;
+use Neuron\Net\Request;
 use Neuron\Net\Response;
 use Neuron\Tools\Text;
+use Neuron\Tools\TokenGenerator;
 use Neuron\URLBuilder;
 
 /**
@@ -20,6 +23,16 @@ use Neuron\URLBuilder;
  */
 class Password extends Authenticator
 {
+    /**
+     * @var string
+     */
+    private $recaptchaClientKey;
+
+    /**
+     * @var string
+     */
+    private $recaptchaClientSecret;
+
     /**
      * @return string
      * @throws \Neuron\Exceptions\DataNotSet
@@ -184,6 +197,8 @@ class Password extends Authenticator
 
     /**
      * @return bool|Response|string
+     * @throws \Neuron\Exceptions\DataNotSet
+     * @throws \Neuron\Exceptions\InvalidParameter
      */
     public function register()
     {
@@ -202,6 +217,15 @@ class Password extends Authenticator
             }
         }
 
+        // Set form protection
+        $formToken = TokenGenerator::getToken(32);
+        $this->request->getSession()->set('formToken', $formToken);
+
+        if ($this->recaptchaClientKey) {
+            $template->set('recaptchaClientKey', $this->recaptchaClientKey);
+        }
+
+        $template->set('token', $formToken);
         $template->set('layout', $this->module->getLayout());
         $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/register/' . $this->getToken()));
         $template->set('email', $this->request->input('email', 'string'));
@@ -215,6 +239,7 @@ class Password extends Authenticator
      * @param $email
      * @param $password
      * @return string|Response
+     * @throws ExpectedType
      */
     private function processLogin($email, $password)
     {
@@ -244,12 +269,25 @@ class Password extends Authenticator
      * @param $password
      * @return bool|string
      * @throws \Neuron\Exceptions\InvalidParameter
+     * @throws \Neuron\Exceptions\DataNotSet
      */
     private function processRegister($email, $username, $password)
     {
         /** @var UserMapper $mapper */
         $mapper = MapperFactory::getUserMapper();
         ExpectedType::check($mapper, UserMapper::class);
+
+        // Check for token
+        $token = $this->request->getSession()->get('formToken');
+        $receivedToken = $this->request->input('token');
+        if (!$token || !$receivedToken || $token !== $receivedToken) {
+            return Errors::INVALID_REQUEST;
+        }
+
+        // Verify recaptcha
+        if (!$this->verifyRecaptcha()) {
+            return Errors::INVALID_REQUEST;
+        }
 
         // Check email invalid
         if (!$email) {
@@ -295,6 +333,7 @@ class Password extends Authenticator
     /**
      * @param $email
      * @return Response|string
+     * @throws ExpectedType
      */
     private function processRecoverPassword($email)
     {
@@ -393,6 +432,52 @@ class Password extends Authenticator
         $template->set('formTemplate', 'CatLab/Accounts/authenticators/password/form.phpt');
 
         return $template;
+    }
+
+    /**
+     * @param string $clientKey
+     * @param string $clientSecret
+     * @return Password
+     */
+    public function setReCaptcha($clientKey, $clientSecret)
+    {
+        $this->recaptchaClientKey = $clientKey;
+        $this->recaptchaClientSecret = $clientSecret;
+
+        return $this;
+    }
+
+    /**
+     * Verify recaptcha code
+     */
+    private function verifyRecaptcha()
+    {
+        if (!isset($this->recaptchaClientKey)) {
+            return true;
+        }
+
+        $recaptcha = $this->request->input('g-recaptcha-response');
+        if (!$recaptcha) {
+            return false;
+        }
+
+        $request = new Request();
+        $request->setUrl('https://www.google.com/recaptcha/api/siteverify');
+        $request->setBody([
+            'secret' => $this->recaptchaClientSecret,
+            'response' => $recaptcha,
+            'remoteip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null
+        ]);
+
+        $client = Client::getInstance();
+
+        $response = $client->post($request);
+        if (!$response->getBody()) {
+            return false;
+        }
+
+        $responseData = json_decode($response->getBody(), true);
+        return isset($responseData['success']) && $responseData['success'];
     }
 
 }

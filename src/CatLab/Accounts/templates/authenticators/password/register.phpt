@@ -3,7 +3,7 @@
 	$this->textdomain ('catlab.accounts');
 ?>
 
-<form method="post" action="<?php echo $action; ?>" role="form">
+<form method="post" action="<?php echo $action; ?>" role="form" id="registerForm">
 
     <h2><?php echo $this->gettext('Welcome, stranger'); ?></h2>
     <?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>
@@ -24,5 +24,21 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="<?php echo $this->gettext ('Password'); ?>" />
     </div>
 
-	<button type="submit" class="btn btn-default"><?php echo $this->gettext ('Register'); ?></button>
+    <input type="hidden" class="hidden" name="token" value="<?php echo $token; ?>" />
+
+    <?php if (isset($recaptchaClientKey)) { ?>
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+        <script type="text/javascript">
+            function submitRegistration() {
+                document.getElementById('registerForm').submit();
+            }
+        </script>
+        <button
+                class="g-recaptcha btn btn-default"
+                data-sitekey="<?php echo $recaptchaClientKey; ?>"
+                data-callback="submitRegistration"
+        ><?php echo $this->gettext ('Register'); ?></button>
+    <?php } else { ?>
+        <button type="submit" class="g-recaptcha btn btn-default"><?php echo $this->gettext ('Register'); ?></button>
+    <?php } ?>
 </form>

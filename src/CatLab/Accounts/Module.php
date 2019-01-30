@@ -79,6 +79,7 @@ class Module extends Observable
     /**
      * Set user from session
      * @param Request $request
+     * @throws \Neuron\Exceptions\InvalidParameter
      */
     public function setRequestUser (Request $request)
     {
@@ -113,6 +114,7 @@ class Module extends Observable
      * @param Request $request
      * @param User $user
      * @return Response
+     * @throws DataNotSet
      */
     public function register (Request $request, User $user)
     {
@@ -134,6 +136,7 @@ class Module extends Observable
      * @param User $user
      * @param bool $registration
      * @return \Neuron\Net\Response
+     * @throws DataNotSet
      */
     public function login (Request $request, User $user, $registration = false)
     {
@@ -169,6 +172,7 @@ class Module extends Observable
      * @param \Neuron\Interfaces\Models\User $user
      * @param boolean $registered
      * @return \Neuron\Net\Response
+     * @throws DataNotSet
      */
     public function postLogin (Request $request, \Neuron\Interfaces\Models\User $user, $registered = false)
     {
@@ -184,7 +188,7 @@ class Module extends Observable
         ]);
 
         // Should skip welcome screen?
-        if ($request->getSession()->set('skip-welcome-redirect')) {
+        if ($request->getSession()->get('skip-welcome-redirect')) {
             $redirectUrl = $this->getAndClearPostLoginRedirect($request);
             return Response::redirect($redirectUrl);
         }
@@ -211,6 +215,7 @@ class Module extends Observable
      * Called after a redirect
      * @param Request $request
      * @return Response
+     * @throws DataNotSet
      */
     public function postLogout (Request $request)
     {
@@ -325,6 +330,7 @@ class Module extends Observable
     /**
      * @param Request $request
      * @return string
+     * @throws DataNotSet
      */
     public function getAndClearPostLoginRedirect(Request $request)
     {
