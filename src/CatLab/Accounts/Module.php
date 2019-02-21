@@ -181,6 +181,9 @@ class Module extends Observable
             $parameters['registered'] = 1;
         }
 
+        // Also set in session... why wouldn't this be in session? :D
+        $request->getSession()->set('userJustRegistered', $registered);
+
         $this->trigger('user:login', [
             'request' => $request,
             'user' => $user,

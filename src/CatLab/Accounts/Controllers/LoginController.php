@@ -26,18 +26,32 @@ class LoginController
         $redirect = $this->module->getAndClearPostLoginRedirect($this->request);
 
         // Tracker
-        $tracker = array(
-            'event' => $this->request->input('registered') ? 'registration' : 'login'
+        $trackerEvents = array();
+
+        // is user registered?
+        if (
+            $this->request->input('registered') ||
+            $this->request->getSession()->get('userJustRegistered')
+        ) {
+            $trackerEvents[] = array(
+                'event' => 'registration'
+            );
+        }
+
+        $trackerEvents[] = array(
+            'event' => 'login'
         );
 
         $template->set('redirect_url', $redirect);
-        $template->set('tracker', $tracker);
+        $template->set('tracker', $trackerEvents[0]);
+        $template->set('trackers', $trackerEvents);
 
         return Response::template ($template);
     }
 
     /**
      * @return Response
+     * @throws \Neuron\Exceptions\DataNotSet
      */
 	public function login ()
 	{
@@ -89,11 +103,12 @@ class LoginController
 		return Response::template ($template);
 	}
 
-	/**
-	 * @param $id
-	 * @return Response
-	 * @throws InvalidParameter
-	 */
+    /**
+     * @param $id
+     * @return Response
+     * @throws InvalidParameter
+     * @throws \Neuron\Exceptions\DataNotSet
+     */
 	public function verify ($id) {
 
 		$email = MapperFactory::getEmailMapper ()->getFromId ($id);
