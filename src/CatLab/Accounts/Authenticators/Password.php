@@ -78,6 +78,8 @@ class Password extends Authenticator
             }
         }
 
+        $this->addOtherAuthenticators($template);
+
         return Response::template($template);
     }
 
@@ -234,6 +236,8 @@ class Password extends Authenticator
         $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/register/' . $this->getToken()));
         $template->set('email', $this->request->input('email', 'string'));
         $template->set('username', $this->request->input('username', 'string'));
+
+        $this->addOtherAuthenticators($template);
 
         return Response::template($template);
     }
@@ -484,6 +488,22 @@ class Password extends Authenticator
 
         $responseData = json_decode($response->getBody(), true);
         return isset($responseData['success']) && $responseData['success'];
+    }
+
+    /**
+     * @param Template $template
+     */
+    private function addOtherAuthenticators(Template $template)
+    {
+        $authenticators = $this->module->getAuthenticators ();
+        $otherAuthenticators = [];
+        foreach ($authenticators as $v) {
+            if (!($v instanceof self)) {
+                $v->setRequest($this->request);
+                $otherAuthenticators[] = $v;
+            }
+        }
+        $template->set ('otherAuthenticators', $otherAuthenticators);
     }
 
 }

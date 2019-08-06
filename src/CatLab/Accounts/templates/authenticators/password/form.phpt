@@ -18,4 +18,10 @@
 		<a href="<?php echo $register; ?>"><?php echo $this->gettext ('Register a new account'); ?></a>
 	</p>
 
+    <?php if (isset($otherAuthenticators)) { ?>
+        <?php foreach ($otherAuthenticators as $authenticator) { ?>
+            <?php echo $authenticator->getInlineForm (); ?>
+        <?php } ?>
+    <?php } ?>
+
 </form>

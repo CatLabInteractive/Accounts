@@ -24,6 +24,19 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="<?php echo $this->gettext ('Password'); ?>" />
     </div>
 
+    <?php if (isset($otherAuthenticators)) { ?>
+        <div class="other-authenticators">
+            <p class="connect-with"><?php echo $this->gettext ('Connect with: '); ?><br /></p>
+            <div class="media-connections">
+            <?php foreach ($otherAuthenticators as $authenticator) { ?>
+                <?php if (! ($authenticator instanceof \CatLab\Accounts\Authenticators\Password)) { ?>
+                    <?php echo $authenticator->getInlineForm (); ?>
+                <?php } ?>
+            <?php } ?>
+            </div>
+        </div>
+    <?php } ?>
+
     <input type="hidden" class="hidden" name="token" value="<?php echo $token; ?>" />
 
     <?php if (isset($recaptchaClientKey)) { ?>
@@ -41,4 +54,5 @@
     <?php } else { ?>
         <button type="submit" class="g-recaptcha btn btn-default"><?php echo $this->gettext ('Register'); ?></button>
     <?php } ?>
+
 </form>
