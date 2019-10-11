@@ -192,8 +192,7 @@ class Module extends Observable
 
         // Should skip welcome screen?
         if ($request->getSession()->get('skip-welcome-redirect')) {
-            $redirectUrl = $this->getAndClearPostLoginRedirect($request);
-            return Response::redirect($redirectUrl);
+            return $this->redirectBackToApp([]);
         }
 
         return $this->redirectToWelcome ([]);
@@ -209,6 +208,21 @@ class Module extends Observable
         return Response::redirect(
             URLBuilder::getURL(
                 $this->getRoutePath() . '/welcome',
+                $parameters
+            )
+        );
+    }
+
+    /**
+     * Redirect back to the orginal app, but go through the 'next' endpoint.
+     * @param $parameters
+     * @return Response
+     */
+    public function redirectBackToApp($parameters)
+    {
+        return Response::redirect(
+            URLBuilder::getURL(
+                $this->getRoutePath() . '/next',
                 $parameters
             )
         );
@@ -255,6 +269,7 @@ class Module extends Observable
         $router->match ('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
         $router->match ('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
         $router->match ('GET', $this->routepath . '/welcome', '\CatLab\Accounts\Controllers\LoginController@welcome')->filter('authenticated');
+        $router->match ('GET', $this->routepath . '/next', '\CatLab\Accounts\Controllers\LoginController@next')->filter('authenticated');
 
         $router->match ('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
 

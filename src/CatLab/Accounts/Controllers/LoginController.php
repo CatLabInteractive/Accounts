@@ -23,7 +23,7 @@ class LoginController
         $template->set('name', $user->getUsername());
         $template->set('layout', $this->module->getLayout());
 
-        $redirect = $this->module->getAndClearPostLoginRedirect($this->request);
+        $redirect = URLBuilder::getURL($this->module->getRoutePath () . '/next');
 
         // Tracker
         $trackerEvents = array();
@@ -47,6 +47,16 @@ class LoginController
         $template->set('trackers', $trackerEvents);
 
         return Response::template ($template);
+    }
+
+    /**
+     * Redirect back to the app after going through the welcome page.
+     * @return Response
+     */
+    public function next()
+    {
+        $redirect = $this->module->getAndClearPostLoginRedirect($this->request);
+        return Response::redirect($redirect);
     }
 
     /**
