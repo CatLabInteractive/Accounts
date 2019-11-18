@@ -89,7 +89,7 @@ class LoginController
         if (!isset($cookies['fv'])) {
             $response = Response::redirect($this->module->getRoutePath () . '/register');
             //$response->setCookies(array( 'fv' => time() ));
-            setcookie('fv', time(), time() + 60*60*24*365*2, [ 'samesite' => 'Lax' ]);
+            setcookie('fv', time(), [ 'expires' => time() + 60*60*24*365*2, 'samesite' => 'Lax' ]);
             return $response;
         }
 
