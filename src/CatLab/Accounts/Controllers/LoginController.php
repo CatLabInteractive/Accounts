@@ -88,7 +88,7 @@ class LoginController
         $cookies = $this->request->getCookies();
         if (!isset($cookies['fv'])) {
             //$response->setCookies(array( 'fv' => time() ));
-            setcookie('fv', time(), [ 'expires' => time() + 60*60*24*365*2 ]);
+            setcookie('fv', time(), [ 'expires' => time() + 60*60*24*365*2, 'samesite' => 'Lax' ]);
 
             $registrationController = new RegistrationController($this->module);
             $registrationController->setRequest($this->request);
