@@ -38,7 +38,8 @@ class RegistrationController
         $authenticators = $this->module->getAuthenticators ();
         $authenticator = $authenticators[0]->getToken ();
 
-        return Response::redirect(URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $authenticator));
+        //return Response::redirect(URLBuilder::getURL ($this->module->getRoutePath () . '/register/' . $authenticator));
+        return $this->authenticator($authenticator);
     }
 
     /**
