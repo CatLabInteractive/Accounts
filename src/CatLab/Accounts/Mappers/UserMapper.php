@@ -2,6 +2,7 @@
 
 namespace CatLab\Accounts\Mappers;
 
+use CatLab\Accounts\MapperFactory;
 use CatLab\Accounts\Models\User;
 use Neuron\DB\Query;
 use Neuron\Exceptions\InvalidParameter;
@@ -190,6 +191,23 @@ class UserMapper
         $user->setEmailVerified($data['u_emailVerified'] == 1);
 
         return $user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function anonymize(User $user)
+    {
+        Query::update($this->getTableName('users'), [
+
+            'u_email' => null,
+            'u_password' => null,
+            'u_username' => null,
+            'u_emailVerified' => null
+
+        ], [ 'u_id' => $user->getId() ])->execute();
+
+        MapperFactory::getDeligatedMapper()->deleteFromUser($user);
     }
 
     /**

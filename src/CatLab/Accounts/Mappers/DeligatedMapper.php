@@ -163,6 +163,17 @@ class DeligatedMapper
 		}
 	}
 
+    /**
+     * Remove all deligated accounts from specific user.
+     * @param User $user
+     */
+    public function deleteFromUser(User $user)
+    {
+        Query::delete('neuron_users_deligated', [
+            'u_id' => $user->getId()
+        ])->execute();
+    }
+
 	protected function getObjectFromData ($data)
 	{
 
