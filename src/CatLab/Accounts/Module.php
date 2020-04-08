@@ -389,4 +389,19 @@ class Module extends Observable
             $request->getSession()->set('post-login-redirect-expires', time() + 5);
         }
     }
+
+    public function setPostLoginRedirects(Request $request)
+    {
+        // Check for return tag
+        if ($return = $request->input('return')) {
+            $request->getSession()->set('post-login-redirect', $return);
+            $request->getSession()->set('post-login-redirect-expires', null);
+        }
+
+        // Check for cancel tag
+        if ($return = $request->input('cancel')) {
+            $request->getSession()->set('cancel-login-redirect', $return);
+            $request->getSession()->set('post-login-redirect-expires', null);
+        }
+    }
 }

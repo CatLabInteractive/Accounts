@@ -63,18 +63,11 @@ class LoginController
     /**
      * @return Response
      * @throws \Neuron\Exceptions\DataNotSet
+     * @throws InvalidParameter
      */
 	public function login ()
 	{
-		// Check for return tag
-		if ($return = $this->request->input ('return')) {
-			$this->request->getSession ()->set ('post-login-redirect', $return);
-		}
-
-		// Check for cancel tag
-		if ($return = $this->request->input ('cancel')) {
-			$this->request->getSession ()->set ('cancel-login-redirect', $return);
-		}
+        $this->module->setPostLoginRedirects($this->request);
 
 		if ($this->request->input('skipWelcome')) {
 		    $this->request->getSession()->set('skip-welcome-redirect', $this->request->input('skipWelcome') ? 1 : 0);
@@ -197,15 +190,7 @@ class LoginController
      */
 	public function authenticator ($token)
 	{
-        // Check for return tag
-        if ($return = $this->request->input ('return')) {
-            $this->request->getSession ()->set ('post-login-redirect', $return);
-        }
-
-        // Check for cancel tag
-        if ($return = $this->request->input ('cancel')) {
-            $this->request->getSession ()->set ('cancel-login-redirect', $return);
-        }
+        $this->module->setPostLoginRedirects($this->request);
 
 		$authenticator = $this->module->getAuthenticators ()->getFromToken ($token);
 
@@ -224,9 +209,6 @@ class LoginController
 	    $cancel = $this->module->getAndClearCancelLoginRedirect($this->request);
 
 		if ($cancel) {
-			$this->request->getSession ()->set ('post-login-redirect', null);
-			$this->request->getSession ()->set ('cancel-login-redirect', null);
-
 			return Response::redirect ($cancel);
 		} else {
 			return Response::redirect (URLBuilder::getURL ('/'));
