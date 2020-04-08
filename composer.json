@@ -14,7 +14,8 @@
 	"facebook/php-sdk-v4": "~4.0",
 	"openid/php-openid" : ">=2.3.0",
 
-	"ext-mbstring": "*"
+	"ext-mbstring": "*",
+    "catlabinteractive/samesite-cookie-sniffer": "dev-master"
   },
 
   "authors" : [

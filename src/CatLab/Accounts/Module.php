@@ -12,11 +12,11 @@ use Neuron\Core\Template;
 use Neuron\Exceptions\DataNotSet;
 use Neuron\Exceptions\ExpectedType;
 use Neuron\MapperFactory;
+use Neuron\Models\Observable;
 use Neuron\Net\Request;
 use Neuron\Net\Response;
 use Neuron\Router;
 use Neuron\Tools\Text;
-use Neuron\Models\Observable;
 use Neuron\URLBuilder;
 
 /**
@@ -43,7 +43,7 @@ class Module extends Observable
     /**
      *
      */
-    public function __construct ()
+    public function __construct()
     {
         $this->authenticators = new AuthenticatorCollection ();
     }
@@ -53,27 +53,27 @@ class Module extends Observable
      * @param string $routepath The prefix that should be added to all route paths.
      * @return void
      */
-    public function initialize ($routepath)
+    public function initialize($routepath)
     {
         // Set path
         $this->routepath = $routepath;
 
         // Add templates
-        Template::addPath (__DIR__ . '/templates/', 'CatLab/Accounts/');
+        Template::addPath(__DIR__ . '/templates/', 'CatLab/Accounts/');
 
         // Add locales
-        Text::getInstance ()->addPath ('catlab.accounts', __DIR__ . '/locales/');
+        Text::getInstance()->addPath('catlab.accounts', __DIR__ . '/locales/');
 
         // Set session variable
-        Application::getInstance ()->on ('dispatch:before', array ($this, 'setRequestUser'));
+        Application::getInstance()->on('dispatch:before', array($this, 'setRequestUser'));
 
         // Set the global user mapper, unless one is set already
-        Application::getInstance ()->on ('dispatch:first', array ($this, 'setUserMapper'));
+        Application::getInstance()->on('dispatch:first', array($this, 'setUserMapper'));
 
         // Add helper methods
         $helper = new LoginForm ($this);
 
-        Template::addHelper ('CatLab.Accounts.LoginForm', $helper);
+        Template::addHelper('CatLab.Accounts.LoginForm', $helper);
     }
 
     /**
@@ -81,15 +81,14 @@ class Module extends Observable
      * @param Request $request
      * @throws \Neuron\Exceptions\InvalidParameter
      */
-    public function setRequestUser (Request $request)
+    public function setRequestUser(Request $request)
     {
-        $request->addUserCallback ('accounts', function (Request $request) {
+        $request->addUserCallback('accounts', function (Request $request) {
 
-            $userid = $request->getSession ()->get ('catlab-user-id');
+            $userid = $request->getSession()->get('catlab-user-id');
 
-            if ($userid)
-            {
-                $user = MapperFactory::getUserMapper ()->getFromId ($userid);
+            if ($userid) {
+                $user = MapperFactory::getUserMapper()->getFromId($userid);
                 if ($user)
                     return $user;
             }
@@ -98,15 +97,13 @@ class Module extends Observable
         });
     }
 
-    public function setUserMapper ()
+    public function setUserMapper()
     {
         try {
-            $mapper = MapperFactory::getUserMapper ();
-            ExpectedType::check ($mapper, UserMapper::class);
-        }
-        catch (DataNotSet $e)
-        {
-            MapperFactory::getInstance ()->setMapper ('user', new UserMapper ());
+            $mapper = MapperFactory::getUserMapper();
+            ExpectedType::check($mapper, UserMapper::class);
+        } catch (DataNotSet $e) {
+            MapperFactory::getInstance()->setMapper('user', new UserMapper ());
         }
     }
 
@@ -116,15 +113,13 @@ class Module extends Observable
      * @return Response
      * @throws DataNotSet
      */
-    public function register (Request $request, User $user)
+    public function register(Request $request, User $user)
     {
         // New account. Needs verification?
-        if ($this->requiresEmailValidation ()) {
-            $user->sendVerificationEmail ($this);
-        }
-
-        else {
-            $user->sendConfirmationEmail ($this);
+        if ($this->requiresEmailValidation()) {
+            $user->sendVerificationEmail($this);
+        } else {
+            $user->sendConfirmationEmail($this);
         }
 
         return $this->login($request, $user, true);
@@ -138,12 +133,12 @@ class Module extends Observable
      * @return \Neuron\Net\Response
      * @throws DataNotSet
      */
-    public function login (Request $request, User $user, $registration = false)
+    public function login(Request $request, User $user, $registration = false)
     {
         // Check for email validation
         if ($this->requiresEmailValidation()) {
             if (!$user->isEmailVerified()) {
-                $request->getSession()->set ('catlab-non-verified-user-id', $user->getId());
+                $request->getSession()->set('catlab-non-verified-user-id', $user->getId());
                 return Response::redirect(URLBuilder::getURL($this->routepath . '/notverified'));
             }
         }
@@ -155,14 +150,14 @@ class Module extends Observable
     /**
      * Logout user
      * @param Request $request
-     * @throws \Neuron\Exceptions\DataNotSet
      * @return \Neuron\Net\Response
+     * @throws \Neuron\Exceptions\DataNotSet
      */
-    public function logout (Request $request)
+    public function logout(Request $request)
     {
-        $request->getSession ()->set ('catlab-user-id', null);
-        $request->getSession ()->set ('catlab-non-verified-user-id', null);
-        return $this->postLogout ($request);
+        $request->getSession()->set('catlab-user-id', null);
+        $request->getSession()->set('catlab-non-verified-user-id', null);
+        return $this->postLogout($request);
     }
 
     /**
@@ -174,7 +169,7 @@ class Module extends Observable
      * @return \Neuron\Net\Response
      * @throws DataNotSet
      */
-    public function postLogin (Request $request, \Neuron\Interfaces\Models\User $user, $registered = false)
+    public function postLogin(Request $request, \Neuron\Interfaces\Models\User $user, $registered = false)
     {
         $parameters = array();
         if ($registered) {
@@ -195,7 +190,7 @@ class Module extends Observable
             return $this->redirectBackToApp([]);
         }
 
-        return $this->redirectToWelcome ([]);
+        return $this->redirectToWelcome([]);
     }
 
     /**
@@ -203,7 +198,7 @@ class Module extends Observable
      * @param $parameters
      * @return Response
      */
-    public function redirectToWelcome ($parameters)
+    public function redirectToWelcome($parameters)
     {
         return Response::redirect(
             URLBuilder::getURL(
@@ -234,23 +229,22 @@ class Module extends Observable
      * @return Response
      * @throws DataNotSet
      */
-    public function postLogout (Request $request)
+    public function postLogout(Request $request)
     {
-        if ($redirect = $request->getSession ()->get ('post-login-redirect'))
-        {
-            $request->getSession ()->set ('post-login-redirect', null);
-            $request->getSession ()->set ('cancel-login-redirect', null);
+        if ($redirect = $request->getSession()->get('post-login-redirect')) {
+            $request->getSession()->set('post-login-redirect', null);
+            $request->getSession()->set('cancel-login-redirect', null);
 
-            return Response::redirect ($redirect);
+            return Response::redirect($redirect);
         }
 
-        return Response::redirect (URLBuilder::getURL ('/'));
+        return Response::redirect(URLBuilder::getURL('/'));
     }
 
     /**
      * @return string
      */
-    public function getRoutePath ()
+    public function getRoutePath()
     {
         return $this->routepath;
     }
@@ -260,43 +254,43 @@ class Module extends Observable
      * @param Router $router
      * @return mixed
      */
-    public function setRoutes (Router $router)
+    public function setRoutes(Router $router)
     {
         // Filter
-        $router->addFilter ('authenticated', array ($this, 'routerVerifier'));
+        $router->addFilter('authenticated', array($this, 'routerVerifier'));
 
         // Routes
-        $router->match ('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
-        $router->match ('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
-        $router->match ('GET', $this->routepath . '/welcome', '\CatLab\Accounts\Controllers\LoginController@welcome')->filter('authenticated');
-        $router->match ('GET', $this->routepath . '/next', '\CatLab\Accounts\Controllers\LoginController@next')->filter('authenticated');
+        $router->match('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
+        $router->match('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
+        $router->match('GET', $this->routepath . '/welcome', '\CatLab\Accounts\Controllers\LoginController@welcome')->filter('authenticated');
+        $router->match('GET', $this->routepath . '/next', '\CatLab\Accounts\Controllers\LoginController@next')->filter('authenticated');
 
-        $router->match ('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
+        $router->match('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
 
-        $router->match ('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
+        $router->match('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
 
-        $router->match ('GET', $this->routepath . '/cancel', '\CatLab\Accounts\Controllers\LoginController@cancel');
+        $router->match('GET', $this->routepath . '/cancel', '\CatLab\Accounts\Controllers\LoginController@cancel');
 
-        $router->match ('GET|POST', $this->routepath . '/register/{authenticator}', '\CatLab\Accounts\Controllers\RegistrationController@authenticator');
-        $router->match ('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
+        $router->match('GET|POST', $this->routepath . '/register/{authenticator}', '\CatLab\Accounts\Controllers\RegistrationController@authenticator');
+        $router->match('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
 
-        $router->get ($this->routepath . '/verify/{id}', '\CatLab\Accounts\Controllers\LoginController@verify');
+        $router->get($this->routepath . '/verify/{id}', '\CatLab\Accounts\Controllers\LoginController@verify');
     }
 
     /**
      * Add an authenticator
      * @param Authenticator $authenticator
      */
-    public function addAuthenticator (Authenticator $authenticator)
+    public function addAuthenticator(Authenticator $authenticator)
     {
-        $authenticator->setModule ($this);
+        $authenticator->setModule($this);
         $this->authenticators[] = $authenticator;
     }
 
     /**
      * @return AuthenticatorCollection
      */
-    public function getAuthenticators ()
+    public function getAuthenticators()
     {
         return $this->authenticators;
     }
@@ -305,7 +299,7 @@ class Module extends Observable
      * Set a layout that will be used for all pages
      * @param string $layout
      */
-    public function setLayout ($layout)
+    public function setLayout($layout)
     {
         $this->layout = $layout;
     }
@@ -313,24 +307,24 @@ class Module extends Observable
     /**
      * @return string
      */
-    public function getLayout ()
+    public function getLayout()
     {
         return $this->layout;
     }
 
-    public function routerVerifier (\Neuron\Models\Router\Filter $filter)
+    public function routerVerifier(\Neuron\Models\Router\Filter $filter)
     {
-        if ($filter->getRequest ()->getUser ()) {
+        if ($filter->getRequest()->getUser()) {
             return true;
         }
 
-        return Response::error ('You must be authenticated', Response::STATUS_UNAUTHORIZED);
+        return Response::error('You must be authenticated', Response::STATUS_UNAUTHORIZED);
     }
 
     /**
      * @return boolean
      */
-    public function requiresEmailValidation ()
+    public function requiresEmailValidation()
     {
         return $this->requireEmailValidation;
     }
@@ -339,7 +333,7 @@ class Module extends Observable
      * @param boolean $requireEmailValidation
      * @return self
      */
-    public function requireEmailValidation ($requireEmailValidation = true)
+    public function requireEmailValidation($requireEmailValidation = true)
     {
         $this->requireEmailValidation = $requireEmailValidation;
         return $this;
@@ -352,16 +346,47 @@ class Module extends Observable
      */
     public function getAndClearPostLoginRedirect(Request $request)
     {
-        if ($redirect = $request->getSession ()->get ('post-login-redirect'))
-        {
-            $request->getSession ()->set ('post-login-redirect', null);
-            $request->getSession ()->set ('cancel-login-redirect', null);
+        $this->clearExpiredSessionAttributes($request);
 
-            //return Response::redirect ($redirect);
+        if ($redirect = $request->getSession()->get('post-login-redirect')) {
+            return $redirect;
         } else {
-            $redirect = '/';
+            return '/';
         }
+    }
 
-        return $redirect;
+    /**
+     * @param Request $request
+     * @return string
+     * @throws DataNotSet
+     */
+    public function getAndClearCancelLoginRedirect(Request $request)
+    {
+        $this->clearExpiredSessionAttributes($request);
+
+        if ($redirect = $request->getSession()->get('post-login-redirect')) {
+            return $redirect;
+        } else {
+            return '/';
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @throws DataNotSet
+     */
+    private function clearExpiredSessionAttributes(Request $request)
+    {
+        if (
+            $request->getSession()->get('post-login-redirect-expires') &&
+            $request->getSession()->get('post-login-redirect-expires') < time()
+        ) {
+            $request->getSession()->set('post-login-redirect', null);
+            $request->getSession()->set('cancel-login-redirect', null);
+            $request->getSession()->set('post-login-redirect-expires', null);
+        } else {
+            // schedule expiration in 5, 4, 3, 2 ...
+            $request->getSession()->set('post-login-redirect-expires', time() + 5);
+        }
     }
 }

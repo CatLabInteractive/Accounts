@@ -4,6 +4,7 @@ namespace CatLab\Accounts\Controllers;
 
 use CatLab\Accounts\Models\User;
 use CatLab\Accounts\MapperFactory;
+use CatLab\SameSiteCookieSniffer\Sniffer;
 use Neuron\Core\Template;
 use Neuron\Exceptions\InvalidParameter;
 use Neuron\Net\Response;
@@ -87,17 +88,9 @@ class LoginController
         // Check if this is our first visit
         $cookies = $this->request->getCookies();
         if (!isset($cookies['fv'])) {
-            //$response->setCookies(array( 'fv' => time() ));
-            $cookieOptions = [
-                'expires' => time() + 60*60*24*365*2,
-                'samesite' => 'None',
-                'path' => '/',
-                'httponly' => true
-            ];
-
-            $cookieOptions['secure'] = true;
-
-            setcookie('fv', time(), $cookieOptions);
+            setcookie('fv', time(), Sniffer::instance()->getCookieParameters([
+                'expires' => time() + 60*60*24*365*2
+            ]));
 
             $registrationController = new RegistrationController($this->module);
             $registrationController->setRequest($this->request);
@@ -228,16 +221,14 @@ class LoginController
 
 	public function cancel ()
 	{
-		$cancel = $this->request->getSession ()->get ('cancel-login-redirect');
+	    $cancel = $this->module->getAndClearCancelLoginRedirect($this->request);
 
-		if ($cancel)
-		{
+		if ($cancel) {
 			$this->request->getSession ()->set ('post-login-redirect', null);
 			$this->request->getSession ()->set ('cancel-login-redirect', null);
 
 			return Response::redirect ($cancel);
-		}
-		else {
+		} else {
 			return Response::redirect (URLBuilder::getURL ('/'));
 		}
 	}
