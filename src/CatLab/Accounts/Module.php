@@ -390,8 +390,14 @@ class Module extends Observable
         }
     }
 
+    /**
+     * @param Request $request
+     * @throws DataNotSet
+     */
     public function setPostLoginRedirects(Request $request)
     {
+        $this->getAndClearCancelLoginRedirect($request);
+
         // Check for return tag
         if ($return = $request->input('return')) {
             $request->getSession()->set('post-login-redirect', $return);
