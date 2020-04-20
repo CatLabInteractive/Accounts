@@ -231,10 +231,9 @@ class Module extends Observable
      */
     public function postLogout(Request $request)
     {
-        if ($redirect = $request->getSession()->get('post-login-redirect')) {
-            $request->getSession()->set('post-login-redirect', null);
-            $request->getSession()->set('cancel-login-redirect', null);
+        $redirect = $this->getAndClearPostLoginRedirect($request);
 
+        if ($redirect) {
             return Response::redirect($redirect);
         }
 
