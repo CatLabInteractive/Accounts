@@ -363,7 +363,7 @@ class Module extends Observable
     {
         $this->clearExpiredSessionAttributes($request);
 
-        if ($redirect = $request->getSession()->get('post-login-redirect')) {
+        if ($redirect = $request->getSession()->get('cancel-login-redirect')) {
             return $redirect;
         } else {
             return '/';
@@ -395,8 +395,6 @@ class Module extends Observable
      */
     public function setPostLoginRedirects(Request $request)
     {
-        $this->getAndClearCancelLoginRedirect($request);
-
         // Check for return tag
         if ($return = $request->input('return')) {
             $request->getSession()->set('post-login-redirect', $return);
