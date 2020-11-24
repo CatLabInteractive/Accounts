@@ -120,6 +120,9 @@ class Module extends Observable
      */
     public function register(Request $request, User $user)
     {
+        // Actually, we need to reload the user model to make sure we have fresh model
+        $user = MapperFactory::getUserMapper()->getFromId($user->getId());
+
         // New account. Needs verification?
         if (
             $this->requiresEmailValidation() ||
