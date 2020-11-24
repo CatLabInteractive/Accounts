@@ -121,7 +121,10 @@ class Module extends Observable
     public function register(Request $request, User $user)
     {
         // New account. Needs verification?
-        if ($this->requireEmailValidation()) {
+        if (
+            $this->requiresEmailValidation() ||
+            $this->requiresEmailValidationOnRegistration()
+        ) {
             $user->generateVerificationEmail($this);
         } else {
             $user->sendConfirmationEmail($this);
