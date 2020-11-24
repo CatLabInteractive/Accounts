@@ -11,4 +11,8 @@
 
 <p><?php echo $this->gettext('If you did not submit this request, please ignore this email.'); ?></p>
 
-<p><?php echo $this->gettext('Have fun!'); ?></p>
+<p>
+    <?php echo $this->gettext('Many greetings'); ?>,<br />
+    <?php echo \Neuron\Config::get('app.organisation.name'); ?><br />
+    <?php echo \Neuron\Config::get('app.organisation.email'); ?>
+</p>

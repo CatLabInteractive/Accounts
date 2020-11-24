@@ -41,6 +41,11 @@ class Module extends Observable
     private $requireEmailValidation = false;
 
     /**
+     * @var bool
+     */
+    private $requireEmailValidationOnRegistration = false;
+
+    /**
      *
      */
     public function __construct()
@@ -116,8 +121,8 @@ class Module extends Observable
     public function register(Request $request, User $user)
     {
         // New account. Needs verification?
-        if ($this->requiresEmailValidation()) {
-            $user->sendVerificationEmail($this);
+        if ($this->requireEmailValidation()) {
+            $user->generateVerificationEmail($this);
         } else {
             $user->sendConfirmationEmail($this);
         }
@@ -135,8 +140,13 @@ class Module extends Observable
      */
     public function login(Request $request, User $user, $registration = false)
     {
+        $requiresEmailValidation = $this->requiresEmailValidation();
+        if ($registration) {
+            $requiresEmailValidation = $this->requiresEmailValidationOnRegistration();
+        }
+
         // Check for email validation
-        if ($this->requiresEmailValidation()) {
+        if ($requiresEmailValidation) {
             if (!$user->isEmailVerified()) {
                 $request->getSession()->set('catlab-non-verified-user-id', $user->getId());
                 return Response::redirect(URLBuilder::getURL($this->routepath . '/notverified'));
@@ -265,6 +275,7 @@ class Module extends Observable
         $router->match('GET', $this->routepath . '/next', '\CatLab\Accounts\Controllers\LoginController@next')->filter('authenticated');
 
         $router->match('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
+        $router->match('GET|POST', $this->routepath . '/notverified/poll', '\CatLab\Accounts\Controllers\LoginController@isVerifiedPoll');
 
         $router->match('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
 
@@ -329,12 +340,26 @@ class Module extends Observable
     }
 
     /**
-     * @param boolean $requireEmailValidation
+     * @return bool
+     */
+    public function requiresEmailValidationOnRegistration()
+    {
+        return $this->requireEmailValidationOnRegistration;
+    }
+
+    /**
+     * @param boolean $requireEmailValidationOnLogin
+     * @param null $requireEmailValidationOnRegistration
      * @return self
      */
-    public function requireEmailValidation($requireEmailValidation = true)
-    {
-        $this->requireEmailValidation = $requireEmailValidation;
+    public function requireEmailValidation(
+        $requireEmailValidationOnLogin = true,
+        $requireEmailValidationOnRegistration = null
+    ) {
+        $this->requireEmailValidation = $requireEmailValidationOnLogin;
+        $this->requireEmailValidationOnRegistration = $requireEmailValidationOnRegistration !== null
+            ? $requireEmailValidationOnRegistration : $this->requireEmailValidation;
+
         return $this;
     }
 

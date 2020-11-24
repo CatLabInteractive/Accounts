@@ -44,7 +44,10 @@ class Password extends Authenticator
     }
 
     /**
-     * @return Response|string
+     * @return bool|Response|string
+     * @throws ExpectedType
+     * @throws \Neuron\Exceptions\DataNotSet
+     * @throws \Neuron\Exceptions\InvalidParameter
      */
     public function login()
     {
@@ -364,7 +367,7 @@ class Password extends Authenticator
 
         $user = $mapper->getFromEmail($email);
         if ($user) {
-            $user->sendPasswordRecoveryEmail($this->module);
+            $user->generatePasswordRecoveryEmail($this->module);
         }
 
         return Response::template($template);

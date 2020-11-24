@@ -165,11 +165,10 @@ class User implements \Neuron\Interfaces\Models\User
 
     /**
      * @param Module $module
+     * @throws \CatLab\Mailer\Exceptions\MailException
      */
-    public function sendVerificationEmail(Module $module)
+    public function generateVerificationEmail(Module $module)
     {
-        return;
-
         $email = new Email ();
         $email->setEmail($this->getEmail());
         $email->setExpires(new DateTime ('next week'));
@@ -179,9 +178,19 @@ class User implements \Neuron\Interfaces\Models\User
 
         MapperFactory::getEmailMapper()->create($email);
 
+        $this->sendVerificationEmail($module, $email->getVerifyURL($module->getRoutePath()));
+    }
+
+    /**
+     * @param Module $module
+     * @param $verifyUrl
+     * @throws \CatLab\Mailer\Exceptions\MailException
+     */
+    public function sendVerificationEmail(Module $module, $verifyUrl)
+    {
         $template = new Template ('CatLab/Accounts/mails/verification.phpt');
         $template->set('user', $this);
-        $template->set('verify_url', $email->getVerifyURL($module->getRoutePath()));
+        $template->set('verify_url', $verifyUrl);
 
         $mail = new Mail ();
         $mail->setSubject(Text::getInstance()->getText('Email address verification'));
@@ -190,21 +199,19 @@ class User implements \Neuron\Interfaces\Models\User
         $mail->setFrom(Config::get('mailer.from.email'));
 
         Mailer::getInstance()->send($mail);
-
     }
 
     /**
      * @param Module $module
+     * @throws \CatLab\Mailer\Exceptions\MailException
      */
     public function sendConfirmationEmail(Module $module)
     {
-        return;
-
         $template = new Template ('CatLab/Accounts/mails/confirmation.phpt');
         $template->set('user', $this);
 
         $mail = new Mail ();
-        $mail->setSubject(Text::getInstance()->getText('Email address confirmed'));
+        $mail->setSubject(Text::getInstance()->getText('Account creation'));
         $mail->setTemplate($template);
         $mail->getTo()->add($this->getEmail());
         $mail->setFrom(Config::get('mailer.from.email'));
@@ -213,9 +220,11 @@ class User implements \Neuron\Interfaces\Models\User
     }
 
     /**
+     * Generate and send a password recovery request.
      * @param Module $module
+     * @throws \CatLab\Mailer\Exceptions\MailException
      */
-    public function sendPasswordRecoveryEmail(Module $module)
+    public function generatePasswordRecoveryEmail(Module $module)
     {
         $passwordRecoveryRequest = new PasswordRecovery();
         $passwordRecoveryRequest->setExpires(new DateTime ('next week'));
@@ -224,9 +233,20 @@ class User implements \Neuron\Interfaces\Models\User
 
         MapperFactory::getPasswordRecoveryMapper()->create($passwordRecoveryRequest);
 
+        $this->sendPasswordRecoveryEmail($module, $passwordRecoveryRequest->getUrl($module->getRoutePath()));
+    }
+
+    /**
+     * Send out the actual password recovery email.
+     * @param Module $module
+     * @param $recoveryUrl
+     * @throws \CatLab\Mailer\Exceptions\MailException
+     */
+    public function sendPasswordRecoveryEmail(Module $module, $recoveryUrl)
+    {
         $template = new Template('CatLab/Accounts/mails/passwordRecovery.phpt');
         $template->set('user', $this);
-        $template->set('recovery_url', $passwordRecoveryRequest->getUrl($module->getRoutePath()));
+        $template->set('recovery_url', $recoveryUrl);
 
         $mail = new Mail ();
         $mail->setSubject(Text::getInstance()->getText('Password recovery'));
