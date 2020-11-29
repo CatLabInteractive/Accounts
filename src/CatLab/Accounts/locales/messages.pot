@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-29 14:32+0100\n"
+"POT-Creation-Date: 2020-11-29 17:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -311,6 +311,10 @@ msgstr ""
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:17
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:18
 msgid "Repeat password"
+msgstr ""
+
+#: src/CatLab/Accounts/templates/welcome.phpt:7
+msgid "We're sending you back to the application."
 msgstr ""
 
 #: src/CatLab/Accounts/templates/login.phpt:14

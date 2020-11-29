@@ -4,7 +4,7 @@
 ?>
 
 <h2><?php echo sprintf($this->gettext('Welcome, %s'), $name); ?></h2>
-<p>We're sending you back to the application.</p>
+<p><?php echo $this->gettext('We\'re sending you back to the application.'); ?></p>
 
 <script>
     dataLayer = [<?php echo json_encode($tracker); ?>];
