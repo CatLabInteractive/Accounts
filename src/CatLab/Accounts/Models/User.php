@@ -188,6 +188,8 @@ class User implements \Neuron\Interfaces\Models\User
      */
     public function sendVerificationEmail(Module $module, $verifyUrl)
     {
+        Text::getInstance()->setDomain('catlab.accounts');
+
         $template = new Template ('CatLab/Accounts/mails/verification.phpt');
         $template->set('user', $this);
         $template->set('verify_url', $verifyUrl);
@@ -207,11 +209,13 @@ class User implements \Neuron\Interfaces\Models\User
      */
     public function sendConfirmationEmail(Module $module)
     {
+        Text::getInstance()->setDomain('catlab.accounts');
+
         $template = new Template ('CatLab/Accounts/mails/confirmation.phpt');
         $template->set('user', $this);
 
         $mail = new Mail ();
-        $mail->setSubject(Text::getInstance()->getText('Account creation'));
+        $mail->setSubject(Text::getInstance()->gettext('Account creation'));
         $mail->setTemplate($template);
         $mail->getTo()->add($this->getEmail());
         $mail->setFrom(Config::get('mailer.from.email'));
@@ -244,6 +248,8 @@ class User implements \Neuron\Interfaces\Models\User
      */
     public function sendPasswordRecoveryEmail(Module $module, $recoveryUrl)
     {
+        Text::getInstance()->setDomain('catlab.accounts');
+
         $template = new Template('CatLab/Accounts/mails/passwordRecovery.phpt');
         $template->set('user', $this);
         $template->set('recovery_url', $recoveryUrl);

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CatLab Accounts\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-24 22:13+0100\n"
-"PO-Revision-Date: 2020-11-24 22:24+0100\n"
+"POT-Creation-Date: 2020-11-29 14:31+0100\n"
+"PO-Revision-Date: 2020-11-29 14:32+0100\n"
 "Last-Translator: Thijs Van der Schaeghe <thijs@catlab.be>\n"
 "Language-Team: CatLab Interactive <thijs@catlab.be>\n"
 "Language: nl_BE\n"
@@ -61,57 +61,61 @@ msgstr "Kies alsjeblieft een ander paswoord."
 msgid "Welcome, %s."
 msgstr "Welkom, %s."
 
+#: src/CatLab/Accounts/templates/helpers/welcome.phpt:5
+msgid "logout"
+msgstr "uitloggen"
+
 #: src/CatLab/Accounts/templates/logout.phpt:6
 msgid "You are now logged out."
 msgstr "Je bent nu uitgelogd."
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:3
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:6
 #, php-format
 msgid "Dear %s,"
 msgstr "Beste %s,"
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:5
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:8
 msgid "We have received a password recovery request for this email address."
 msgstr "We hebben een aanvraag ontvangen om jouw paswoord te herstellen."
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:6
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:9
 msgid "If you have submitted this request, please click the link below:"
 msgstr "Als jij deze aanvraag gedaan hebt, klik dan op onderstaande link:"
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:12
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:15
 msgid "If you did not submit this request, please ignore this email."
 msgstr "Komt deze aanvraag niet van jou? Negeer dan deze email."
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:15
-#: src/CatLab/Accounts/templates/mails/verification.phpt:20
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:14
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:18
+#: src/CatLab/Accounts/templates/mails/verification.phpt:23
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:17
 msgid "Many greetings"
 msgstr "Vriendelijke groeten"
 
-#: src/CatLab/Accounts/templates/mails/verification.phpt:3
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:3
+#: src/CatLab/Accounts/templates/mails/verification.phpt:6
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:6
 #, php-format
 msgid "Hello %s"
 msgstr "Beste %s"
 
-#: src/CatLab/Accounts/templates/mails/verification.phpt:6
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:10
+#: src/CatLab/Accounts/templates/mails/verification.phpt:9
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:13
 msgid "Thank you for subscribing to our platform."
 msgstr "Bedankt om in te schrijven op ons platform."
 
-#: src/CatLab/Accounts/templates/mails/verification.phpt:10
+#: src/CatLab/Accounts/templates/mails/verification.phpt:13
 msgid ""
 "To complete email verification, please click the link below or copy/paste it "
 "in your browser:"
 msgstr "Klik op de link hieronder om jouw e-mail adres te bevestigen."
 
-#: src/CatLab/Accounts/templates/mails/verification.phpt:17
+#: src/CatLab/Accounts/templates/mails/verification.phpt:20
 msgid ""
 "If you did not create an account using this address, please ignore this "
 "email."
 msgstr "Heb je geen account gemaakt op ons platform? Negeer dan deze e-mail."
 
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:6
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:9
 msgid ""
 "We are writing you this email to inform you that this email address was used "
 "when creating an account on our platform."
@@ -293,7 +297,7 @@ msgid "New password"
 msgstr "Nieuw paswoord"
 
 #: src/CatLab/Accounts/templates/authenticators/password/register.phpt:29
-msgid "Connect with: "
+msgid "Connect with:"
 msgstr "Verbind met:"
 
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:3
@@ -338,6 +342,18 @@ msgstr "Nog niet ontvangen?"
 #: src/CatLab/Accounts/templates/notverified.phpt:19
 msgid "Resend verification email"
 msgstr "Stuur bevestigingsemail opnieuw"
+
+#: src/CatLab/Accounts/Models/User.php:198
+msgid "Email address verification"
+msgstr "Email adres verificieren"
+
+#: src/CatLab/Accounts/Models/User.php:218
+msgid "Account creation"
+msgstr "Account aangemaakt"
+
+#: src/CatLab/Accounts/Models/User.php:258
+msgid "Password recovery"
+msgstr "Paswoord herstellen"
 
 #: example/templates/home.phpt:7
 msgid "Welcome to the world of tomorrow!"

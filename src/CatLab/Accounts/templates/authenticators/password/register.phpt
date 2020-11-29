@@ -26,7 +26,7 @@
 
     <?php if (isset($otherAuthenticators)) { ?>
         <div class="other-authenticators">
-            <p class="connect-with"><?php echo $this->gettext ('Connect with: '); ?><br /></p>
+            <p class="connect-with"><?php echo $this->gettext ('Connect with:'); ?><br /></p>
             <div class="media-connections">
             <?php foreach ($otherAuthenticators as $authenticator) { ?>
                 <?php if (! ($authenticator instanceof \CatLab\Accounts\Authenticators\Password)) { ?>

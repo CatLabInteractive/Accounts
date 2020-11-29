@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-29 14:15+0100\n"
+"POT-Creation-Date: 2020-11-29 14:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,57 +61,61 @@ msgstr ""
 msgid "Welcome, %s."
 msgstr ""
 
+#: src/CatLab/Accounts/templates/helpers/welcome.phpt:5
+msgid "logout"
+msgstr ""
+
 #: src/CatLab/Accounts/templates/logout.phpt:6
 msgid "You are now logged out."
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:3
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:6
 #, php-format
 msgid "Dear %s,"
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:5
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:8
 msgid "We have received a password recovery request for this email address."
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:6
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:9
 msgid "If you have submitted this request, please click the link below:"
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:12
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:15
 msgid "If you did not submit this request, please ignore this email."
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:15
-#: src/CatLab/Accounts/templates/mails/verification.phpt:20
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:14
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:18
+#: src/CatLab/Accounts/templates/mails/verification.phpt:23
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:17
 msgid "Many greetings"
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/verification.phpt:3
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:3
+#: src/CatLab/Accounts/templates/mails/verification.phpt:6
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:6
 #, php-format
 msgid "Hello %s"
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/verification.phpt:6
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:10
+#: src/CatLab/Accounts/templates/mails/verification.phpt:9
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:13
 msgid "Thank you for subscribing to our platform."
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/verification.phpt:10
+#: src/CatLab/Accounts/templates/mails/verification.phpt:13
 msgid ""
 "To complete email verification, please click the link below or copy/paste it "
 "in your browser:"
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/verification.phpt:17
+#: src/CatLab/Accounts/templates/mails/verification.phpt:20
 msgid ""
 "If you did not create an account using this address, please ignore this "
 "email."
 msgstr ""
 
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:6
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:9
 msgid ""
 "We are writing you this email to inform you that this email address was used "
 "when creating an account on our platform."
@@ -287,7 +291,7 @@ msgid "New password"
 msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/password/register.phpt:29
-msgid "Connect with: "
+msgid "Connect with:"
 msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:3
@@ -331,6 +335,18 @@ msgstr ""
 
 #: src/CatLab/Accounts/templates/notverified.phpt:19
 msgid "Resend verification email"
+msgstr ""
+
+#: src/CatLab/Accounts/Models/User.php:198
+msgid "Email address verification"
+msgstr ""
+
+#: src/CatLab/Accounts/Models/User.php:218
+msgid "Account creation"
+msgstr ""
+
+#: src/CatLab/Accounts/Models/User.php:258
+msgid "Password recovery"
 msgstr ""
 
 #: example/templates/home.phpt:7
