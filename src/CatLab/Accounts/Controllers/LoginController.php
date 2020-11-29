@@ -142,6 +142,10 @@ class LoginController
         }
 
         $user->setEmailVerified(true);
+        $email->setVerified(true);
+
+        MapperFactory::getEmailMapper()->update($email);
+
         $mapper = \Neuron\MapperFactory::getUserMapper();
         if (!($mapper instanceof \CatLab\Accounts\Mappers\UserMapper)) {
             throw new InvalidParameter ("Mapper must be UserMapper instance.");

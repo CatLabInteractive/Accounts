@@ -51,18 +51,43 @@ class EmailMapper
      */
     public function create(Email $email)
     {
+        $data = $this->getDataToSet($email);
+
         $id = Query::insert(
             'neuron_users_emails',
-            array(
-                'u_id' => $email->getUser()->getId(),
-                'ue_email' => $email->getEmail(),
-                'ue_verified' => $email->isVerified() ? 1 : 0,
-                'ue_token' => $email->getToken(),
-                'ue_expires' => $email->getExpires()
-            )
+            $data
         )->execute();
 
         $email->setId(intval($id));
+    }
+
+    /**
+     * @param Email $email
+     */
+    public function update(Email $email)
+    {
+        Query::update(
+            'neuron_users_emails',
+            $this->getDataToSet($email),
+            [
+                'ue_id' => $email->getId()
+            ]
+        )->execute();
+    }
+
+    /**
+     * @param Email $email
+     * @return array
+     */
+    protected function getDataToSet(Email $email)
+    {
+        return array(
+            'u_id' => $email->getUser()->getId(),
+            'ue_email' => $email->getEmail(),
+            'ue_verified' => $email->isVerified() ? 1 : 0,
+            'ue_token' => $email->getToken(),
+            'ue_expires' => $email->getExpires()
+        );
     }
 
     /**
