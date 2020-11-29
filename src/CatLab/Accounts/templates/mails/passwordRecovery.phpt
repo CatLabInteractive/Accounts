@@ -1,4 +1,7 @@
-<?php $this->layout ('CatLab/Accounts/mails/layout.phpt'); ?>
+<?php
+$this->layout ('CatLab/Accounts/mails/layout.phpt');
+$this->textdomain ('catlab.accounts');
+?>
 
 <p><?php echo sprintf($this->gettext('Dear %s,'), $user->getUsername ()); ?></p>
 
