@@ -273,6 +273,7 @@ class Module extends Observable
     {
         // Filter
         $router->addFilter('authenticated', array($this, 'routerVerifier'));
+        $router->addFilter('verifiedEmailAddress', array($this, 'requireVerifiedEmailAddressFilter'));
 
         // Routes
         $router->match('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
@@ -437,5 +438,48 @@ class Module extends Observable
             $request->getSession()->set('cancel-login-redirect', $return);
             $request->getSession()->set('post-login-redirect-expires', null);
         }
+    }
+
+    /**
+     *
+     * @param \Neuron\Models\Router\Filter $filter
+     * @return bool|Response
+     */
+    public function requireVerifiedEmailAddressFilter(\Neuron\Models\Router\Filter $filter)
+    {
+        $user = $filter->getRequest()->getUser();
+        if ($user) {
+            if ($filter->getRequest()->getUser()->isEmailVerified()) {
+                return true;
+            } else {
+                global $signinmodule;
+
+                $template = new Template ('CatLab/Accounts/notverified.phpt');
+                $template->set('layout', $signinmodule->getLayout());
+
+                $canResend = true;
+                if (
+                    $filter->getRequest()->input('retry') ||
+                    count(\CatLab\Accounts\MapperFactory::getEmailMapper()->getFromUser($user)) === 0
+                ) {
+                    $user->generateVerificationEmail($signinmodule);
+                    $canResend = false;
+                }
+
+                $template->set('canResend', $canResend);
+                $template->set('name', $user->getUsername());
+                $template->set('user', $user);
+                $template->set('resend_url', URLBuilder::getURL($filter->getRequest()->getUrl(), array_merge($_GET, [ 'retry' => 1 ])));
+
+                $pollAction = URLBuilder::getURL($signinmodule->getRoutePath() . '/notverified/poll', [
+                    'continue' => URLBuilder::getURL($filter->getRequest()->getUrl(), array_merge($_GET))
+                ]);
+                $template->set('pollAction', $pollAction);
+
+                return Response::template($template);
+            }
+        }
+
+        return Response::error('You must be authenticated', Response::STATUS_UNAUTHORIZED);
     }
 }

@@ -203,9 +203,12 @@ class LoginController
      */
     public function isVerifiedPoll()
     {
-        $userId = $this->request->getSession()->get('catlab-non-verified-user-id');
-        if ($userId) {
-            $user = \Neuron\MapperFactory::getUserMapper()->getFromId($userId);
+        $user = $this->request->getUser();
+        if (!$user) {
+            $userId = $this->request->getSession()->get('catlab-non-verified-user-id');
+            if ($userId) {
+                $user = \Neuron\MapperFactory::getUserMapper()->getFromId($userId);
+            }
         }
 
         if (!$user || !($user instanceof User)) {
@@ -217,9 +220,15 @@ class LoginController
         }
 
         if ($user->isEmailVerified()) {
+
+            $continue = $this->request->input('continue');
+            if (!$continue) {
+                $continue = URLBuilder::getURL($this->module->getRoutePath() . '/notverified');
+            }
+
             return Response::json([
                 'verified' => true,
-                'redirect' => URLBuilder::getURL($this->module->getRoutePath() . '/notverified')
+                'redirect' => $continue
             ]);
         } else {
             return Response::json([
