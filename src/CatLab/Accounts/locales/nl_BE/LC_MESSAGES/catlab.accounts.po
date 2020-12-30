@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: CatLab Accounts\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-29 17:11+0100\n"
-"PO-Revision-Date: 2020-11-29 17:12+0100\n"
+"PO-Revision-Date: 2020-12-30 18:08+0100\n"
 "Last-Translator: Thijs Van der Schaeghe <thijs@catlab.be>\n"
 "Language-Team: CatLab Interactive <thijs@catlab.be>\n"
 "Language: nl_BE\n"
@@ -107,7 +107,7 @@ msgstr "Bedankt om in te schrijven op ons platform."
 msgid ""
 "To complete email verification, please click the link below or copy/paste it "
 "in your browser:"
-msgstr "Klik op de link hieronder om jouw e-mail adres te bevestigen."
+msgstr "Klik op de link hieronder om jouw e-mail adres te bevestigen:"
 
 #: src/CatLab/Accounts/templates/mails/verification.phpt:20
 msgid ""
@@ -349,7 +349,7 @@ msgstr "Stuur bevestigingsemail opnieuw"
 
 #: src/CatLab/Accounts/Models/User.php:198
 msgid "Email address verification"
-msgstr "Email adres verificieren"
+msgstr "Email adres verifiëren"
 
 #: src/CatLab/Accounts/Models/User.php:218
 msgid "Account creation"
