@@ -109,7 +109,7 @@ class UserMapper
      * @param User $user
      * @return array
      */
-    private function prepareFields(User $user)
+    protected function getDataToSet(User $user)
     {
         // Prepare data
         $data = array();
@@ -145,7 +145,7 @@ class UserMapper
         if ($this->getFromEmail($user->getEmail()))
             throw new InvalidParameter ("A user with this email address already exists.");
 
-        $data = $this->prepareFields($user);
+        $data = $this->getDataToSet($user);
 
         // Insert
         $id = Query::insert($this->table_users, $data)->execute();
@@ -160,7 +160,7 @@ class UserMapper
      */
     public function update(User $user)
     {
-        $data = $this->prepareFields($user);
+        $data = $this->getDataToSet($user);
         Query::update($this->table_users, $data, array('u_id' => $user->getId()))->execute();
     }
 
