@@ -1,9 +1,12 @@
 <?php
 $this->layout ('CatLab/Accounts/mails/layout.phpt');
 $this->textdomain ('catlab.accounts');
+
+/** @var \CatLab\Accounts\Models\User $user */
+/** @var string $verify_url */
 ?>
 
-<p><?php echo sprintf ($this->gettext ('Hello %s'), $user->getUsername ()); ?></p>
+<p><?php echo sprintf ($this->gettext ('Hello %s'), $user->getDisplayName (false)); ?></p>
 
 <p>
     <?php echo $this->gettext('Thank you for subscribing to our platform.'); ?>

@@ -1,9 +1,11 @@
 <?php
 $this->layout ('CatLab/Accounts/mails/layout.phpt');
 $this->textdomain ('catlab.accounts');
+
+/** @var \CatLab\Accounts\Models\User $user */
 ?>
 
-<p><?php echo sprintf ($this->gettext ('Hello %s'), $user->getUsername ()); ?></p>
+<p><?php echo sprintf ($this->gettext ('Hello %s'), $user->getDisplayName (false)); ?></p>
 
 <p>
     <?php echo $this->gettext('We are writing you this email to inform you that this email address was used when creating an account on our platform.'); ?>

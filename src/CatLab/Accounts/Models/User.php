@@ -155,6 +155,15 @@ class User implements \Neuron\Interfaces\Models\User
     }
 
     /**
+     * @param boolean $formal If FALSE, use an informal tone (= first name only)
+     * @return string
+     */
+    public function getDisplayName($formal = false)
+    {
+        return $this->getUsername();
+    }
+
+    /**
      * @param null $type The type of user we are requesting.
      * @return Collection
      */
