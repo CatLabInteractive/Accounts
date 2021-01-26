@@ -28,7 +28,7 @@ class Facebook
 	private $loaded = false;
 
 	/** @var string[] */
-	private $scopes = array ('user_birthday', 'email');
+	private $scopes = array ('email');
 
 	protected function initialize () {
 
