@@ -391,11 +391,7 @@ class Password extends Authenticator
             return Errors::CONFIRM_PASSWORD_INVALID;
         }
 
-        /** @var UserMapper $mapper */
-        $mapper = MapperFactory::getUserMapper();
-
-        $user->setPassword($password);
-        $mapper->update($user);
+        $user->changePassword($this->module, $password);
 
         // Now login this user.
         return $this->module->login($this->request, $user);

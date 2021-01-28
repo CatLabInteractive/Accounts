@@ -173,13 +173,38 @@ class User implements \Neuron\Interfaces\Models\User
     }
 
     /**
+     * (plan to) change the email address. The actual change only happens at
+     * the moment when the user clicks the link in the verification email.
      * @param Module $module
+     * @param $emailAddress
      * @throws \CatLab\Mailer\Exceptions\MailException
      */
-    public function generateVerificationEmail(Module $module)
+    public function changeEmail(Module $module, $emailAddress)
+    {
+        $this->generateVerificationEmail($module, $emailAddress);
+    }
+
+    /**
+     * @param Module $module
+     * @param $password
+     */
+    public function changePassword(Module $module, $password)
+    {
+        $this->setPassword($password);
+        \Neuron\MapperFactory::getUserMapper()->update($this);
+
+        $this->onPasswordChanged();
+    }
+
+    /**
+     * @param Module $module
+     * @param string $emailAddress
+     * @throws \CatLab\Mailer\Exceptions\MailException
+     */
+    public function generateVerificationEmail(Module $module, $emailAddress)
     {
         $email = new Email ();
-        $email->setEmail($this->getEmail());
+        $email->setEmail($emailAddress);
         $email->setExpires(new DateTime ('next week'));
         $email->setToken(TokenGenerator::getSimplifiedToken(24));
         $email->setUser($this);
@@ -187,15 +212,16 @@ class User implements \Neuron\Interfaces\Models\User
 
         MapperFactory::getEmailMapper()->create($email);
 
-        $this->sendVerificationEmail($module, $email->getVerifyURL($module->getRoutePath()));
+        $this->sendVerificationEmail($module, $email->getEmail(), $email->getVerifyURL($module->getRoutePath()));
     }
 
     /**
      * @param Module $module
+     * @param string $emailAddress
      * @param $verifyUrl
      * @throws \CatLab\Mailer\Exceptions\MailException
      */
-    public function sendVerificationEmail(Module $module, $verifyUrl)
+    public function sendVerificationEmail(Module $module, $emailAddress, $verifyUrl)
     {
         Text::getInstance()->setDomain('catlab.accounts');
 
@@ -206,7 +232,7 @@ class User implements \Neuron\Interfaces\Models\User
         $mail = new Mail ();
         $mail->setSubject(Text::getInstance()->getText('Email address verification'));
         $mail->setTemplate($template);
-        $mail->getTo()->add($this->getEmail());
+        $mail->getTo()->add($emailAddress);
         $mail->setFrom(Config::get('mailer.from.email'));
 
         Mailer::getInstance()->send($mail);
@@ -270,5 +296,21 @@ class User implements \Neuron\Interfaces\Models\User
         $mail->setFrom(Config::get('mailer.from.email'));
 
         Mailer::getInstance()->send($mail);
+    }
+
+    /**
+     * Called when email address was changed.
+     */
+    public function onEmailAddressChanged()
+    {
+
+    }
+
+    /**
+     * Called when password was changed.
+     */
+    public function onPasswordChanged()
+    {
+
     }
 }

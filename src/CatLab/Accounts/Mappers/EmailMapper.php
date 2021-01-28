@@ -91,6 +91,26 @@ class EmailMapper
     }
 
     /**
+     * @param $emailAddress
+     */
+    public function removeForEmailAddress($emailAddress)
+    {
+        Query::delete('neuron_users_emails', [
+            'ue_email' => $emailAddress
+        ])->execute();
+    }
+
+    /**
+     * @param User $user
+     */
+    public function removeForUser(User $user)
+    {
+        Query::delete('neuron_users_emails', [
+            'u_id' => $user->getId()
+        ])->execute();
+    }
+
+    /**
      * @param $data
      * @return Email
      * @throws \Exception

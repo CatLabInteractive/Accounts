@@ -4,11 +4,13 @@ namespace CatLab\Accounts;
 
 use CatLab\Accounts\Authenticators\Base\Authenticator;
 use CatLab\Accounts\Collections\AuthenticatorCollection;
+use CatLab\Accounts\Enums\Errors;
 use CatLab\Accounts\Helpers\LoginForm;
 use CatLab\Accounts\Mappers\UserMapper;
 use CatLab\Accounts\Models\User;
 use Neuron\Application;
 use Neuron\Core\Template;
+use Neuron\Core\Tools;
 use Neuron\Exceptions\DataNotSet;
 use Neuron\Exceptions\ExpectedType;
 use Neuron\MapperFactory;
@@ -128,12 +130,54 @@ class Module extends Observable
             $this->requiresEmailValidation() ||
             $this->requiresEmailValidationOnRegistration()
         ) {
-            $user->generateVerificationEmail($this);
+            $user->generateVerificationEmail($this, $user->getEmail());
         } else {
             $user->sendConfirmationEmail($this);
         }
 
         return $this->login($request, $user, true);
+    }
+
+    /**
+     * Change a users password.
+     * @param Request $request
+     * @param User $user
+     * @param $newPassword
+     * @return bool|string
+     */
+    public function changePassword(Request $request, User $user, $newPassword)
+    {
+        if (!Tools::checkInput($newPassword, 'password')) {
+            return Errors::PASSWORD_INVALID;
+        }
+
+        $user->changePassword($this, $newPassword);
+        return true;
+    }
+
+    /**
+     * @param Request $request
+     * @param User $user
+     * @param $newEmailAddress
+     * @return bool|string
+     * @throws \CatLab\Mailer\Exceptions\MailException
+     */
+    public function changeEmail(Request $request, User $user, $newEmailAddress)
+    {
+        // Check if we already have someone with this email address
+
+        /** @var UserMapper $mapper */
+        $mapper = MapperFactory::getUserMapper();
+
+        $existingUser = $mapper->getFromEmail($newEmailAddress);
+        if ($existingUser) {
+            return Errors::EMAIL_DUPLICATE;
+        }
+
+        \CatLab\Accounts\MapperFactory::getEmailMapper()->removeForEmailAddress($newEmailAddress);
+
+        $user->changeEmail($this, $newEmailAddress);
+        return true;
     }
 
     /**
@@ -462,7 +506,7 @@ class Module extends Observable
                     $filter->getRequest()->input('retry') ||
                     count(\CatLab\Accounts\MapperFactory::getEmailMapper()->getFromUser($user)) === 0
                 ) {
-                    $user->generateVerificationEmail($signinmodule);
+                    $user->generateVerificationEmail($signinmodule, $user->getEmail());
                     $canResend = false;
                 }
 

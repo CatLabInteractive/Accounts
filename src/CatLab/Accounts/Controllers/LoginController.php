@@ -130,8 +130,10 @@ class LoginController
         if ($email->getToken() !== $token)
             return Response::error('Invalid email verification', Response::STATUS_UNAUTHORIZED);
 
+        /*
         if ($email->getUser()->getEmail() !== $email->getEmail())
             return Response::error('Invalid email verification: email mismatch', Response::STATUS_INVALID_INPUT);
+        */
 
         if ($email->isExpired())
             return Response::error('Invalid email verification: token expired', Response::STATUS_INVALID_INPUT);
@@ -141,10 +143,18 @@ class LoginController
             throw new InvalidParameter ("User type mismatch.");
         }
 
+        $isEmailAddressChanged = $user->getEmail() !== $email->getEmail();
+
+        $user->setEmail($email->getEmail());
         $user->setEmailVerified(true);
         $email->setVerified(true);
 
         MapperFactory::getEmailMapper()->update($email);
+
+        // Call trigger of address was changed
+        if ($isEmailAddressChanged) {
+            $user->onEmailAddressChanged();
+        }
 
         $mapper = \Neuron\MapperFactory::getUserMapper();
         if (!($mapper instanceof \CatLab\Accounts\Mappers\UserMapper)) {
@@ -188,7 +198,7 @@ class LoginController
             $this->request->input('retry') ||
             count(MapperFactory::getEmailMapper()->getFromUser($user)) === 0
         ) {
-            $user->generateVerificationEmail($this->module);
+            $user->generateVerificationEmail($this->module, $user->getEmail());
             $canResend = false;
         }
 
