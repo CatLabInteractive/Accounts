@@ -4,7 +4,7 @@
     <?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>
 
     <p>
-        <?php echo sprintf($this->gettext('Almost there, %s.'), $user->getUsername()); ?>
+        <?php echo sprintf($this->gettext('Almost there, %s.'), $user->getDisplayName()); ?>
         <?php echo $this->gettext('Please choose a new password.'); ?>
     </p>
 

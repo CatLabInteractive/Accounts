@@ -22,7 +22,7 @@ class LoginController
         $template = new Template ('CatLab/Accounts/welcome.phpt');
 
         $user = $this->request->getUser();
-        $template->set('name', $user->getUsername());
+        $template->set('name', $user->getDisplayName());
         $template->set('layout', $this->module->getLayout());
 
         $redirect = URLBuilder::getURL($this->module->getRoutePath() . '/next');
@@ -203,7 +203,7 @@ class LoginController
         }
 
         $template->set('canResend', $canResend);
-        $template->set('name', $user->getUsername());
+        $template->set('name', $user->getDisplayName());
         $template->set('layout', $this->module->getLayout());
         $template->set('user', $user);
         $template->set('resend_url', URLBuilder::getURL($this->module->getRoutePath() . '/notverified', array('retry' => 1)));

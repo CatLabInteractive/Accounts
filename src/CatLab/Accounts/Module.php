@@ -511,7 +511,7 @@ class Module extends Observable
                 }
 
                 $template->set('canResend', $canResend);
-                $template->set('name', $user->getUsername());
+                $template->set('name', $user->getDisplayName());
                 $template->set('user', $user);
                 $template->set('resend_url', URLBuilder::getURL($filter->getRequest()->getUrl(), array_merge($_GET, [ 'retry' => 1 ])));
 

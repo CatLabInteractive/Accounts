@@ -42,14 +42,19 @@ class User implements \Neuron\Interfaces\Models\User
     private $passwordhash;
 
     /**
-     * @var string $username
-     */
-    private $username;
-
-    /**
      * @var boolean
      */
     private $emailVerified;
+
+    /**
+     * @var string
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     */
+    private $familyName;
 
     public function __construct()
     {
@@ -121,19 +126,47 @@ class User implements \Neuron\Interfaces\Models\User
     }
 
     /**
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
      * @param string $username
      */
     public function setUsername($username)
     {
         $this->username = $username;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     * @return User
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFamilyName()
+    {
+        return $this->familyName;
+    }
+
+    /**
+     * @param string $familyName
+     * @return User
+     */
+    public function setFamilyName($familyName)
+    {
+        $this->familyName = $familyName;
+        return $this;
     }
 
     /**
@@ -160,7 +193,11 @@ class User implements \Neuron\Interfaces\Models\User
      */
     public function getDisplayName($formal = false)
     {
-        return $this->getUsername();
+        if ($formal) {
+            return $this->getFirstName() . ' ' . $this->getFamilyName();
+        } else {
+            return $this->getFirstName();
+        }
     }
 
     /**

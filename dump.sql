@@ -29,7 +29,8 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `neuron_users` (
 `u_id` int(11) NOT NULL,
   `u_email` varchar(255) DEFAULT NULL,
-  `u_username` varchar(50) DEFAULT NULL,
+  `u_firstName` varchar(255) DEFAULT NULL,
+  `u_familyName` varchar(255) DEFAULT NULL,
   `u_password` varchar(255) DEFAULT NULL,
   `u_resetPassword` tinyint(1) NOT NULL DEFAULT '0',
   `u_emailVerified` tinyint(1) NOT NULL DEFAULT '0'

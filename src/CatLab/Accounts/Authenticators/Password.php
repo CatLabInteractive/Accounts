@@ -215,10 +215,12 @@ class Password extends Authenticator
             $receivedToken
         ) {
             $email = $this->request->input('email', 'email');
-            $username = $this->request->input('username', 'username');
             $password = $this->request->input('password');
 
-            $response = $this->processRegister($email, $username, $password);
+            $firstName = $this->request->input('firstName', 'text');
+            $lastName = $this->request->input('lastName', 'text');
+
+            $response = $this->processRegister($email, $password, $firstName, $lastName);
             if ($response instanceof Response) {
                 return $response;
             } else if (is_string($response)) {
@@ -238,7 +240,8 @@ class Password extends Authenticator
         $template->set('layout', $this->module->getLayout());
         $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/register/' . $this->getToken()));
         $template->set('email', $this->request->input('email', 'string'));
-        $template->set('username', $this->request->input('username', 'string'));
+        $template->set('firstName', $this->request->input('firstName', 'string'));
+        $template->set('lastName', $this->request->input('lastName', 'string'));
 
         $this->addOtherAuthenticators($template);
 
@@ -277,13 +280,15 @@ class Password extends Authenticator
 
     /**
      * @param $email
-     * @param $username
      * @param $password
+     * @param $firstName
+     * @param $lastName
      * @return bool|string
-     * @throws \Neuron\Exceptions\InvalidParameter
+     * @throws ExpectedType
      * @throws \Neuron\Exceptions\DataNotSet
+     * @throws \Neuron\Exceptions\InvalidParameter
      */
-    private function processRegister($email, $username, $password)
+    private function processRegister($email, $password, $firstName, $lastName)
     {
         /** @var UserMapper $mapper */
         $mapper = MapperFactory::getUserMapper();
@@ -306,11 +311,6 @@ class Password extends Authenticator
             return Errors::EMAIL_INVALID;
         }
 
-        // Check username input
-        if (!$username) {
-            return Errors::USERNAME_INVALID;
-        }
-
         // Check if password is good
         if (!Tools::checkInput($password, 'password')) {
             return Errors::PASSWORD_INVALID;
@@ -322,16 +322,11 @@ class Password extends Authenticator
             return Errors::EMAIL_DUPLICATE;
         }
 
-        // Check if username is unique
-        $user = $mapper->getFromUsername($username);
-        if ($user) {
-            return Errors::USERNAME_DUPLICATE;
-        }
-
         // Create the user
         $user = new User ();
         $user->setEmail($email);
-        $user->setUsername($username);
+        $user->setFirstName($firstName);
+        $user->setFamilyName($lastName);
         $user->setPassword($password);
 
         $user = $mapper->create($user);

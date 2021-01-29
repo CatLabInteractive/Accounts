@@ -16,16 +16,26 @@
 
 	<?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>
 
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="firstName"><?php echo $this->gettext('First name'); ?></label>
+                <input type="text" class="form-control" id="firstName" placeholder="<?php echo $this->gettext('First name'); ?>" name="firstName" value="<?php echo htmlentities($firstName); ?>" autocomplete="given-name">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="lastName"><?php echo $this->gettext('Last name'); ?></label>
+                <input type="text" class="form-control" id="lastName" placeholder="<?php echo $this->gettext('Last name'); ?>" name="lastName" value="<?php echo htmlentities($lastName); ?>" autocomplete="family-name">
+            </div>
+        </div>
+    </div>
+
 	<div class="form-group">
 		<label for="email"><?php echo $this->gettext ('Email address'); ?></label>
 		<input type="email" class="form-control"  id="email" name="email" value="<?php echo $email; ?>" placeholder="<?php echo $this->gettext ('Email'); ?>" />
 		<p class="help-block"><?php echo $this->gettext ('Don\'t worry, it\'s our little secret. We won\'t share your email address with anyone.'); ?></p>
-	</div>
-
-	<div class="form-group">
-		<label for="username"><?php echo $this->gettext ('Username'); ?></label>
-		<input type="text" class="form-control"  id="username" name="username" value="<?php echo $username; ?>" placeholder="<?php echo $this->gettext ('Username'); ?>" />
-		<p class="help-block"><?php echo $this->gettext ('Your username must be unique and will be visible to other users.'); ?></p>
 	</div>
 
 	<button type="submit" class="btn btn-default"><?php echo $this->gettext ('Register'); ?></button>

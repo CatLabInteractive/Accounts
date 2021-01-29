@@ -65,27 +65,6 @@ class UserMapper
     }
 
     /**
-     * @param $username
-     * @return \CatLab\Accounts\Models\User|null
-     */
-    public function getFromUsername($username)
-    {
-        $query = new Query
-        ("
-			SELECT
-				*
-			FROM
-				{$this->table_users}
-			WHERE
-				u_username = ?
-		");
-
-        $query->bindValue(1, $username);
-
-        return $this->getSingle($query->execute());
-    }
-
-    /**
      * @param $email
      * @param $password
      * @return \CatLab\Accounts\Models\User|null
@@ -126,8 +105,11 @@ class UserMapper
             $data['u_password'] = $hash;
 
         // Username
-        if ($username = $user->getUsername())
-            $data['u_username'] = $username;
+        if ($firstName = $user->getFirstName())
+            $data['u_firstName'] = $firstName;
+
+        if ($familyName = $user->getFamilyName())
+            $data['u_familyName'] = $familyName;
 
         $data['u_emailVerified'] = $user->isEmailVerified() ? 1 : 0;
 
@@ -185,8 +167,11 @@ class UserMapper
         if ($data['u_password'])
             $user->setPasswordHash($data['u_password']);
 
-        if ($data['u_username'])
-            $user->setUsername($data['u_username']);
+        if ($data['u_firstName'])
+            $user->setFirstName($data['u_firstName']);
+
+        if ($data['u_familyName'])
+            $user->setFamilyName($data['u_familyName']);
 
         $user->setEmailVerified($data['u_emailVerified'] == 1);
 
@@ -202,7 +187,8 @@ class UserMapper
 
             'u_email' => null,
             'u_password' => null,
-            'u_username' => null,
+            'u_firstName' => null,
+            'u_familyName' => null,
             'u_emailVerified' => null
 
         ], [ 'u_id' => $user->getId() ])->execute();
