@@ -126,14 +126,6 @@ class User implements \Neuron\Interfaces\Models\User
     }
 
     /**
-     * @param string $username
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
-
-    /**
      * @return string
      */
     public function getFirstName()
