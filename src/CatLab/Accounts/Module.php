@@ -204,6 +204,8 @@ class Module extends Observable
         }
 
         $request->getSession()->set('catlab-user-id', $user->getId());
+        $request->clearUser();
+
         return $this->postLogin($request, $user, $registration);
     }
 
