@@ -15,6 +15,7 @@ use Neuron\Exceptions\DataNotSet;
 use Neuron\Exceptions\ExpectedType;
 use Neuron\MapperFactory;
 use Neuron\Models\Observable;
+use Neuron\Net\QueryTrackingParameters;
 use Neuron\Net\Request;
 use Neuron\Net\Response;
 use Neuron\Router;
@@ -426,6 +427,7 @@ class Module extends Observable
         $this->clearExpiredSessionAttributes($request);
 
         if ($redirect = $request->getSession()->get('post-login-redirect')) {
+            $redirect = $this->injectTrackingParameters($redirect);
             return $redirect;
         } else {
             return '/';
@@ -527,5 +529,35 @@ class Module extends Observable
         }
 
         return Response::error('You must be authenticated', Response::STATUS_UNAUTHORIZED);
+    }
+
+    /**
+     * @param string $redirectUrl
+     * @return string
+     */
+    protected function injectTrackingParameters($redirectUrl)
+    {
+        $parameters = QueryTrackingParameters::instance()->queryParameters;
+
+        $values = [];
+        foreach ($parameters as $parameter) {
+            if (isset($_GET[$parameter])) {
+                $values[$parameter] = $_GET[$parameter];
+            }
+        }
+
+        if (count($values) === 0) {
+            return $redirectUrl;
+        }
+
+        if (strpos($redirectUrl, '?') === false) {
+            $redirectUrl .= '?';
+        } else {
+            $redirectUrl .= '&';
+        }
+
+        $redirectUrl .= http_build_query($values);
+
+        return $redirectUrl;
     }
 }
