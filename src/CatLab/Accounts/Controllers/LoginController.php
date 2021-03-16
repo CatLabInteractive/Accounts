@@ -81,8 +81,12 @@ class LoginController
         }
 
         // Check if this is our first visit
+        $intend = $this->request->input('intend');
         $cookies = $this->request->getCookies();
-        if (!isset($cookies['fv'])) {
+        if (
+            (!$intend && !isset($cookies['fv'])) ||
+            $this->request->input('intend') === 'register'
+        ) {
             setcookie('fv', time(), Sniffer::instance()->getCookieParameters([
                 'expires' => time() + 60 * 60 * 24 * 365 * 2
             ]));
