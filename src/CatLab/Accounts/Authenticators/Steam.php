@@ -18,6 +18,8 @@ use Neuron\Net\Request;
 class Steam
 	extends OpenIDAuthenticator {
 
+    protected $trustProvidedEmailAddress = false;
+
 	public function getOpenIDUrl () {
 		return 'http://steamcommunity.com/openid';
 	}

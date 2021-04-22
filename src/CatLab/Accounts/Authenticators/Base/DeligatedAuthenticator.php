@@ -18,6 +18,11 @@ use Neuron\URLBuilder;
 abstract class DeligatedAuthenticator
     extends Authenticator
 {
+    /**
+     * If set to TRUE, email validation will be skipped if the chosen email address is identical to the provided one.
+     * @var bool
+     */
+    protected $trustProvidedEmailAddress = false;
 
     protected function initialize()
     {
@@ -92,6 +97,11 @@ abstract class DeligatedAuthenticator
         $user->setEmail($email);
         $user->setFirstName($firstName);
         $user->setFamilyName($familyName);
+
+        // Is email address verified?
+        if ($this->isVerifiedEmailAddress($user, $deligatedUser)) {
+            $user->setEmailVerified(true);
+        }
 
         $user = $mapper->create($user);
 
@@ -281,6 +291,21 @@ abstract class DeligatedAuthenticator
         $page->set('authenticator', $this);
 
         return $page;
+    }
+
+    /**
+     * Should we trust the provided email address (and thus not verify it?)
+     * @param User $user
+     * @param DeligatedUser $deligatedUser
+     * @return bool
+     */
+    protected function isVerifiedEmailAddress(User $user, DeligatedUser $deligatedUser)
+    {
+        if (!$this->trustProvidedEmailAddress) {
+            return false;
+        }
+
+        return $user->getEmail() === $deligatedUser->getEmail();
     }
 
 }

@@ -30,6 +30,8 @@ class Facebook
 	/** @var string[] */
 	private $scopes = array ('email');
 
+    protected $trustProvidedEmailAddress = true;
+
 	protected function initialize () {
 
 		if (!$this->loaded) {
