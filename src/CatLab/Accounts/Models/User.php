@@ -210,6 +210,11 @@ class User implements \Neuron\Interfaces\Models\User
      */
     public function changeEmail(Module $module, $emailAddress)
     {
+        if (!$this->isEmailVerified()) {
+            $this->setEmail($emailAddress);
+            \Neuron\MapperFactory::getUserMapper()->update($this);
+        }
+
         $this->generateVerificationEmail($module, $emailAddress);
     }
 

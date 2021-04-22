@@ -171,6 +171,11 @@ class Module extends Observable
     {
         // Check if we already have someone with this email address
 
+        // No change?
+        if ($user->getEmail() === $newEmailAddress) {
+            return true;
+        }
+
         /** @var UserMapper $mapper */
         $mapper = MapperFactory::getUserMapper();
 
@@ -334,6 +339,7 @@ class Module extends Observable
 
         $router->match('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
         $router->match('GET|POST', $this->routepath . '/notverified/poll', '\CatLab\Accounts\Controllers\LoginController@isVerifiedPoll');
+        $router->match('GET|POST', $this->routepath . '/change-email', '\CatLab\Accounts\Controllers\LoginController@changeEmailAddress');
 
         $router->match('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
 
@@ -506,7 +512,7 @@ class Module extends Observable
             } else {
                 global $signinmodule;
 
-                $template = new Template ('CatLab/Accounts/notverified.phpt');
+                $template = new Template ('CatLab/Accounts/notverified/notverified.phpt');
                 $template->set('layout', $signinmodule->getLayout());
 
                 $canResend = true;

@@ -2,16 +2,19 @@
 
 namespace CatLab\Accounts\Controllers;
 
+use CatLab\Accounts\Enums\Errors;
 use CatLab\Accounts\Models\User;
 use CatLab\Accounts\MapperFactory;
+use CatLab\Base\Helpers\StringHelper;
 use CatLab\SameSiteCookieSniffer\Sniffer;
 use Neuron\Core\Template;
 use Neuron\Exceptions\InvalidParameter;
 use Neuron\Net\Response;
+use Neuron\Tools\Text;
+use Neuron\Tools\TokenGenerator;
 use Neuron\URLBuilder;
 
-class LoginController
-    extends Base
+class LoginController extends Base
 {
     /**
      * @return Response
@@ -168,7 +171,7 @@ class LoginController
         $mapper->update($user);
 
         //return $this->module->login($this->request, $user);
-        $template = new Template('CatLab/Accounts/verified.phpt');
+        $template = new Template('CatLab/Accounts/notverified/verified.phpt');
         $template->set('layout', $this->module->getLayout());
         return Response::template($template);
     }
@@ -195,7 +198,7 @@ class LoginController
         }
 
         $canResend = true;
-        $template = new Template ('CatLab/Accounts/notverified.phpt');
+        $template = new Template ('CatLab/Accounts/notverified/notverified.phpt');
 
         // Send verification.
         if (
@@ -212,6 +215,88 @@ class LoginController
         $template->set('user', $user);
         $template->set('resend_url', URLBuilder::getURL($this->module->getRoutePath() . '/notverified', array('retry' => 1)));
         $template->set('pollAction', URLBuilder::getURL($this->module->getRoutePath() . '/notverified/poll'));
+        $template->set('changeAddress_url', URLBuilder::getURL(
+            $this->module->getRoutePath() . '/change-email', array(
+                'return' => URLBuilder::getURL($this->module->getRoutePath() . '/notverified'))
+            )
+        );
+
+        return Response::template($template);
+    }
+
+    /**
+     * @return Response
+     * @throws \CatLab\Mailer\Exceptions\MailException
+     * @throws \Neuron\Exceptions\DataNotSet
+     */
+    public function changeEmailAddress()
+    {
+        $text = Text::getInstance();
+        $text->setDomain('messages');
+        
+        $user = $this->request->getUser();
+        if (!$user) {
+            $userId = $this->request->getSession()->get('catlab-non-verified-user-id');
+            if ($userId) {
+                $user = \Neuron\MapperFactory::getUserMapper()->getFromId($userId);
+            }
+        }
+
+        if (!$user || !($user instanceof User)) {
+            return Response::error('You are not logged in.');
+        }
+
+        $return = $this->request->input('return');
+        $action = $this->request->input('action');
+
+        $error = null;
+        switch ($action) {
+            case 'change-password':
+                // check csfr
+                if (!$this->isValidCsfrToken()) {
+                    $error = 'Invalid request, please try again.';
+                    break;
+                }
+
+                $email = $this->request->input('email', 'email');
+                if ($email) {
+                    $error = $this->module->changeEmail($this->request, $user, $email);
+                    if ($error === true) {
+                        if ($return) {
+                            return Response::redirect($return);
+                        } else {
+                            return Response::redirect('/');
+                        }
+                    }
+                }
+                break;
+        }
+
+        $template = new Template ('CatLab/Accounts/notverified/changeAddress.phpt');
+
+        $errorText = null;
+        if ($error) {
+            switch ($error) {
+                case Errors::EMAIL_DUPLICATE:
+                    $errorText = $text->getText('This email address is already in use for a different account.');
+                    break;
+
+                default:
+                    $errorText = $text->getText('An undefined error has occurred.');
+                    break;
+            }
+        }
+        
+        $template->set('error', $errorText);
+        $template->set('name', $user->getDisplayName());
+        $template->set('layout', $this->module->getLayout());
+        $template->set('user', $user);
+        $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/change-email', [ 'return' => $return ]));
+        $template->set('csfr', $this->generateCsfrToken());
+
+        if (isset($return)) {
+            $template->set('return_url', $return);
+        }
 
         return Response::template($template);
     }
@@ -299,5 +384,34 @@ class LoginController
     {
         $this->module->setPostLoginRedirects($this->request);
         return $this->module->logout($this->request);
+    }
+
+    /**
+     * @return bool
+     * @throws \Neuron\Exceptions\DataNotSet
+     */
+    protected function isValidCsfrToken()
+    {
+        if (!$this->request->getSession()->get('csfr-token')) {
+            return false;
+        }
+
+        if ($this->request->input('csfr-token') !== $this->request->getSession()->get('csfr-token')) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return string
+     * @throws \Neuron\Exceptions\DataNotSet
+     */
+    protected function generateCsfrToken()
+    {
+        $csfr = TokenGenerator::getToken(32);
+        $this->request->getSession()->set('csfr-token', $csfr);
+
+        return $csfr;
     }
 }
