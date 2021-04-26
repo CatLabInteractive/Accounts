@@ -189,6 +189,9 @@ class Password extends Authenticator
             $password = $this->request->input('password', 'password');
             $confirmPassword = $this->request->input('password_confirmation', 'password');
 
+            // Email address can be verified, as this link was signed.
+            $user->setEmailVerified(true);
+
             $response = $this->processChangePassword($user, $password, $confirmPassword);
             if ($response instanceof Response) {
                 return $response;
