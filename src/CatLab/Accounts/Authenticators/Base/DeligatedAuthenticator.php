@@ -294,6 +294,14 @@ abstract class DeligatedAuthenticator
     }
 
     /**
+     * @return bool
+     */
+    protected function canTrustEmailAddress()
+    {
+        return $this->trustProvidedEmailAddress;
+    }
+
+    /**
      * Should we trust the provided email address (and thus not verify it?)
      * @param User $user
      * @param DeligatedUser $deligatedUser
@@ -301,7 +309,7 @@ abstract class DeligatedAuthenticator
      */
     protected function isVerifiedEmailAddress(User $user, DeligatedUser $deligatedUser)
     {
-        if (!$this->trustProvidedEmailAddress) {
+        if (!$this->canTrustEmailAddress()) {
             return false;
         }
 

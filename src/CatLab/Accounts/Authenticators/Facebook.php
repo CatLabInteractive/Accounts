@@ -22,6 +22,10 @@ use Neuron\Config;
 use Neuron\Net\Response;
 use Neuron\URLBuilder;
 
+/**
+ * Class Facebook
+ * @package CatLab\Accounts\Authenticators
+ */
 class Facebook
 	extends DeligatedAuthenticator {
 
