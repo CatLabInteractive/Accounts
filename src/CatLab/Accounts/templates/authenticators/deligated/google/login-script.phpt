@@ -23,13 +23,13 @@
                     var idToken = response.id_token;
 
                     var form = document.createElement('form');
-                    document.getElementById('google-authenticator').appendChild(form);
+                    document.body.appendChild.append(form);
 
                     form.action = '<?php echo $authUrl; ?>';
                     form.method = 'post';
 
                     var input = document.createElement('input');
-                    document.body.appendChild(input);
+                    form.append(input);
 
                     input.name = 'idtoken';
                     input.value = idToken;
