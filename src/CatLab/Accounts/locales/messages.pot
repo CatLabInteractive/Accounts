@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-23 00:20+0200\n"
+"POT-Creation-Date: 2021-04-30 01:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,8 +82,8 @@ msgstr ""
 #: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:19
 #: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:36
 #: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:8
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:7
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:28
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:18
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:47
 msgid "Email address"
 msgstr ""
 
@@ -220,24 +220,24 @@ msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:20
 #: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:9
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:8
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:19
 #: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:5
 msgid "Enter email"
 msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:22
 #: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:23
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:10
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:11
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:21
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:22
 #: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:9
 #: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:10
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:34
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:53
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:13
 msgid "Password"
 msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:25
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:15
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:26
 msgid "Sign in"
 msgstr ""
 
@@ -255,21 +255,21 @@ msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:22
 #: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:23
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:14
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:15
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:33
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:34
 msgid "First name"
 msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:29
 #: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:30
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:21
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:22
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:40
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:41
 msgid "Last name"
 msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:37
 #: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:4
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:29
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:48
 msgid "Email"
 msgstr ""
 
@@ -281,8 +281,8 @@ msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:41
 #: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:14
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:64
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:66
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:70
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:72
 msgid "Register"
 msgstr ""
 
@@ -319,33 +319,51 @@ msgstr ""
 msgid "Please sign in"
 msgstr ""
 
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:13
-msgid "Lost password"
-msgstr ""
-
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:18
-msgid "Register a new account"
-msgstr ""
-
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:4
 #: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:13
 msgid "Login"
 msgstr ""
 
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:8
-msgid "Welcome, stranger"
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:5
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:9
+msgid "This part of our application is only available for authenticated users."
 msgstr ""
 
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:33
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:8
+msgid "Connect with:"
+msgstr ""
+
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:14
+msgid "Or use our password based authentication:"
+msgstr ""
+
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:24
+msgid "Lost password"
+msgstr ""
+
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:29
+msgid "Register a new account"
+msgstr ""
+
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:8
+msgid "Welcome"
+msgstr ""
+
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:14
+msgid "Use your favourite online service to authenticate:"
+msgstr ""
+
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:26
+msgid "Or register using email and password."
+msgstr ""
+
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:52
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:12
 msgid "New password"
 msgstr ""
 
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:35
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:54
 msgid "Minimum 8 characters."
-msgstr ""
-
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:40
-msgid "Connect with:"
 msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:3
@@ -375,11 +393,11 @@ msgstr ""
 msgid "I don't want to login right now"
 msgstr ""
 
-#: src/CatLab/Accounts/Controllers/LoginController.php:281
+#: src/CatLab/Accounts/Controllers/LoginController.php:282
 msgid "This email address is already in use for a different account."
 msgstr ""
 
-#: src/CatLab/Accounts/Controllers/LoginController.php:285
+#: src/CatLab/Accounts/Controllers/LoginController.php:286
 msgid "An undefined error has occurred."
 msgstr ""
 

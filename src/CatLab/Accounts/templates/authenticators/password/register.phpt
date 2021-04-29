@@ -5,7 +5,26 @@
 
 <form method="post" action="<?php echo $action; ?>" role="form" id="registerForm">
 
-    <h2><?php echo $this->gettext('Welcome, stranger'); ?></h2>
+    <h2><?php echo $this->gettext ('Welcome'); ?></h2>
+    <p><?php echo $this->gettext ('This part of our application is only available for authenticated users.'); ?></p>
+
+    <?php if (isset($otherAuthenticators)) { ?>
+        <p class="other-authenticators">
+            <p>
+                <?php echo $this->gettext ('Use your favourite online service to authenticate:'); ?>
+                <div class="media-connections">
+                    <?php foreach ($otherAuthenticators as $authenticator) { ?>
+                        <?php if (! ($authenticator instanceof \CatLab\Accounts\Authenticators\Password)) { ?>
+                            <?php echo $authenticator->getInlineForm (); ?>
+                        <?php } ?>
+                    <?php } ?>
+                </div>
+            </p>
+        </div>
+    <?php } ?>
+
+    <p><?php echo $this->gettext ('Or register using email and password.'); ?></p>
+
     <?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>
 
     <div class="row">
@@ -34,19 +53,6 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="<?php echo $this->gettext ('Password'); ?>" autocomplete="new-password" />
         <p class="help-block"><?php echo $this->gettext ('Minimum 8 characters.'); ?></p>
     </div>
-
-    <?php if (isset($otherAuthenticators)) { ?>
-        <div class="other-authenticators">
-            <p class="connect-with"><?php echo $this->gettext ('Connect with:'); ?><br /></p>
-            <div class="media-connections">
-            <?php foreach ($otherAuthenticators as $authenticator) { ?>
-                <?php if (! ($authenticator instanceof \CatLab\Accounts\Authenticators\Password)) { ?>
-                    <?php echo $authenticator->getInlineForm (); ?>
-                <?php } ?>
-            <?php } ?>
-            </div>
-        </div>
-    <?php } ?>
 
     <input type="hidden" class="hidden" name="token" value="<?php echo $token; ?>" />
 
