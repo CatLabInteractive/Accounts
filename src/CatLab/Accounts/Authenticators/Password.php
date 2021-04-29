@@ -438,6 +438,8 @@ class Password extends Authenticator
         $template->set('layout', $this->module->getLayout());
         $template->set('formTemplate', 'CatLab/Accounts/authenticators/password/form.phpt');
 
+        $this->addOtherAuthenticators($template);
+
         return $template;
     }
 
