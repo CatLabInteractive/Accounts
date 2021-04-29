@@ -23,13 +23,13 @@
                     var idToken = response.id_token;
 
                     var form = document.createElement('form');
-                    document.body.appendChild.append(form);
+                    document.body.appendChild(form);
 
                     form.action = '<?php echo $authUrl; ?>';
                     form.method = 'post';
 
                     var input = document.createElement('input');
-                    form.append(input);
+                    form.appendChild(input);
 
                     input.name = 'idtoken';
                     input.value = idToken;
