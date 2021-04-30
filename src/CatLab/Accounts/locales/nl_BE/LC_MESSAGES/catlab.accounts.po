@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CatLab Accounts\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-30 11:16+0200\n"
-"PO-Revision-Date: 2021-04-30 11:17+0200\n"
+"POT-Creation-Date: 2021-04-30 11:34+0200\n"
+"PO-Revision-Date: 2021-04-30 11:35+0200\n"
 "Last-Translator: Thijs Van der Schaeghe <thijs@catlab.be>\n"
 "Language-Team: CatLab Interactive <thijs@catlab.be>\n"
 "Language: nl_BE\n"
@@ -302,10 +302,9 @@ msgstr "Paswoord herstellen"
 msgid "Please enter your email address."
 msgstr "Geef je e-mail adres in."
 
-#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:14
-#: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:9
-msgid "Go back"
-msgstr "Ga terug"
+#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:15
+msgid "Return to login form"
+msgstr "Terug naar het login formulier"
 
 #: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:5
 msgid ""
@@ -318,6 +317,10 @@ msgstr ""
 #: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:6
 msgid "Please check your mailbox and click the link we have sent to you."
 msgstr "Kijk even of je een mailtje hebt en klik op de link in de e-mail."
+
+#: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:9
+msgid "Go back"
+msgstr "Ga terug"
 
 #: src/CatLab/Accounts/templates/authenticators/password/form.phpt:3
 msgid "Please sign in"

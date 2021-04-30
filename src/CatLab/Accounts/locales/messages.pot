@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-30 11:16+0200\n"
+"POT-Creation-Date: 2021-04-30 11:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -300,9 +300,8 @@ msgstr ""
 msgid "Please enter your email address."
 msgstr ""
 
-#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:14
-#: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:9
-msgid "Go back"
+#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:15
+msgid "Return to login form"
 msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:5
@@ -313,6 +312,10 @@ msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:6
 msgid "Please check your mailbox and click the link we have sent to you."
+msgstr ""
+
+#: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:9
+msgid "Go back"
 msgstr ""
 
 #: src/CatLab/Accounts/templates/authenticators/password/form.phpt:3

@@ -81,8 +81,6 @@ class Password extends Authenticator
             }
         }
 
-        $this->addOtherAuthenticators($template);
-
         return Response::template($template);
     }
 
@@ -502,7 +500,8 @@ class Password extends Authenticator
                 $otherAuthenticators[] = $v;
             }
         }
-        $template->set ('otherAuthenticators', $otherAuthenticators);
+
+        $template->set ('otherAuthenticators', $otherAuthenticators, true);
     }
 
 }

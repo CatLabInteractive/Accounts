@@ -10,8 +10,10 @@
 
     <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $this->gettext ('Recover password'); ?></button>
 
-    <p class="login">
-        <a href="<?php echo $login; ?>"><?php echo $this->gettext ('Go back'); ?></a>
-    </p>
+    <ul class="login-actions">
+        <li>
+            <a href="<?php echo \Neuron\URLBuilder::getURL('account/login'); ?>"><?php echo $this->gettext('Return to login form'); ?></a>
+        </li>
+    </ul>
 
 </form>
