@@ -21,12 +21,16 @@
 	<label for="inputPassword" class="sr-only"><?php echo $this->gettext ('Password'); ?></label>
 	<input type="password" class="form-control" id="inputPassword" autocomplete="current-password" name="password" placeholder="<?php echo $this->gettext ('Password'); ?>" required />
 
-    <p><a href="<?php echo $lostPassword; ?>"><?php echo $this->gettext('Lost password'); ?></a></p>
-
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $this->gettext ('Sign in'); ?></button>
 
-	<p class="register">
-		<a href="<?php echo $register; ?>"><?php echo $this->gettext ('Register a new account'); ?></a>
-	</p>
+    <ul class="login-actions">
+        <li>
+            <a href="<?php echo $lostPassword; ?>"><?php echo $this->gettext('Forgot password?'); ?></a>
+        </li>
+
+        <li>
+            <?php echo $this->gettext('Not registered?'); ?> <a href="<?php echo $register; ?>"><?php echo $this->gettext('Sign up now.'); ?></a>
+        </li>
+    </ul>
 
 </form>

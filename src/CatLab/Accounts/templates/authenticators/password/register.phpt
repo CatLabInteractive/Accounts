@@ -5,7 +5,7 @@
 
 <form method="post" action="<?php echo $action; ?>" role="form" id="registerForm">
 
-    <h2><?php echo $this->gettext ('Welcome'); ?></h2>
+    <h2><?php echo $this->gettext ('Sign up'); ?></h2>
     <p><?php echo $this->gettext ('This part of our application is only available for authenticated users.'); ?></p>
 
     <?php if (isset($otherAuthenticators)) { ?>
@@ -24,6 +24,12 @@
     <?php } ?>
 
     <p><?php echo $this->gettext ('Or register using email and password.'); ?></p>
+    <ul class="login-actions">
+        <li>
+            <?php echo $this->gettext('Signed up before?'); ?>
+            <a href="<?php echo \Neuron\URLBuilder::getURL('account/login'); ?>"><?php echo $this->gettext('Login.'); ?></a>
+        </li>
+    </ul>
 
     <?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>
 
