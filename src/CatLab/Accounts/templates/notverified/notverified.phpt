@@ -11,7 +11,7 @@ $this->textdomain ('catlab.accounts');
 <div class="panel">
     <div class="panel-body">
         <p>
-            <?php echo sprintf($this->gettext ('We have sent a confirmation email to %s.'), $user->getEmail()); ?><br />
+            <?php echo sprintf($this->gettext ('We have sent a confirmation email to %s.'), '<code>' . $user->getEmail() . '</code>'); ?><br />
             <?php echo $this->gettext ('Please click the link in the email in order to verify your account.'); ?>
         </p>
 
