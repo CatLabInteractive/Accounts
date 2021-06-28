@@ -388,6 +388,16 @@ class LoginController extends Base
     }
 
     /**
+     * @return Response
+     */
+    public function ageGate()
+    {
+        return Response::template('CatLab/Accounts/agegate.phpt', [
+            'layout' => $this->module->getLayout()
+        ]);
+    }
+
+    /**
      * @return bool
      * @throws \Neuron\Exceptions\DataNotSet
      */

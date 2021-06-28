@@ -593,16 +593,6 @@ class Module extends Observable
     }
 
     /**
-     * @return Response
-     */
-    public function ageGate()
-    {
-        return Response::template('CatLab/Accounts/agegate.phpt', [
-            'layout' => $this->layout
-        ]);
-    }
-
-    /**
      * @param string $redirectUrl
      * @return string
      */
