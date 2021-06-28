@@ -4,6 +4,7 @@ namespace CatLab\Accounts\Mappers;
 
 use CatLab\Accounts\MapperFactory;
 use CatLab\Accounts\Models\User;
+use CatLab\Base\Models\Database\DB;
 use Neuron\DB\Query;
 use Neuron\Exceptions\InvalidParameter;
 use Neuron\Mappers\BaseMapper;
@@ -111,6 +112,10 @@ class UserMapper
         if ($familyName = $user->getFamilyName())
             $data['u_familyName'] = $familyName;
 
+        if ($birthDate = $user->getBirthDate()) {
+            $data['u_birthdate'] = [ $birthDate, Query::PARAM_DATE ];
+        }
+
         $data['u_emailVerified'] = $user->isEmailVerified() ? 1 : 0;
 
         return $data;
@@ -128,6 +133,7 @@ class UserMapper
             throw new InvalidParameter ("A user with this email address already exists.");
 
         $data = $this->getDataToSet($user);
+        $data['created_at'] = [ new \DateTime(), Query::PARAM_DATE ];
 
         // Insert
         $id = Query::insert($this->table_users, $data)->execute();

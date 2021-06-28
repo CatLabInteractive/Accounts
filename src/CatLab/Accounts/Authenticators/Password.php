@@ -86,6 +86,7 @@ class Password extends Authenticator
 
     /**
      * @return Response
+     * @throws ExpectedType
      */
     public function lostPassword()
     {
@@ -104,6 +105,7 @@ class Password extends Authenticator
 
     /**
      * @return Response
+     * @throws ExpectedType
      */
     private function getLostPasswordForm()
     {
@@ -144,6 +146,7 @@ class Password extends Authenticator
 
     /**
      * @return Response
+     * @throws \Neuron\Exceptions\DataNotSet
      */
     private function getChangePasswordForm()
     {
@@ -221,7 +224,12 @@ class Password extends Authenticator
             $firstName = $this->request->input('firstName', 'text');
             $lastName = $this->request->input('lastName', 'text');
 
-            $response = $this->processRegister($email, $password, $firstName, $lastName);
+            $birthDate = $this->request->input('birthdate', 'date');
+            if ($birthDate) {
+                $birthDate = new \DateTime(date('Y-m-d', $birthDate));
+            }
+
+            $response = $this->processRegister($email, $password, $firstName, $lastName, $birthDate);
             if ($response instanceof Response) {
                 return $response;
             } else if (is_string($response)) {
@@ -284,12 +292,13 @@ class Password extends Authenticator
      * @param $password
      * @param $firstName
      * @param $lastName
+     * @param \DateTime|null $birthDate
      * @return bool|string
      * @throws ExpectedType
      * @throws \Neuron\Exceptions\DataNotSet
      * @throws \Neuron\Exceptions\InvalidParameter
      */
-    private function processRegister($email, $password, $firstName, $lastName)
+    private function processRegister($email, $password, $firstName, $lastName, \DateTime $birthDate = null)
     {
         /** @var UserMapper $mapper */
         $mapper = MapperFactory::getUserMapper();
@@ -323,12 +332,23 @@ class Password extends Authenticator
             return Errors::EMAIL_DUPLICATE;
         }
 
+        if (!$birthDate) {
+            return Errors::BIRTHDATE_INVALID;
+        }
+
+        // Check for age lock
+        $ageWallResponse = $this->module->checkAgeGate($birthDate);
+        if ($ageWallResponse !== true) {
+            return $ageWallResponse;
+        }
+
         // Create the user
         $user = new User ();
         $user->setEmail($email);
         $user->setFirstName($firstName);
         $user->setFamilyName($lastName);
         $user->setPassword($password);
+        $user->setBirthDate($birthDate);
 
         $user = $mapper->create($user);
         if ($user) {

@@ -49,6 +49,12 @@ class Module extends Observable
     private $requireEmailValidationOnRegistration = false;
 
     /**
+     * Minimum user age to be able to register.
+     * @var int
+     */
+    private $minimumAge = 13;
+
+    /**
      *
      */
     public function __construct()
@@ -541,6 +547,22 @@ class Module extends Observable
         }
 
         return Response::error('You must be authenticated', Response::STATUS_UNAUTHORIZED);
+    }
+
+    /**
+     * @param \DateTime $birthdate
+     * @return Response|true
+     */
+    public function checkAgeGate(\DateTime $birthdate)
+    {
+        $yearsOld = (new \DateTime())->diff(($birthdate))->y;
+        if ($yearsOld < $this->minimumAge) {
+            return Response::template('CatLab/Accounts/agegate.phpt', [
+                'layout' => $this->layout
+            ]);
+        }
+
+        return true;
     }
 
     /**

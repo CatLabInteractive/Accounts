@@ -60,6 +60,11 @@
         <p class="help-block"><?php echo $this->gettext ('Minimum 8 characters.'); ?></p>
     </div>
 
+    <div class="form-group">
+        <label for="password"><?php echo $this->gettext ('Date of birth'); ?></label>
+        <input type="date" class="form-control" id="birthday" name="birthday" placeholder="<?php echo $this->gettext ('Date of birth'); ?>" autocomplete="bday" />
+    </div>
+
     <input type="hidden" class="hidden" name="token" value="<?php echo $token; ?>" />
 
     <?php if (isset($recaptchaClientKey)) { ?>

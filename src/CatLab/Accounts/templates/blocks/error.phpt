@@ -51,6 +51,10 @@ use CatLab\Accounts\Enums\Errors;
             <?php echo $this->gettext ('This password does not match our security requirements.'); ?>
             <?php echo $this->gettext ('Please choose a different password.'); ?>
 
+        <?php } else if ($error === Errors::BIRTHDATE_INVALID) { ?>
+
+            <?php echo $this->gettext ('Please enter your birthdate.'); ?>
+
         <?php } else { ?>
 
 			<?php echo $error; ?>

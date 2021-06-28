@@ -33,7 +33,10 @@ CREATE TABLE IF NOT EXISTS `neuron_users` (
   `u_familyName` varchar(255) DEFAULT NULL,
   `u_password` varchar(255) DEFAULT NULL,
   `u_resetPassword` tinyint(1) NOT NULL DEFAULT '0',
-  `u_emailVerified` tinyint(1) NOT NULL DEFAULT '0'
+  `u_emailVerified` tinyint(1) NOT NULL DEFAULT '0',
+  `u_birthdate` date null,
+  `created_at` timestamp null,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

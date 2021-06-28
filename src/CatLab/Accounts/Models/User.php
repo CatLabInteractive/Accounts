@@ -56,6 +56,11 @@ class User implements \Neuron\Interfaces\Models\User
      */
     private $familyName;
 
+    /**
+     * @var DateTime
+     */
+    private $birthDate;
+
     public function __construct()
     {
 
@@ -158,6 +163,24 @@ class User implements \Neuron\Interfaces\Models\User
     public function setFamilyName($familyName)
     {
         $this->familyName = $familyName;
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getBirthDate()
+    {
+        return $this->birthDate;
+    }
+
+    /**
+     * @param DateTime $birthDate
+     * @return User
+     */
+    public function setBirthDate(DateTime $birthDate)
+    {
+        $this->birthDate = $birthDate;
         return $this;
     }
 

@@ -18,6 +18,7 @@ class RegistrationController
 
     /**
      * @return Response
+     * @throws \Neuron\Exceptions\DataNotSet
      */
     public function register ()
     {
