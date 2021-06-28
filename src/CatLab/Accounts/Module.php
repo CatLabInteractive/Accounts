@@ -99,7 +99,13 @@ class Module extends Observable
     {
         $request->addUserCallback('accounts', function (Request $request) {
 
-            $userid = $request->getSession()->get('catlab-user-id');
+            try {
+                $session = $request->getSession();
+            } catch (DataNotSet $e) {
+                return null;
+            }
+
+            $userid = $session->get('catlab-user-id');
 
             if ($userid) {
                 $user = MapperFactory::getUserMapper()->getFromId($userid);
@@ -340,23 +346,46 @@ class Module extends Observable
         $router->addFilter('verifiedEmailAddress', array($this, 'requireVerifiedEmailAddressFilter'));
 
         // Routes
-        $router->match('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator');
-        $router->match('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login');
-        $router->match('GET', $this->routepath . '/welcome', '\CatLab\Accounts\Controllers\LoginController@welcome')->filter('authenticated');
-        $router->match('GET', $this->routepath . '/next', '\CatLab\Accounts\Controllers\LoginController@next')->filter('authenticated');
+        $router->match('GET|POST', $this->routepath . '/login/{authenticator}', '\CatLab\Accounts\Controllers\LoginController@authenticator')
+            ->filter('session');
 
-        $router->match('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification');
-        $router->match('GET|POST', $this->routepath . '/notverified/poll', '\CatLab\Accounts\Controllers\LoginController@isVerifiedPoll');
-        $router->match('GET|POST', $this->routepath . '/change-email', '\CatLab\Accounts\Controllers\LoginController@changeEmailAddress');
+        $router->match('GET', $this->routepath . '/login', '\CatLab\Accounts\Controllers\LoginController@login')
+            ->filter('session');
 
-        $router->match('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout');
+        $router->match('GET', $this->routepath . '/welcome', '\CatLab\Accounts\Controllers\LoginController@welcome')
+            ->filter('session')
+            ->filter('authenticated');
 
-        $router->match('GET', $this->routepath . '/cancel', '\CatLab\Accounts\Controllers\LoginController@cancel');
+        $router->match('GET', $this->routepath . '/next', '\CatLab\Accounts\Controllers\LoginController@next')
+            ->filter('session')
+            ->filter('authenticated');
 
-        $router->match('GET|POST', $this->routepath . '/register/{authenticator}', '\CatLab\Accounts\Controllers\RegistrationController@authenticator');
-        $router->match('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register');
+        $router->match('GET|POST', $this->routepath . '/notverified', '\CatLab\Accounts\Controllers\LoginController@requiresVerification')
+            ->filter('session');
 
-        $router->get($this->routepath . '/verify/{id}', '\CatLab\Accounts\Controllers\LoginController@verify');
+        $router->match('GET|POST', $this->routepath . '/notverified/poll', '\CatLab\Accounts\Controllers\LoginController@isVerifiedPoll')
+            ->filter('session');
+
+        $router->match('GET|POST', $this->routepath . '/change-email', '\CatLab\Accounts\Controllers\LoginController@changeEmailAddress')
+            ->filter('session');
+
+        $router->match('GET', $this->routepath . '/logout', '\CatLab\Accounts\Controllers\LoginController@logout')
+            ->filter('session');
+
+        $router->match('GET', $this->routepath . '/cancel', '\CatLab\Accounts\Controllers\LoginController@cancel')
+            ->filter('session');
+
+        $router->match('GET|POST', $this->routepath . '/register/{authenticator}', '\CatLab\Accounts\Controllers\RegistrationController@authenticator')
+            ->filter('session');
+
+        $router->match('GET|POST', $this->routepath . '/register', '\CatLab\Accounts\Controllers\RegistrationController@register')
+            ->filter('session');
+
+        $router->get($this->routepath . '/verify/{id}', '\CatLab\Accounts\Controllers\LoginController@verify')
+            ->filter('session');
+
+        $router->get($this->routepath . '/age-gate', '\CatLab\Accounts\Controllers\LoginController@ageGate')
+            ->filter('session');
     }
 
     /**
@@ -557,12 +586,20 @@ class Module extends Observable
     {
         $yearsOld = (new \DateTime())->diff(($birthdate))->y;
         if ($yearsOld < $this->minimumAge) {
-            return Response::template('CatLab/Accounts/agegate.phpt', [
-                'layout' => $this->layout
-            ]);
+            return Response::redirect(URLBuilder::getURL($this->routepath . '/age-gate'));
         }
 
         return true;
+    }
+
+    /**
+     * @return Response
+     */
+    public function ageGate()
+    {
+        return Response::template('CatLab/Accounts/agegate.phpt', [
+            'layout' => $this->layout
+        ]);
     }
 
     /**
