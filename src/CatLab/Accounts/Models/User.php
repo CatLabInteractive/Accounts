@@ -208,10 +208,14 @@ class User implements \Neuron\Interfaces\Models\User
      */
     public function getDisplayName($formal = false)
     {
-        if ($formal) {
+        if ($formal && $this->getFirstName() && $this->getFamilyName()) {
             return $this->getFirstName() . ' ' . $this->getFamilyName();
-        } else {
+        } elseif ($this->getFirstName()) {
             return $this->getFirstName();
+        } elseif ($this->getFamilyName()) {
+            return $this->getFamilyName();
+        } else {
+            return 'User ' . $this->getId();
         }
     }
 
