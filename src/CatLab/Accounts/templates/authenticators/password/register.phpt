@@ -62,6 +62,7 @@
 
     <div class="form-group">
         <label for="password"><?php echo $this->gettext ('Date of birth'); ?></label>
+        <p class="help-block"><?php echo sprintf($this->gettext ('You must be at least %s years old in order to use our platform.'), $module->getMinimumAge()); ?></p>
         <input type="date" class="form-control" id="birthday" name="birthday" placeholder="<?php echo $this->gettext ('Date of birth'); ?>" autocomplete="bday" />
     </div>
 
