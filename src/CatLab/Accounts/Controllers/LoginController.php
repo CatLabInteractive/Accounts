@@ -393,7 +393,8 @@ class LoginController extends Base
     public function ageGate()
     {
         return Response::template('CatLab/Accounts/agegate.phpt', [
-            'layout' => $this->module->getLayout()
+            'layout' => $this->module->getLayout(),
+            'return' => URLBuilder::getURL($this->module->getRoutePath() . '/register/password')
         ]);
     }
 

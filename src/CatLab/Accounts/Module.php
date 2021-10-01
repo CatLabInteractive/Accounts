@@ -585,11 +585,19 @@ class Module extends Observable
     public function checkAgeGate(\DateTime $birthdate)
     {
         $yearsOld = (new \DateTime())->diff(($birthdate))->y;
-        if ($yearsOld < $this->minimumAge) {
+        if ($yearsOld < $this->getMinimumAge()) {
             return Response::redirect(URLBuilder::getURL($this->routepath . '/age-gate'));
         }
 
         return true;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinimumAge()
+    {
+        return $this->minimumAge;
     }
 
     /**

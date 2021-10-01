@@ -4,5 +4,9 @@
 ?>
 
 <h2><?php echo $this->gettext('Just a few more years'); ?></h2>
-<p><?php echo $this->gettext('We\'re terribly sorry, but our platform was developed for people of age 13 and up.'); ?></p>
-<p><?php echo $this->gettext('Perhaps you can join in a few years?'); ?></p>
+<div class="alert alert-danger">
+    <p><?php echo $this->gettext('We\'re terribly sorry, but our platform was developed for people of age 13 and up.'); ?></p>
+    <p><?php echo $this->gettext('Perhaps you can join in a few years?'); ?></p>
+</div>
+
+<p><a href="<?php echo $return; ?>" class="btn btn-primary"><?php echo $this->gettext('Return'); ?></a></p>

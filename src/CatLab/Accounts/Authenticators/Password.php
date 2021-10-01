@@ -251,6 +251,7 @@ class Password extends Authenticator
         $template->set('email', $this->request->input('email', 'string'));
         $template->set('firstName', $this->request->input('firstName', 'string'));
         $template->set('lastName', $this->request->input('lastName', 'string'));
+        $template->set('module', $this->module);
 
         $this->addOtherAuthenticators($template);
 
