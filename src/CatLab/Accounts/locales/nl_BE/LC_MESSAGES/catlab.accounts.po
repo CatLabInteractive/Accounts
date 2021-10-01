@@ -2,59 +2,51 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CatLab Accounts\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-30 11:34+0200\n"
-"PO-Revision-Date: 2021-04-30 11:35+0200\n"
+"POT-Creation-Date: 2021-10-01 17:12+0200\n"
+"PO-Revision-Date: 2021-10-01 17:12+0200\n"
 "Last-Translator: Thijs Van der Schaeghe <thijs@catlab.be>\n"
 "Language-Team: CatLab Interactive <thijs@catlab.be>\n"
 "Language: nl_BE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: ../../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
 "X-Poedit-SearchPath-0: templates\n"
 
-#: src/CatLab/Accounts/templates/blocks/error.phpt:15
-msgid "We don't know anyone with that email address."
-msgstr "We kennen niemand met dat e-mailadres."
+#: example/templates/home.phpt:7
+msgid "Welcome to the world of tomorrow!"
+msgstr "Welkom in de wereld van morgen!"
 
-#: src/CatLab/Accounts/templates/blocks/error.phpt:19
-msgid "The password you have provided is incorrect."
-msgstr "Het wachtwoord dat u hebt opgegeven, is onjuist."
-
-#: src/CatLab/Accounts/templates/blocks/error.phpt:23
-msgid "This email address is already registered in our database."
-msgstr "Dit e-mailadres is al geregistreerd in onze database."
-
-#: src/CatLab/Accounts/templates/blocks/error.phpt:28
-#: src/CatLab/Accounts/templates/blocks/error.phpt:40
+#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:8
 #, php-format
-msgid "If you already have an account here, you can %s."
-msgstr "Als je al een account hebt, kun je %s."
+msgid "Hello, %s"
+msgstr "Hallo, %s"
 
-#: src/CatLab/Accounts/templates/blocks/error.phpt:29
-#: src/CatLab/Accounts/templates/blocks/error.phpt:41
-msgid "link it up"
-msgstr "linken"
+#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:9
+msgid "Need to change your email address? No problem!"
+msgstr "Je e-mailadres aanpassen? Geen probleem!"
 
-#: src/CatLab/Accounts/templates/blocks/error.phpt:35
-msgid "This username is already in use."
-msgstr "Deze gebruikersnaam is al in gebruik."
+#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:24
+#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:25
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:18
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:53
+#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:8
+#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:19
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:36
+msgid "Email address"
+msgstr "E-mailadres"
 
-#: src/CatLab/Accounts/templates/blocks/error.phpt:47
-msgid "Your passwords do not match."
-msgstr "Uw wachtwoorden komen niet overeen."
+#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:28
+msgid "Change email address"
+msgstr "E-mailadres aanpassen"
 
-#: src/CatLab/Accounts/templates/blocks/error.phpt:51
-msgid "This password does not match our security requirements."
-msgstr "Dit wachtwoord voldoet niet aan onze beveiligingsvereisten."
-
-#: src/CatLab/Accounts/templates/blocks/error.phpt:52
-msgid "Please choose a different password."
-msgstr "Kies alsjeblieft een ander paswoord."
+#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:30
+msgid "Back"
+msgstr "Terug"
 
 #: src/CatLab/Accounts/templates/notverified/verified.phpt:6
 msgid "Email address verified"
@@ -68,37 +60,10 @@ msgstr "Bedankt! Jouw email adres is nu geverifieerd."
 msgid "You may now close this window."
 msgstr "Je kan nu dit venster sluiten."
 
-#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:8
-#, php-format
-msgid "Hello, %s"
-msgstr "Hallo, %s"
-
-#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:9
-msgid "Need to change your email address? No problem!"
-msgstr "Je e-mailadres aanpassen? Geen probleem!"
-
-#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:24
-#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:25
-#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:19
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:36
-#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:8
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:18
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:53
-msgid "Email address"
-msgstr "E-mailadres"
-
-#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:28
-msgid "Change email address"
-msgstr "E-mailadres aanpassen"
-
-#: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:30
-msgid "Back"
-msgstr "Terug"
-
 #: src/CatLab/Accounts/templates/notverified/notverified.phpt:8
+#: src/CatLab/Accounts/templates/welcome.phpt:6
 #: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:9
 #: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:9
-#: src/CatLab/Accounts/templates/welcome.phpt:6
 #, php-format
 msgid "Welcome, %s"
 msgstr "Welkom, %s"
@@ -116,21 +81,27 @@ msgstr "We hebben een bevestigingsemail naar %s gestuurd."
 msgid "Please click the link in the email in order to verify your account."
 msgstr "Klik op de link in de e-mail om je account te bevestigen."
 
-#: src/CatLab/Accounts/templates/notverified/notverified.phpt:16
-msgid "Made a mistake?"
-msgstr "Een foutje gemaakt?"
-
-#: src/CatLab/Accounts/templates/notverified/notverified.phpt:17
-msgid "Change your email address"
-msgstr "Pas je email adres aan"
-
-#: src/CatLab/Accounts/templates/notverified/notverified.phpt:22
+#: src/CatLab/Accounts/templates/notverified/notverified.phpt:20
 msgid "Haven't received our email?"
 msgstr "Onze email nog niet ontvangen?"
 
-#: src/CatLab/Accounts/templates/notverified/notverified.phpt:23
+#: src/CatLab/Accounts/templates/notverified/notverified.phpt:21
+#, php-format
+msgid "%s or %s"
+msgstr "%s of %s"
+
+#: src/CatLab/Accounts/templates/notverified/notverified.phpt:22
 msgid "Resend verification email"
 msgstr "Stuur bevestigingsemail opnieuw"
+
+#: src/CatLab/Accounts/templates/notverified/notverified.phpt:23
+#: src/CatLab/Accounts/templates/notverified/notverified.phpt:29
+msgid "Change your email address"
+msgstr "Pas je email adres aan"
+
+#: src/CatLab/Accounts/templates/notverified/notverified.phpt:28
+msgid "Did you make a mistake in your email address?"
+msgstr "Heb je een fout gemaakt in je email adres?"
 
 #: src/CatLab/Accounts/templates/helpers/welcome.phpt:4
 #, php-format
@@ -141,43 +112,30 @@ msgstr "Welkom, %s."
 msgid "logout"
 msgstr "uitloggen"
 
-#: src/CatLab/Accounts/templates/logout.phpt:6
-msgid "You are now logged out."
-msgstr "Je bent nu uitgelogd."
-
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:9
-#, php-format
-msgid "Dear %s,"
-msgstr "Beste %s,"
-
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:11
-msgid "We have received a password recovery request for this email address."
-msgstr "We hebben een aanvraag ontvangen om jouw paswoord te herstellen."
-
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:12
-msgid "If you have submitted this request, please click the link below:"
-msgstr "Als jij deze aanvraag gedaan hebt, klik dan op onderstaande link:"
-
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:18
-msgid "If you did not submit this request, please ignore this email."
-msgstr "Komt deze aanvraag niet van jou? Negeer dan deze email."
-
-#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:21
-#: src/CatLab/Accounts/templates/mails/verification.phpt:26
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:19
-msgid "Many greetings"
-msgstr "Vriendelijke groeten"
-
-#: src/CatLab/Accounts/templates/mails/verification.phpt:9
 #: src/CatLab/Accounts/templates/mails/confirmation.phpt:8
+#: src/CatLab/Accounts/templates/mails/verification.phpt:9
 #, php-format
 msgid "Hello %s"
-msgstr "Beste %s"
+msgstr "Dag %s"
 
-#: src/CatLab/Accounts/templates/mails/verification.phpt:12
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:11
+msgid ""
+"We are writing you this email to inform you that this email address was used "
+"when creating an account on our platform."
+msgstr ""
+"We schrijven je aan om je te informeren dat jouw email adres gebruikt werd "
+"om een account te maken op ons platform."
+
 #: src/CatLab/Accounts/templates/mails/confirmation.phpt:15
+#: src/CatLab/Accounts/templates/mails/verification.phpt:12
 msgid "Thank you for subscribing to our platform."
 msgstr "Bedankt om in te schrijven op ons platform."
+
+#: src/CatLab/Accounts/templates/mails/confirmation.phpt:19
+#: src/CatLab/Accounts/templates/mails/verification.phpt:26
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:21
+msgid "Many greetings"
+msgstr "Vriendelijke groeten"
 
 #: src/CatLab/Accounts/templates/mails/verification.phpt:16
 msgid ""
@@ -191,120 +149,32 @@ msgid ""
 "email."
 msgstr "Heb je geen account gemaakt op ons platform? Negeer dan deze e-mail."
 
-#: src/CatLab/Accounts/templates/mails/confirmation.phpt:11
-msgid ""
-"We are writing you this email to inform you that this email address was used "
-"when creating an account on our platform."
-msgstr ""
-"We schrijven je aan om je te informeren dat jouw email adres gebruikt werd "
-"om een account te maken op ons platform."
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/form.phpt:4
-#: src/CatLab/Accounts/templates/authenticators/deligated/inlineform.phpt:4
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:9
 #, php-format
-msgid "Connect with %s"
-msgstr "Verbindt met %s"
+msgid "Dear %s,"
+msgstr "Dag %s,"
 
-#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:11
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:11
-msgid "Welcome!"
-msgstr "Welkom!"
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:11
+msgid "We have received a password recovery request for this email address."
+msgstr "We hebben een aanvraag ontvangen om jouw paswoord te herstellen."
 
-#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:14
-msgid "Link account"
-msgstr "Link je account"
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:12
+msgid "If you have submitted this request, please click the link below:"
+msgstr "Als jij deze aanvraag gedaan hebt, klik dan op onderstaande link:"
 
-#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:15
-msgid ""
-"Please supply your email and password in order to link up an existing "
-"account."
-msgstr "Geef je e-mail adres en paswoord in om je account te linken."
+#: src/CatLab/Accounts/templates/mails/passwordRecovery.phpt:18
+msgid "If you did not submit this request, please ignore this email."
+msgstr "Komt deze aanvraag niet van jou? Negeer dan deze email."
 
-#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:20
-#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:9
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:19
-#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:5
-msgid "Enter email"
-msgstr "Geef e-mail adres in"
+#: src/CatLab/Accounts/templates/welcome.phpt:7
+msgid "We're sending you back to the application."
+msgstr "We sturen je terug naar de applicatie."
 
-#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:22
-#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:23
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:21
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:22
-#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:9
-#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:10
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:59
-#: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:13
-msgid "Password"
-msgstr "Paswoord"
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:25
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:24
-msgid "Sign in"
-msgstr "Login"
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:29
-msgid "Never mind, I don't have an account anyway"
-msgstr "Laat maar zitten, ik heb toch geen ander account"
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:14
-msgid "Almost there!"
-msgstr "Bijna klaar!"
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:15
-msgid "We just need a bit more information in order to get started..."
-msgstr "We hebben nog wat extra informatie nodig voor we verder kunnen gaan..."
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:22
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:23
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:39
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:40
-msgid "First name"
-msgstr "Voornaam"
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:29
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:30
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:46
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:47
-msgid "Last name"
-msgstr "Familienaam"
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:37
-#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:4
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:54
-msgid "Email"
-msgstr "E-mail"
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:38
-msgid ""
-"Don't worry, it's our little secret. We won't share your email address with "
-"anyone."
-msgstr "Geen nood! We gaan je e-mail adres met niemand delen."
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:41
-#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:14
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:76
-#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:78
-msgid "Register"
-msgstr "Registreren"
-
-#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:45
-msgid "Connect existing account"
-msgstr "Verbindt een bestaand account"
-
+#: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:3
 #: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:3
 #: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:11
-#: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:3
 msgid "Recover password"
 msgstr "Paswoord herstellen"
-
-#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:4
-msgid "Please enter your email address."
-msgstr "Geef je e-mail adres in."
-
-#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:15
-msgid "Return to login form"
-msgstr "Terug naar het login formulier"
 
 #: src/CatLab/Accounts/templates/authenticators/password/passwordSent.phpt:5
 msgid ""
@@ -345,6 +215,29 @@ msgstr "Verbind met:"
 msgid "Or use our password based authentication:"
 msgstr "Of gebruik authenticatie met email en paswoord:"
 
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:19
+#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:9
+#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:5
+#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:20
+msgid "Enter email"
+msgstr "Geef e-mail adres in"
+
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:21
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:22
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:59
+#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:9
+#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:10
+#: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:13
+#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:22
+#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:23
+msgid "Password"
+msgstr "Paswoord"
+
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:24
+#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:25
+msgid "Sign in"
+msgstr "Login"
+
 #: src/CatLab/Accounts/templates/authenticators/password/form.phpt:28
 msgid "Forgot password?"
 msgstr "Paswoord vergeten?"
@@ -377,6 +270,26 @@ msgstr "Al ingeschreven?"
 msgid "Login."
 msgstr "Login."
 
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:39
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:40
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:22
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:23
+msgid "First name"
+msgstr "Voornaam"
+
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:46
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:47
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:29
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:30
+msgid "Last name"
+msgstr "Familienaam"
+
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:54
+#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:4
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:37
+msgid "Email"
+msgstr "E-mail"
+
 #: src/CatLab/Accounts/templates/authenticators/password/register.phpt:58
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:12
 msgid "New password"
@@ -385,6 +298,26 @@ msgstr "Nieuw paswoord"
 #: src/CatLab/Accounts/templates/authenticators/password/register.phpt:60
 msgid "Minimum 8 characters."
 msgstr "Minstens 8 tekens."
+
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:64
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:65
+msgid "Date of birth"
+msgstr "Geboortedatum"
+
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:81
+#: src/CatLab/Accounts/templates/authenticators/password/register.phpt:83
+#: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:14
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:41
+msgid "Register"
+msgstr "Registreren"
+
+#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:4
+msgid "Please enter your email address."
+msgstr "Geef je e-mail adres in."
+
+#: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:15
+msgid "Return to login form"
+msgstr "Terug naar het login formulier"
 
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:3
 #: src/CatLab/Accounts/templates/authenticators/password/changePassword.phpt:21
@@ -405,13 +338,118 @@ msgstr "Kies een nieuw paswoord."
 msgid "Repeat password"
 msgstr "Herhaal paswoord"
 
-#: src/CatLab/Accounts/templates/welcome.phpt:7
-msgid "We're sending you back to the application."
-msgstr "We sturen je terug naar de applicatie."
+#: src/CatLab/Accounts/templates/authenticators/deligated/form.phpt:4
+#: src/CatLab/Accounts/templates/authenticators/deligated/inlineform.phpt:4
+#, php-format
+msgid "Connect with %s"
+msgstr "Verbindt met %s"
+
+#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:11
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:11
+msgid "Welcome!"
+msgstr "Welkom!"
+
+#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:14
+msgid "Link account"
+msgstr "Link je account"
+
+#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:15
+msgid ""
+"Please supply your email and password in order to link up an existing "
+"account."
+msgstr "Geef je e-mail adres en paswoord in om je account te linken."
+
+#: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:29
+msgid "Never mind, I don't have an account anyway"
+msgstr "Laat maar zitten, ik heb toch geen ander account"
+
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:14
+msgid "Almost there!"
+msgstr "Bijna klaar!"
+
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:15
+msgid "We just need a bit more information in order to get started..."
+msgstr "We hebben nog wat extra informatie nodig voor we verder kunnen gaan..."
+
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:38
+msgid ""
+"Don't worry, it's our little secret. We won't share your email address with "
+"anyone."
+msgstr "Geen nood! We gaan je e-mail adres met niemand delen."
+
+#: src/CatLab/Accounts/templates/authenticators/deligated/register.phpt:45
+msgid "Connect existing account"
+msgstr "Verbindt een bestaand account"
+
+#: src/CatLab/Accounts/templates/logout.phpt:6
+msgid "You are now logged out."
+msgstr "Je bent nu uitgelogd."
 
 #: src/CatLab/Accounts/templates/login.phpt:14
 msgid "I don't want to login right now"
 msgstr "Ik wil nu niet inloggen"
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:15
+msgid "We don't know anyone with that email address."
+msgstr "We kennen niemand met dat e-mailadres."
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:19
+msgid "The password you have provided is incorrect."
+msgstr "Het wachtwoord dat u hebt opgegeven, is onjuist."
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:23
+msgid "This email address is already registered in our database."
+msgstr "Dit e-mailadres is al geregistreerd in onze database."
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:28
+#: src/CatLab/Accounts/templates/blocks/error.phpt:40
+#, php-format
+msgid "If you already have an account here, you can %s."
+msgstr "Als je al een account hebt, kun je %s."
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:29
+#: src/CatLab/Accounts/templates/blocks/error.phpt:41
+msgid "link it up"
+msgstr "linken"
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:35
+msgid "This username is already in use."
+msgstr "Deze gebruikersnaam is al in gebruik."
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:47
+msgid "Your passwords do not match."
+msgstr "Uw wachtwoorden komen niet overeen."
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:51
+msgid "This password does not match our security requirements."
+msgstr "Dit wachtwoord voldoet niet aan onze beveiligingsvereisten."
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:52
+msgid "Please choose a different password."
+msgstr "Kies alsjeblieft een ander paswoord."
+
+#: src/CatLab/Accounts/templates/blocks/error.phpt:56
+msgid "Please enter your birthdate."
+msgstr "Gelieve uw geboortedatum in te geven."
+
+#: src/CatLab/Accounts/templates/agegate.phpt:6
+msgid "Just a few more years"
+msgstr "Nog een paar jaar"
+
+#: src/CatLab/Accounts/templates/agegate.phpt:8
+#, php-format
+msgid ""
+"We're terribly sorry, but our platform was developed for people of age %s "
+"and up."
+msgstr "Sorry, ons platform is enkel geschikt voor gebruikers vanaf %s jaar."
+
+#: src/CatLab/Accounts/templates/agegate.phpt:9
+msgid "Perhaps you can join in a few years?"
+msgstr "Misschien kan je over een paar jaar terugkomen?"
+
+#: src/CatLab/Accounts/templates/agegate.phpt:12
+msgid "Return"
+msgstr "Ga terug"
 
 #: src/CatLab/Accounts/Controllers/LoginController.php:282
 msgid "This email address is already in use for a different account."
@@ -421,21 +459,20 @@ msgstr "Dit e-mailadres is al geregistreerd door een andere gebruiker."
 msgid "An undefined error has occurred."
 msgstr "Er is een onbekende fout opgetreden."
 
-#: src/CatLab/Accounts/Models/User.php:267
+#: src/CatLab/Accounts/Models/User.php:294
 msgid "Email address verification"
 msgstr "Email adres verifiëren"
 
-#: src/CatLab/Accounts/Models/User.php:287
+#: src/CatLab/Accounts/Models/User.php:314
 msgid "Account creation"
 msgstr "Account aangemaakt"
 
-#: src/CatLab/Accounts/Models/User.php:327
+#: src/CatLab/Accounts/Models/User.php:354
 msgid "Password recovery"
 msgstr "Paswoord herstellen"
 
-#: example/templates/home.phpt:7
-msgid "Welcome to the world of tomorrow!"
-msgstr "Welkom in de wereld van morgen!"
+#~ msgid "Made a mistake?"
+#~ msgstr "Een foutje gemaakt?"
 
 #~ msgid "Register a new account"
 #~ msgstr "Registreer een nieuw account"
