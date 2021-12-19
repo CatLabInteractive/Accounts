@@ -220,8 +220,10 @@ class Module extends Observable
         // Check for email validation
         if ($requiresEmailValidation) {
             if (!$user->isEmailVerified()) {
-                // Also set in session... why wouldn't this be in session? :D
-                $request->getSession()->set('userJustRegistered', $registration);
+                // Also set in session in case it isn't already set yet
+                if (!$request->getSession()->get('userJustRegistered')) {
+                    $request->getSession()->set('userJustRegistered', $registration);
+                }
                 $request->getSession()->set('catlab-non-verified-user-id', $user->getId());
                 return Response::redirect(URLBuilder::getURL($this->routepath . '/notverified'));
             }
@@ -262,8 +264,10 @@ class Module extends Observable
             $parameters['registered'] = 1;
         }
 
-        // Also set in session... why wouldn't this be in session? :D
-        $request->getSession()->set('userJustRegistered', $registered);
+        // Also set in session in case it isn't already set yet
+        if (!$request->getSession()->get('userJustRegistered')) {
+            $request->getSession()->set('userJustRegistered', $registered);
+        }
 
         $this->trigger('user:login', [
             'request' => $request,

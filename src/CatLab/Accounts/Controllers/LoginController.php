@@ -195,6 +195,7 @@ class LoginController extends Base
 
         if ($user->isEmailVerified()) {
             $didJustRegister = !!$this->request->getSession()->get('userJustRegistered');
+            $this->request->getSession()->set('userJustRegistered', false);
             return $this->module->login($this->request, $user, $didJustRegister);
         }
 
