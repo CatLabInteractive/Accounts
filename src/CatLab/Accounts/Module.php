@@ -108,9 +108,13 @@ class Module extends Observable
             $userid = $session->get('catlab-user-id');
 
             if ($userid) {
+                /** @var User $user */
                 $user = MapperFactory::getUserMapper()->getFromId($userid);
-                if ($user)
+                if ($user && !$user->isAnonymized()) {
                     return $user;
+                } else {
+                    $this->logout($request);
+                }
             }
 
             return null;

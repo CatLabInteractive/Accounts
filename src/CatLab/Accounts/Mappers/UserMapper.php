@@ -5,6 +5,7 @@ namespace CatLab\Accounts\Mappers;
 use CatLab\Accounts\MapperFactory;
 use CatLab\Accounts\Models\User;
 use CatLab\Base\Models\Database\DB;
+use DateTime;
 use Neuron\DB\Query;
 use Neuron\Exceptions\InvalidParameter;
 use Neuron\Mappers\BaseMapper;
@@ -118,6 +119,8 @@ class UserMapper
 
         $data['u_emailVerified'] = $user->isEmailVerified() ? 1 : 0;
 
+        $data['anonymized_at'] = [ $user->getAnonymizedAt(), Query::PARAM_DATE ];
+
         return $data;
     }
 
@@ -133,7 +136,7 @@ class UserMapper
             throw new InvalidParameter ("A user with this email address already exists.");
 
         $data = $this->getDataToSet($user);
-        $data['created_at'] = [ new \DateTime(), Query::PARAM_DATE ];
+        $data['created_at'] = [ new DateTime(), Query::PARAM_DATE ];
 
         // Insert
         $id = Query::insert($this->table_users, $data)->execute();
@@ -181,6 +184,18 @@ class UserMapper
 
         $user->setEmailVerified($data['u_emailVerified'] == 1);
 
+        if ($data['created_at']) {
+            $user->setCreatedAt(new DateTime($data['created_at']));
+        }
+
+        if ($data['updated_at']) {
+            $user->setUpdatedAt(new DateTime($data['updated_at']));
+        }
+
+        if ($data['anonymized_at']) {
+            $user->setAnonymizedAt(new DateTime($data['anonymized_at']));
+        }
+
         return $user;
     }
 
@@ -195,7 +210,9 @@ class UserMapper
             'u_password' => null,
             'u_firstName' => null,
             'u_familyName' => null,
-            'u_emailVerified' => null
+            'u_emailVerified' => null,
+            'u_birthdate' => null,
+            'anonymized_at' => [ new DateTime(), Query::PARAM_DATE ],
 
         ], [ 'u_id' => $user->getId() ])->execute();
 

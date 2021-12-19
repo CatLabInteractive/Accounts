@@ -61,6 +61,21 @@ class User implements \Neuron\Interfaces\Models\User
      */
     private $birthDate;
 
+    /**
+     * @var DateTime
+     */
+    private $anonymizedAt;
+
+    /**
+     * @var DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var DateTime
+     */
+    private $updatedAt;
+
     public function __construct()
     {
 
@@ -201,6 +216,70 @@ class User implements \Neuron\Interfaces\Models\User
         $this->emailVerified = $emailVerified;
         return $this;
     }
+
+    /**
+     * @return DateTime
+     */
+    public function getAnonymizedAt()
+    {
+        return $this->anonymizedAt;
+    }
+
+    /**
+     * @param DateTime $anonymizedAt
+     * @return User
+     */
+    public function setAnonymizedAt(DateTime $anonymizedAt)
+    {
+        $this->anonymizedAt = $anonymizedAt;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAnonymized()
+    {
+        return $this->getAnonymizedAt() !== null;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param DateTime $createdAt
+     * @return User
+     */
+    public function setCreatedAt(DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param DateTime $updatedAt
+     * @return User
+     */
+    public function setUpdatedAt(DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+
 
     /**
      * @param boolean $formal If FALSE, use an informal tone (= first name only)
