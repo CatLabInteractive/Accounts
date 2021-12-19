@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: daedeloth
- * Date: 29/11/14
- * Time: 10:49
- */
 
 namespace CatLab\Accounts\Controllers;
 

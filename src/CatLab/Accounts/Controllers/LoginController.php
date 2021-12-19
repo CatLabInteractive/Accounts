@@ -130,20 +130,23 @@ class LoginController extends Base
     {
         $email = MapperFactory::getEmailMapper()->getFromId($id);
 
-        if (!$email)
+        if (!$email) {
             return Response::error('Invalid email verification', Response::STATUS_NOTFOUND);
+        }
 
         $token = $this->request->input('token');
-        if ($email->getToken() !== $token)
+        if ($email->getToken() !== $token) {
             return Response::error('Invalid email verification', Response::STATUS_UNAUTHORIZED);
+        }
 
         /*
         if ($email->getUser()->getEmail() !== $email->getEmail())
             return Response::error('Invalid email verification: email mismatch', Response::STATUS_INVALID_INPUT);
         */
 
-        if ($email->isExpired())
+        if ($email->isExpired()) {
             return Response::error('Invalid email verification: token expired', Response::STATUS_INVALID_INPUT);
+        }
 
         $user = $email->getUser();
         if (!($user instanceof User)) {
@@ -169,6 +172,14 @@ class LoginController extends Base
         }
 
         $mapper->update($user);
+
+        // Check if the poll action is still active
+        $lastPollAction = $this->request->getSession()->get('catlab-last-verify-poll');
+        if ($lastPollAction && $lastPollAction < (time() - 10)) {
+            // last poll action is way too long ago... redirect to the verified page
+            $this->request->getSession()->set('catlab-last-verify-poll', 0);
+            return $this->module->login($this->request, $user);
+        }
 
         //return $this->module->login($this->request, $user);
         $template = new Template('CatLab/Accounts/notverified/verified.phpt');
@@ -210,6 +221,8 @@ class LoginController extends Base
             $user->generateVerificationEmail($this->module, $user->getEmail());
             $canResend = false;
         }
+
+        $this->request->getSession()->set('catlab-last-verify-poll', time());
 
         $template->set('canResend', $canResend);
         $template->set('name', $user->getDisplayName());
@@ -323,6 +336,8 @@ class LoginController extends Base
                 ]
             ])->setStatus(403);
         }
+
+        $this->request->getSession()->set('catlab-last-verify-poll', time());
 
         if ($user->isEmailVerified()) {
 
