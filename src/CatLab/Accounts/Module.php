@@ -217,6 +217,12 @@ class Module extends Observable
     public function login(Request $request, User $user, $registration = false)
     {
         $requiresEmailValidation = $this->requiresEmailValidation();
+
+        // check if we have a session parameter that overrides $registration
+        if ($request->getSession()->get('userJustRegistered')) {
+            $registration = true;
+        }
+
         if ($registration) {
             $requiresEmailValidation = $this->requiresEmailValidationOnRegistration();
         }
