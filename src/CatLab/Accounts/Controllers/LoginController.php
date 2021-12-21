@@ -34,10 +34,10 @@ class LoginController extends Base
         $trackerEvents = array();
 
         // is user registered?
-        if (
-            $this->request->input('registered') ||
-            $this->request->getSession()->get('userJustRegistered')
-        ) {
+        $justRegistered = $this->request->input('registered') ||
+            $this->request->getSession()->get('userJustRegistered');
+
+        if ($justRegistered) {
             $trackerEvents[] = array(
                 'event' => 'registration'
             );
@@ -50,6 +50,7 @@ class LoginController extends Base
         $template->set('redirect_url', $redirect);
         $template->set('tracker', $trackerEvents[0]);
         $template->set('trackers', $trackerEvents);
+        $template->set('registered', $justRegistered);
 
         return Response::template($template);
     }
