@@ -52,6 +52,11 @@ class LoginController extends Base
         $template->set('trackers', $trackerEvents);
         $template->set('registered', $justRegistered);
 
+        // Unset the session variable to mark this user as 'tracked'.
+        if ($justRegistered) {
+            $this->request->getSession()->set('userJustRegistered', false);
+        }
+
         return Response::template($template);
     }
 
@@ -207,7 +212,6 @@ class LoginController extends Base
 
         if ($user->isEmailVerified()) {
             $didJustRegister = !!$this->request->getSession()->get('userJustRegistered');
-            $this->request->getSession()->set('userJustRegistered', false);
             return $this->module->login($this->request, $user, $didJustRegister);
         }
 
