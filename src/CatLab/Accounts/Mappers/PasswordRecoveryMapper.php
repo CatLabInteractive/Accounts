@@ -34,6 +34,28 @@ class PasswordRecoveryMapper extends BaseMapper
     }
 
     /**
+     * @param User $user
+     * @return bool
+     */
+    public function hasRecentActiveRecoveryRequest(User $user)
+    {
+        $query = new Query("
+            SELECT
+                nupr_id
+            FROM
+                neuron_users_password_recovery
+            WHERE
+                u_id = ? AND 
+                nupr_expires < ?
+        ");
+
+        $query->bindValue(1, $user->getId());
+        $query->bindValue(2, new DateTime(), Query::PARAM_DATE);
+
+        return count($query->execute()) > 0;
+    }
+
+    /**
      * @param PasswordRecovery $request
      */
     public function create(PasswordRecovery $request)

@@ -2,6 +2,7 @@
 
 namespace CatLab\Accounts\Models;
 
+use CatLab\Accounts\Exceptions\AlreadyHasActiveRecoveryRequest;
 use CatLab\Accounts\MapperFactory;
 use CatLab\Accounts\Module;
 use CatLab\Mailer\Mailer;
@@ -405,14 +406,21 @@ class User implements \Neuron\Interfaces\Models\User
      */
     public function generatePasswordRecoveryEmail(Module $module)
     {
+        // Do we have a recent password recovery request?
+        if (MapperFactory::getPasswordRecoveryMapper()->hasRecentActiveRecoveryRequest($this)) {
+            throw new AlreadyHasActiveRecoveryRequest('We already have a pending recover password request for this account. Please try again in 24 hours.');
+        }
+
         $passwordRecoveryRequest = new PasswordRecovery();
-        $passwordRecoveryRequest->setExpires(new DateTime ('next week'));
+        $passwordRecoveryRequest->setExpires(new DateTime ('tomorrow'));
         $passwordRecoveryRequest->setToken(TokenGenerator::getSimplifiedToken(24));
         $passwordRecoveryRequest->setUser($this);
 
         MapperFactory::getPasswordRecoveryMapper()->create($passwordRecoveryRequest);
 
         $this->sendPasswordRecoveryEmail($module, $passwordRecoveryRequest->getUrl($module->getRoutePath()));
+
+        return true;
     }
 
     /**

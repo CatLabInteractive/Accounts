@@ -4,6 +4,7 @@ namespace CatLab\Accounts\Authenticators;
 
 use CatLab\Accounts\Authenticators\Base\Authenticator;
 use CatLab\Accounts\Enums\Errors;
+use CatLab\Accounts\Exceptions\AlreadyHasActiveRecoveryRequest;
 use CatLab\Accounts\Mappers\UserMapper;
 use Neuron\Exceptions\ExpectedType;
 use Neuron\MapperFactory;
@@ -384,7 +385,12 @@ class Password extends Authenticator
 
         $user = $mapper->getFromEmail($email);
         if ($user) {
-            $user->generatePasswordRecoveryEmail($this->module);
+            try {
+                $user->generatePasswordRecoveryEmail($this->module);
+            } catch (AlreadyHasActiveRecoveryRequest $e) {
+                // Do not show an error, as this might disclose private information.
+                return Response::template($template);
+            }
         }
 
         return Response::template($template);
