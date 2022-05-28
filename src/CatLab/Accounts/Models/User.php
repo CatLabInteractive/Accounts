@@ -402,6 +402,8 @@ class User implements \Neuron\Interfaces\Models\User
     /**
      * Generate and send a password recovery request.
      * @param Module $module
+     * @return bool
+     * @throws AlreadyHasActiveRecoveryRequest
      * @throws \CatLab\Mailer\Exceptions\MailException
      */
     public function generatePasswordRecoveryEmail(Module $module)

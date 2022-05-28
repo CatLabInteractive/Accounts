@@ -3,6 +3,7 @@
 namespace CatLab\Accounts\Authenticators;
 
 use CatLab\Accounts\Authenticators\Base\Authenticator;
+use CatLab\Accounts\Controllers\Base;
 use CatLab\Accounts\Enums\Errors;
 use CatLab\Accounts\Exceptions\AlreadyHasActiveRecoveryRequest;
 use CatLab\Accounts\Mappers\UserMapper;
@@ -57,27 +58,32 @@ class Password extends Authenticator
             return $this->lostPassword();
         }
 
+        $validCsfr = Base::isValidCsfrToken($this->request);
         $template = $this->getLoginForm('CatLab/Accounts/authenticators/password/page.phpt');
 
         if ($this->request->isPost()) {
-            $button = $this->request->input('submit');
-            if ($button) {
-                switch ($button) {
-                    case 'register':
-                        return $this->register();
-                        break;
+            if (!$validCsfr) {
+                $template->set('error', 'Invalid request, please try again.');
+            } else {
+                $button = $this->request->input('submit');
+                if ($button) {
+                    switch ($button) {
+                        case 'register':
+                            return $this->register();
+                            break;
+                    }
                 }
-            }
 
-            $email = $this->request->input('email', 'email');
-            $password = $this->request->input('password');
+                $email = $this->request->input('email', 'email');
+                $password = $this->request->input('password');
 
-            if ($email && $password) {
-                $response = $this->processLogin($email, $password);
-                if ($response instanceof Response) {
-                    return $response;
-                } else if (is_string($response)) {
-                    $template->set('error', $response);
+                if ($email && $password) {
+                    $response = $this->processLogin($email, $password);
+                    if ($response instanceof Response) {
+                        return $response;
+                    } else if (is_string($response)) {
+                        $template->set('error', $response);
+                    }
                 }
             }
         }
@@ -132,16 +138,21 @@ class Password extends Authenticator
         );
 
         if ($this->request->isPost()) {
-            $email = $this->request->input('email', 'email');
+            if (!Base::isValidCsfrToken($this->request)) {
+                $template->set('error', 'Invalid request, please try again.');
+            } else {
+                $email = $this->request->input('email', 'email');
 
-            $response = $this->processRecoverPassword($email);
-            if ($response instanceof Response) {
-                return $response;
-            } else if (is_string($response)) {
-                $template->set('error', $response);
+                $response = $this->processRecoverPassword($email);
+                if ($response instanceof Response) {
+                    return $response;
+                } else if (is_string($response)) {
+                    $template->set('error', $response);
+                }
             }
         }
 
+        $template->set('csfr', Base::generateCsfrToken($this->request));
         return Response::template($template);
     }
 
@@ -429,6 +440,7 @@ class Password extends Authenticator
 
         $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/login/password', array('return' => $this->request->getUrl())));
         $template->set('email', Tools::getInput($_POST, 'email', 'varchar'));
+        $template->set('csfr', Base::generateCsfrToken($this->request));
 
         return $template;
     }
@@ -462,6 +474,7 @@ class Password extends Authenticator
         $template->set('email', $this->request->input('email'));
         $template->set('layout', $this->module->getLayout());
         $template->set('formTemplate', 'CatLab/Accounts/authenticators/password/form.phpt');
+        $template->set('csfr', Base::generateCsfrToken($this->request));
 
         $this->addOtherAuthenticators($template);
 

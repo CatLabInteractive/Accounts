@@ -12,4 +12,6 @@
 
 	<button type="submit"><?php echo $this->gettext ('Login'); ?></button>
 	<button type="submit" value="register" name="submit"><?php echo $this->gettext ('Register'); ?></button>
+
+    <input type="hidden" name="csfr-token" value="<?php echo $csfr; ?>" />
 </form>

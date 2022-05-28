@@ -12,10 +12,12 @@ use CatLab\Accounts\Module;
 use Neuron\Exceptions\InvalidParameter;
 use Neuron\Interfaces\Controller;
 use Neuron\Net\Request;
+use Neuron\Tools\TokenGenerator;
 
 abstract class Base
 	implements Controller
 {
+    static $generatedCsfrTokens = [];
 
 	/** @var Module $module */
 	protected $module;
@@ -47,4 +49,41 @@ abstract class Base
 	{
 		$this->request = $request;
 	}
+
+    /**
+     * @return bool
+     * @throws \Neuron\Exceptions\DataNotSet
+     */
+    public static function isValidCsfrToken(Request $request)
+    {
+        if (!$request->getSession()->get('csfr-token')) {
+            return false;
+        }
+
+        if ($request->input('csfr-token') !== $request->getSession()->get('csfr-token')) {
+            return false;
+        }
+
+        $request->getSession()->set('csfr-token', false);
+        return true;
+    }
+
+    /**
+     * @return string
+     * @throws \Neuron\Exceptions\DataNotSet
+     */
+    public static function generateCsfrToken(Request $request)
+    {
+        $requestId = spl_object_id($request);
+        if (!isset(self::$generatedCsfrTokens[$requestId])) {
+
+            $csfr = TokenGenerator::getToken(32);
+
+            self::$generatedCsfrTokens[$requestId] = $csfr;
+            $request->getSession()->set('csfr-token', $csfr);
+
+        }
+
+        return self::$generatedCsfrTokens[$requestId];
+    }
 }

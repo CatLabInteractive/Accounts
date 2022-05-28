@@ -9,6 +9,7 @@ use CatLab\Base\Helpers\StringHelper;
 use CatLab\SameSiteCookieSniffer\Sniffer;
 use Neuron\Core\Template;
 use Neuron\Exceptions\InvalidParameter;
+use Neuron\Net\Request;
 use Neuron\Net\Response;
 use Neuron\Tools\Text;
 use Neuron\Tools\TokenGenerator;
@@ -273,7 +274,7 @@ class LoginController extends Base
         switch ($action) {
             case 'change-password':
                 // check csfr
-                if (!$this->isValidCsfrToken()) {
+                if (!self::isValidCsfrToken($this->request)) {
                     $error = 'Invalid request, please try again.';
                     break;
                 }
@@ -312,7 +313,7 @@ class LoginController extends Base
         $template->set('layout', $this->module->getLayout());
         $template->set('user', $user);
         $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/change-email', [ 'return' => $return ]));
-        $template->set('csfr', $this->generateCsfrToken());
+        $template->set('csfr', self::generateCsfrToken($this->request));
 
         if (isset($return)) {
             $template->set('return_url', $return);
@@ -418,34 +419,5 @@ class LoginController extends Base
             'return' => URLBuilder::getURL($this->module->getRoutePath() . '/register/password'),
             'module' => $this->module
         ]);
-    }
-
-    /**
-     * @return bool
-     * @throws \Neuron\Exceptions\DataNotSet
-     */
-    protected function isValidCsfrToken()
-    {
-        if (!$this->request->getSession()->get('csfr-token')) {
-            return false;
-        }
-
-        if ($this->request->input('csfr-token') !== $this->request->getSession()->get('csfr-token')) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @return string
-     * @throws \Neuron\Exceptions\DataNotSet
-     */
-    protected function generateCsfrToken()
-    {
-        $csfr = TokenGenerator::getToken(32);
-        $this->request->getSession()->set('csfr-token', $csfr);
-
-        return $csfr;
     }
 }

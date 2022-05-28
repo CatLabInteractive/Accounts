@@ -21,6 +21,8 @@
 	<label for="inputPassword" class="sr-only"><?php echo $this->gettext ('Password'); ?></label>
 	<input type="password" class="form-control" id="inputPassword" autocomplete="current-password" name="password" placeholder="<?php echo $this->gettext ('Password'); ?>" required />
 
+    <input type="hidden" name="csfr-token" value="<?php echo $csfr; ?>" />
+
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $this->gettext ('Sign in'); ?></button>
 
     <ul class="login-actions">

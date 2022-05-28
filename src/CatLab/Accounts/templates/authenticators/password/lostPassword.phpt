@@ -5,6 +5,8 @@
 
     <?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>
 
+    <input type="hidden" name="csfr-token" value="<?php echo $csfr; ?>" />
+
     <label for="inputEmail" class="sr-only"><?php echo $this->gettext ('Email address'); ?></label>
     <input type="email" class="form-control" id="inputEmail" name="email" value="<?php echo $email; ?>" placeholder="<?php echo $this->gettext ('Enter email'); ?>" required autofocus />
 
