@@ -17,8 +17,6 @@ use Neuron\Tools\TokenGenerator;
 abstract class Base
 	implements Controller
 {
-    static $generatedCsfrTokens = [];
-
 	/** @var Module $module */
 	protected $module;
 
@@ -56,15 +54,14 @@ abstract class Base
      */
     public static function isValidCsfrToken(Request $request)
     {
-        if (!$request->getSession()->get('csfr-token')) {
+        if (!$request->getSession()->get('accounts-csfr-token')) {
             return false;
         }
 
-        if ($request->input('csfr-token') !== $request->getSession()->get('csfr-token')) {
+        if ($request->input('csfr-token') !== $request->getSession()->get('accounts-csfr-token')) {
             return false;
         }
 
-        $request->getSession()->set('csfr-token', false);
         return true;
     }
 
@@ -74,16 +71,11 @@ abstract class Base
      */
     public static function generateCsfrToken(Request $request)
     {
-        $requestId = spl_object_id($request);
-        if (!isset(self::$generatedCsfrTokens[$requestId])) {
-
+        if (!$request->getSession()->get('accounts-csfr-token')) {
             $csfr = TokenGenerator::getToken(32);
-
-            self::$generatedCsfrTokens[$requestId] = $csfr;
-            $request->getSession()->set('csfr-token', $csfr);
-
+            $request->getSession()->set('accounts-csfr-token', $csfr);
         }
 
-        return self::$generatedCsfrTokens[$requestId];
+        return $request->getSession()->get('accounts-csfr-token');
     }
 }
