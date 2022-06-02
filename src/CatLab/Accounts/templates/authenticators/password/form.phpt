@@ -11,6 +11,7 @@
         <?php } ?>
     <?php } ?>
 
+    <h3 class="password-registration"><?php echo $this->gettext('Password registration'); ?></h3>
     <p><?php echo $this->gettext ('Or use our password based authentication:'); ?></p>
 
 	<?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>

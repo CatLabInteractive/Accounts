@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CatLab Accounts\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-03 00:38+0200\n"
-"PO-Revision-Date: 2022-06-03 00:40+0200\n"
+"POT-Creation-Date: 2022-06-03 00:59+0200\n"
+"PO-Revision-Date: 2022-06-03 01:00+0200\n"
 "Last-Translator: Thijs Van der Schaeghe <thijs@catlab.be>\n"
 "Language-Team: CatLab Interactive <thijs@catlab.be>\n"
 "Language: nl_BE\n"
@@ -32,7 +32,7 @@ msgstr "Je e-mailadres aanpassen? Geen probleem!"
 
 #: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:24
 #: src/CatLab/Accounts/templates/notverified/changeAddress.phpt:25
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:18
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:19
 #: src/CatLab/Accounts/templates/authenticators/password/register.phpt:53
 #: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:10
 #: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:19
@@ -212,18 +212,22 @@ msgid "Connect with:"
 msgstr "Verbind met:"
 
 #: src/CatLab/Accounts/templates/authenticators/password/form.phpt:14
+msgid "Password registration"
+msgstr "Paswoord registratie"
+
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:15
 msgid "Or use our password based authentication:"
 msgstr "Of gebruik authenticatie met email en paswoord:"
 
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:19
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:20
 #: src/CatLab/Accounts/templates/authenticators/password/lostPassword.phpt:11
 #: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:5
 #: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:20
 msgid "Enter email"
 msgstr "Geef e-mail adres in"
 
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:21
 #: src/CatLab/Accounts/templates/authenticators/password/form.phpt:22
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:23
 #: src/CatLab/Accounts/templates/authenticators/password/register.phpt:59
 #: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:9
 #: src/CatLab/Accounts/templates/authenticators/password/inlineform.phpt:10
@@ -233,20 +237,20 @@ msgstr "Geef e-mail adres in"
 msgid "Password"
 msgstr "Paswoord"
 
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:26
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:27
 #: src/CatLab/Accounts/templates/authenticators/deligated/link.phpt:25
 msgid "Sign in"
 msgstr "Login"
 
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:30
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:31
 msgid "Forgot password?"
 msgstr "Paswoord vergeten?"
 
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:34
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:35
 msgid "Not registered?"
 msgstr "Nog niet geregistreerd?"
 
-#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:34
+#: src/CatLab/Accounts/templates/authenticators/password/form.phpt:35
 msgid "Sign up now."
 msgstr "Registreer nu."
 
