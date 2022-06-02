@@ -15,7 +15,7 @@
 <?php } ?>
 
 <div class="other-authenticators">
-    <p class="connect-with">Connect with:<br /></p>
+    <p class="connect-with">Sign in with:<br /></p>
     <div class="media-connections">
     <?php foreach ($authenticators as $authenticator) { ?>
         <?php if (! ($authenticator instanceof \CatLab\Accounts\Authenticators\Password)) { ?>
