@@ -41,10 +41,10 @@
             }
 
             document.getElementById('google-authenticator').innerHTML = <?php
-                echo json_encode($this->template('CatLab/Accounts/authenticators/deligated/inlineform.phpt', [
-                    'url' => 'javascript:googleLogin()',
-                    'authentication' => $authenticator
-                ]))
+            echo json_encode($this->template($loginButtonTemplate, [
+                'url' => 'javascript:googleLogin()',
+                'authentication' => $authenticator
+            ]))
             ?>;
         });
     }

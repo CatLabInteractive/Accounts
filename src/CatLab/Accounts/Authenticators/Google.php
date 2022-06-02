@@ -46,6 +46,24 @@ class Google extends DeligatedAuthenticator
         $template->set('clientId', $this->clientId);
         $template->set('authenticator', $this);
         $template->set('authUrl', URLBuilder::getURL($this->module->getRoutePath() . '/login/' . $this->getToken()));
+        $template->set('loginButtonTemplate', 'CatLab/Accounts/authenticators/deligated/inlineform.phpt');
+
+        return $template->parse();
+    }
+
+    /**
+     * @return mixed|Template|string
+     * @throws \Neuron\Exceptions\DataNotSet
+     */
+    public function getForm()
+    {
+        $this->initialize();
+
+        $template = new Template('CatLab/Accounts/authenticators/deligated/google/login-script.phpt');
+        $template->set('clientId', $this->clientId);
+        $template->set('authenticator', $this);
+        $template->set('authUrl', URLBuilder::getURL($this->module->getRoutePath() . '/login/' . $this->getToken()));
+        $template->set('loginButtonTemplate', 'CatLab/Accounts/authenticators/deligated/form.phpt');
 
         return $template->parse();
     }
