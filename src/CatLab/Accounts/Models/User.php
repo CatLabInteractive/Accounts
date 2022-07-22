@@ -463,4 +463,22 @@ class User implements \Neuron\Interfaces\Models\User
     {
 
     }
+
+    /**
+     * @return string
+     */
+    public function getTrackingId()
+    {
+        return md5($this->getId());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTrackingData()
+    {
+        return [
+            'user_id' => $this->getTrackingId(),
+        ];
+    }
 }

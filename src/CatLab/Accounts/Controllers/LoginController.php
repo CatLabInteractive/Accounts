@@ -25,6 +25,7 @@ class LoginController extends Base
     {
         $template = new Template ('CatLab/Accounts/welcome.phpt');
 
+        /** @var User $user */
         $user = $this->request->getUser();
         $template->set('name', $user->getDisplayName());
         $template->set('layout', $this->module->getLayout());
@@ -39,13 +40,19 @@ class LoginController extends Base
             $this->request->getSession()->get('userJustRegistered');
 
         if ($justRegistered) {
-            $trackerEvents[] = array(
-                'event' => 'registration'
+            $trackerEvents[] = array_merge(
+                array(
+                    'event' => 'registration'
+                ),
+                $user->getTrackingData()
             );
         }
 
-        $trackerEvents[] = array(
-            'event' => 'login'
+        $trackerEvents[] = array_merge(
+            array(
+                'event' => 'login'
+            ),
+            $user->getTrackingData()
         );
 
         $template->set('redirect_url', $redirect);
