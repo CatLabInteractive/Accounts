@@ -145,7 +145,9 @@ class Facebook
 				// Touchy touchy!
 				return $this->setDeligatedUser ($user);
 
-			}
+			} else {
+                return Response::error('Login failed.');
+            }
 
 		}
 	}
