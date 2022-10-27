@@ -46,7 +46,7 @@ class PasswordRecoveryMapper extends BaseMapper
                 neuron_users_password_recovery
             WHERE
                 u_id = ? AND 
-                nupr_expires < ?
+                nupr_expires > ?
         ");
 
         $query->bindValue(1, $user->getId());
