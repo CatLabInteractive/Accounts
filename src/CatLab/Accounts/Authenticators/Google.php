@@ -47,6 +47,8 @@ class Google extends DeligatedAuthenticator
         $template->set('authenticator', $this);
         $template->set('authUrl', URLBuilder::getURL($this->module->getRoutePath() . '/login/' . $this->getToken()));
         $template->set('loginButtonTemplate', 'CatLab/Accounts/authenticators/deligated/inlineform.phpt');
+        $template->set('buttonType', 'icon');
+        $template->set('buttonSize', 'small');
 
         return $template->parse();
     }
@@ -64,6 +66,8 @@ class Google extends DeligatedAuthenticator
         $template->set('authenticator', $this);
         $template->set('authUrl', URLBuilder::getURL($this->module->getRoutePath() . '/login/' . $this->getToken()));
         $template->set('loginButtonTemplate', 'CatLab/Accounts/authenticators/deligated/form.phpt');
+        $template->set('buttonType', 'standard');
+        $template->set('buttonSize', 'large');
 
         return $template->parse();
     }
@@ -72,13 +76,13 @@ class Google extends DeligatedAuthenticator
     {
         $this->initialize();
 
-        $idToken = $this->request->input('idtoken');
-        if (!$idToken) {
+        $credential = $this->request->input('credential');
+        if (!$credential) {
             return $this->getInlineForm();
         }
 
         $client = new Google_Client(['client_id' => $this->clientId]);  // Specify the CLIENT_ID of the app that accesses the backend
-        $payload = $client->verifyIdToken($idToken);
+        $payload = $client->verifyIdToken($credential);
         if ($payload) {
             $userid = $payload['sub'];
             // If request specified a G Suite domain:

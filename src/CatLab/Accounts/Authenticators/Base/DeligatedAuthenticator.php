@@ -39,7 +39,7 @@ abstract class DeligatedAuthenticator
         if ($deligatedUser->getUser()) {
             return $this->module->login($this->request, $deligatedUser->getUser());
         } else {
-            return Response::redirect(URLBuilder::getURL($this->module->getRoutePath() . '/register/facebook'));
+            return Response::redirect(URLBuilder::getURL($this->module->getRoutePath() . '/register/' . $this->getToken()));
         }
 
     }

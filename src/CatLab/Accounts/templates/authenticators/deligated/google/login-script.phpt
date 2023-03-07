@@ -1,53 +1,53 @@
-<script src="https://apis.google.com/js/platform.js?onload=initGooglePlatform" async defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
-    window.googleLogin = function() {
 
-    };
+	window.onload = function () {
+		google.accounts.id.initialize({
+			client_id: '<?php echo $clientId; ?>',
+			scope: 'email profile',
+			response_type: 'id_token permission',
+            callback: function(response) {
 
-    function initGooglePlatform() {
-        gapi.load('auth2', function() {
+				console.log(response);
+                if (response.error) {
+                    // An error happened!
+                    return;
+                }
 
-            window.googleLogin = function() {
-                gapi.auth2.authorize({
-                    client_id: '<?php echo $clientId; ?>',
-                    scope: 'email profile',
-                    response_type: 'id_token permission'
-                }, function(response) {
+                //var accessToken = response.access_token;
+                var credential = response.credential;
 
-                    if (response.error) {
-                        // An error happened!
-                        return;
-                    }
+                var form = document.createElement('form');
+                document.body.appendChild(form);
 
-                    //var accessToken = response.access_token;
-                    var idToken = response.id_token;
+                form.action = '<?php echo $authUrl; ?>';
+                form.method = 'post';
 
-                    var form = document.createElement('form');
-                    document.body.appendChild(form);
+                var input = document.createElement('input');
+                form.appendChild(input);
 
-                    form.action = '<?php echo $authUrl; ?>';
-                    form.method = 'post';
+                input.name = 'credential';
+                input.value = credential;
+                input.type = 'hidden';
 
-                    var input = document.createElement('input');
-                    form.appendChild(input);
+                form.submit();
 
-                    input.name = 'idtoken';
-                    input.value = idToken;
-                    input.type = 'hidden';
-
-                    form.submit();
-
-                });
             }
+		});
 
-            document.getElementById('google-authenticator').innerHTML = <?php
-            echo json_encode($this->template($loginButtonTemplate, [
-                'url' => 'javascript:googleLogin()',
-                'authentication' => $authenticator
-            ]))
-            ?>;
-        });
-    }
+		var p = document.createElement('p');
+		p.className = 'authenticator google';
+
+		document.getElementById('google-authenticator').appendChild(p);
+
+		google.accounts.id.renderButton(p, {
+			theme: "filled_blue",
+            type: "<?php echo $buttonType; ?>",
+            size: "<?php echo $buttonSize; ?>"
+		});
+
+		google.accounts.id.prompt();
+	}
 
 </script>
 <span id="google-authenticator"></span>
