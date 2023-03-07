@@ -3,6 +3,7 @@
 namespace CatLab\Accounts\Authenticators;
 
 use CatLab\Accounts\Authenticators\Base\DeligatedAuthenticator;
+use CatLab\Accounts\Controllers\Base;
 use CatLab\Accounts\Models\DeligatedUser;
 use Google_Client;
 use Neuron\Config;
@@ -49,6 +50,7 @@ class Google extends DeligatedAuthenticator
         $template->set('loginButtonTemplate', 'CatLab/Accounts/authenticators/deligated/inlineform.phpt');
         $template->set('buttonType', 'icon');
         $template->set('buttonSize', 'small');
+        $template->set('csfr_token', Base::generateCsfrToken($this->request));
 
         return $template->parse();
     }
@@ -68,6 +70,7 @@ class Google extends DeligatedAuthenticator
         $template->set('loginButtonTemplate', 'CatLab/Accounts/authenticators/deligated/form.phpt');
         $template->set('buttonType', 'standard');
         $template->set('buttonSize', 'large');
+        $template->set('csfr_token', Base::generateCsfrToken($this->request));
 
         return $template->parse();
     }
@@ -75,6 +78,11 @@ class Google extends DeligatedAuthenticator
     public function login()
     {
         $this->initialize();
+
+        // Verify csfr token
+        if (!Base::isValidCsfrToken($this->request)) {
+            return 'Invalid csfr token';
+        }
 
         $credential = $this->request->input('credential');
         if (!$credential) {

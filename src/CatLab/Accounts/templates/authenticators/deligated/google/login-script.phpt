@@ -8,7 +8,6 @@
 			response_type: 'id_token permission',
             callback: function(response) {
 
-				console.log(response);
                 if (response.error) {
                     // An error happened!
                     return;
@@ -30,6 +29,13 @@
                 input.value = credential;
                 input.type = 'hidden';
 
+				var token = document.createElement('input');
+				form.appendChild(token);
+
+				token.name = 'csfr-token';
+				token.value = '<?php echo $csfr_token; ?>';
+				token.type = 'hidden';
+
                 form.submit();
 
             }
@@ -43,7 +49,8 @@
 		google.accounts.id.renderButton(p, {
 			theme: "filled_blue",
             type: "<?php echo $buttonType; ?>",
-            size: "<?php echo $buttonSize; ?>"
+            size: "<?php echo $buttonSize; ?>",
+            width: 400
 		});
 
 		google.accounts.id.prompt();
