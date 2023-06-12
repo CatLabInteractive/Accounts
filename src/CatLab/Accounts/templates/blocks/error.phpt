@@ -55,6 +55,10 @@ use CatLab\Accounts\Enums\Errors;
 
             <?php echo $this->gettext ('Please enter your birthdate.'); ?>
 
+        <?php } else if ($error === Errors::LOGIN_RATE_EXCEEDED) { ?>
+
+            <?php echo $this->gettext ('Login rate exceeded, please wait a few minutes and try again.'); ?>
+
         <?php } else { ?>
 
 			<?php echo $error; ?>
