@@ -69,4 +69,12 @@ class MapperFactory
     {
         return self::getInstance()->getMapper('passwordRecovery', '\CatLab\Accounts\Mappers\PasswordRecoveryMapper');
     }
+
+    /**
+     * @return \CatLab\Accounts\Mappers\RateLimitMapper
+     */
+    public static function getRateLimitMapper()
+    {
+        return self::getInstance()->getMapper('rateLimitMapper', '\CatLab\Accounts\Mappers\RateLimitMapper');
+    }
 }

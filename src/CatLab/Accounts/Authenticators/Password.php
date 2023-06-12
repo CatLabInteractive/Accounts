@@ -53,6 +53,10 @@ class Password extends Authenticator
      */
     public function login()
     {
+        if (!$this->module->getRateLimiter()->attemptIpRateLimit('login')) {
+            return Response::error(Errors::LOGIN_RATE_EXCEEDED, 429);
+        }
+
         // Check for lost password form
         if ($this->request->input('lostPassword')) {
             return $this->lostPassword();
@@ -283,6 +287,16 @@ class Password extends Authenticator
         /** @var UserMapper $mapper */
         $mapper = MapperFactory::getUserMapper();
         ExpectedType::check($mapper, UserMapper::class);
+
+        // Check if we have this email address
+        $user = $mapper->getFromEmail($email);
+        if (!$user) {
+            return Errors::USER_NOT_FOUND;
+        }
+
+        if (!$this->module->getRateLimiter()->attemptLogin($user)) {
+            return Errors::LOGIN_RATE_EXCEEDED;
+        }
 
         $user = $mapper->getFromLogin($email, $password);
 

@@ -8,6 +8,7 @@ use CatLab\Accounts\Enums\Errors;
 use CatLab\Accounts\Helpers\LoginForm;
 use CatLab\Accounts\Mappers\UserMapper;
 use CatLab\Accounts\Models\User;
+use CatLab\Accounts\Tools\RateLimiter;
 use Neuron\Application;
 use Neuron\Core\Template;
 use Neuron\Core\Tools;
@@ -53,6 +54,11 @@ class Module extends Observable
      * @var int
      */
     private $minimumAge = 13;
+
+    /**
+     * @var RateLimiter
+     */
+    private $rateLimiter;
 
     /**
      *
@@ -613,6 +619,27 @@ class Module extends Observable
     public function getMinimumAge()
     {
         return $this->minimumAge;
+    }
+
+    /**
+     * @return RateLimiter
+     */
+    public function getRateLimiter()
+    {
+        if (!isset($this->rateLimiter)) {
+            $this->rateLimiter = new RateLimiter();
+        }
+        return $this->rateLimiter;
+    }
+
+    /**
+     * @param RateLimiter $limiter
+     * @return $this
+     */
+    public function setRateLimiter(RateLimiter $limiter)
+    {
+        $this->rateLimiter = $limiter;
+        return $this;
     }
 
     /**

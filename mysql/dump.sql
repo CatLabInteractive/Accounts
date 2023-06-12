@@ -31,3 +31,15 @@ CREATE TABLE IF NOT EXISTS `neuron_users` (
   UNIQUE KEY `u_email` (`u_email`),
   KEY `u_username` (`u_username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+
+CREATE TABLE IF NOT EXISTS neuron_rate_limiter (
+    id INT UNSIGNED auto_increment NOT NULL,
+    rl_key varchar(128),
+    rl_ip_address varbinary(16) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+    PRIMARY KEY (`id`)
+)
+    ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci;
