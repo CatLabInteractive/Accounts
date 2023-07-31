@@ -79,7 +79,10 @@ class Password extends Authenticator
                 }
 
                 $email = $this->request->input('email', 'email');
-                $password = $this->request->input('password');
+                $password = $this->request->input('password', 'password');
+                if (!$password) {
+                    $template->set('error', Errors::PASSWORD_INCORRECT);
+                }
 
                 if ($email && $password) {
                     $response = $this->processLogin($email, $password);
