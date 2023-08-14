@@ -413,8 +413,11 @@ class User implements \Neuron\Interfaces\Models\User
             throw new AlreadyHasActiveRecoveryRequest('We already have a pending recover password request for this account. Please try again in 24 hours.');
         }
 
+        $expirationDate = new DateTime();
+        $expirationDate->add(new DateInterval('PT1H'));
+
         $passwordRecoveryRequest = new PasswordRecovery();
-        $passwordRecoveryRequest->setExpires(new DateTime ('tomorrow'));
+        $passwordRecoveryRequest->setExpires($expirationDate);
         $passwordRecoveryRequest->setToken(TokenGenerator::getSimplifiedToken(24));
         $passwordRecoveryRequest->setUser($this);
 
