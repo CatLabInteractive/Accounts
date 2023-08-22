@@ -16,7 +16,7 @@ class RateLimiter
     public function attempt($key, $max, $ttl)
     {
         $attempts = MapperFactory::getRateLimitMapper()->count($key, $ttl);
-        if ($attempts > $max) {
+        if ($attempts >= $max) {
             if (rand() < 0.1 || true) {
                 MapperFactory::getRateLimitMapper()->cleanup();
             }
@@ -55,6 +55,22 @@ class RateLimiter
     {
         $key = 'user:change-password:' . $user->getId();
         return $this->attempt($key, 10, 60 * 5);
+    }
+
+    public function attemptVerifyEmailAddress(User $user)
+    {
+        $key = 'user:verify-email:' . $user->getId() . ':' . md5($user->getEmail());
+        return $this->attempt($key, 2, 60 * 15);
+    }
+
+    /**
+     * @param User $user
+     * @return false|null
+     */
+    public function attemptChangeEmailAddress(User $user)
+    {
+        $key = 'user:change-email:' . $user->getId();
+        return $this->attempt($key, 3, 60 * 60 * 24);
     }
 
     /**

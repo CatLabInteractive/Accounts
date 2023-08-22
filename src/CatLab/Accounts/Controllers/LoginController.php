@@ -231,8 +231,13 @@ class LoginController extends Base
             $this->request->input('retry') ||
             count(MapperFactory::getEmailMapper()->getFromUser($user)) === 0
         ) {
-            $user->generateVerificationEmail($this->module, $user->getEmail());
             $canResend = false;
+            // Rate limit sending request
+            if ($this->module->getRateLimiter()->attemptVerifyEmailAddress($user)) {
+                $user->generateVerificationEmail($this->module, $user->getEmail());
+            } else {
+                $template->set('error', Errors::VERIFY_RATE_EXCEEDED);
+            }
         }
 
         $this->request->getSession()->set('catlab-last-verify-poll', time());
@@ -282,7 +287,12 @@ class LoginController extends Base
             case 'change-password':
                 // check csfr
                 if (!self::isValidCsfrToken($this->request)) {
-                    $error = 'Invalid request, please try again.';
+                    $error = Errors::INVALID_REQUEST;
+                    break;
+                }
+
+                if (!$this->module->getRateLimiter()->attemptChangeEmailAddress($user)) {
+                    $error = Errors::CHANGE_EMAIL_RATE_EXCEEDED;
                     break;
                 }
 
@@ -301,21 +311,8 @@ class LoginController extends Base
         }
 
         $template = new Template ('CatLab/Accounts/notverified/changeAddress.phpt');
-
-        $errorText = null;
-        if ($error) {
-            switch ($error) {
-                case Errors::EMAIL_DUPLICATE:
-                    $errorText = $text->getText('This email address is already in use for a different account.');
-                    break;
-
-                default:
-                    $errorText = $text->getText('An undefined error has occurred.');
-                    break;
-            }
-        }
         
-        $template->set('error', $errorText);
+        $template->set('error', $error);
         $template->set('name', $user->getDisplayName());
         $template->set('layout', $this->module->getLayout());
         $template->set('user', $user);

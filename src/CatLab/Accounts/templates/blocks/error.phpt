@@ -59,6 +59,14 @@ use CatLab\Accounts\Enums\Errors;
 
             <?php echo $this->gettext ('Login rate exceeded, please wait a few minutes and try again.'); ?>
 
+        <?php } else if ($error === Errors::VERIFY_RATE_EXCEEDED) { ?>
+
+            <?php echo $this->gettext ('Verification rate exceeded, please wait a few minutes and try again.'); ?>
+
+        <?php } else if ($error === Errors::CHANGE_EMAIL_RATE_EXCEEDED) { ?>
+
+            <?php echo $this->gettext ('Change email rate exceeded, please wait 24 hours and try again.'); ?>
+
         <?php } else { ?>
 
 			<?php echo $error; ?>

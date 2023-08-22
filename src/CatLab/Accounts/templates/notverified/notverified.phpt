@@ -8,6 +8,10 @@ $this->textdomain ('catlab.accounts');
 <h2><?php echo sprintf($this->gettext('Welcome, %s'), $name); ?></h2>
 <p><?php echo $this->gettext ('Almost there, we just need to confirm your email address.'); ?></p>
 
+<?php if (isset($error)) { ?>
+    <?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>
+<?php } ?>
+
 <div class="panel">
     <div class="panel-body">
         <p>

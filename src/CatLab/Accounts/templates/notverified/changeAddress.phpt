@@ -12,7 +12,7 @@ $this->textdomain ('catlab.accounts');
     <div class="panel-body">
 
         <?php if (isset($error)) { ?>
-            <p class="alert alert-danger"><?php echo $error; ?></p>
+            <?php echo $this->template ('CatLab/Accounts/blocks/error.phpt'); ?>
         <?php } ?>
 
         <form method="post" action="<?php echo $action; ?>">
