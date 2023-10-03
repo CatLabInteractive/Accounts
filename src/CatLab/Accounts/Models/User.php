@@ -7,6 +7,7 @@ use CatLab\Accounts\MapperFactory;
 use CatLab\Accounts\Module;
 use CatLab\Mailer\Mailer;
 use CatLab\Mailer\Models\Mail;
+use DateInterval;
 use DateTime;
 use Neuron\Collections\Collection;
 use Neuron\Config;
