@@ -240,8 +240,8 @@ class Password extends Authenticator
             $email = $this->request->input('email', 'email');
             $password = $this->request->input('password');
 
-            $firstName = $this->request->input('firstName', 'text');
-            $lastName = $this->request->input('lastName', 'text');
+            $firstName = $this->request->input('firstName', 'name');
+            $lastName = $this->request->input('lastName', 'name');
 
             $birthDate = $this->request->input('birthdate', 'date');
             if ($birthDate) {
@@ -268,8 +268,8 @@ class Password extends Authenticator
         $template->set('layout', $this->module->getLayout());
         $template->set('action', URLBuilder::getURL($this->module->getRoutePath() . '/register/' . $this->getToken()));
         $template->set('email', $this->request->input('email', 'string'));
-        $template->set('firstName', $this->request->input('firstName', 'string'));
-        $template->set('lastName', $this->request->input('lastName', 'string'));
+        $template->set('firstName', $this->request->input('firstName', 'name'));
+        $template->set('lastName', $this->request->input('lastName', 'name'));
         $template->set('module', $this->module);
 
         $this->addOtherAuthenticators($template);

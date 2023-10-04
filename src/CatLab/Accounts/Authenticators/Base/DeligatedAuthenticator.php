@@ -145,8 +145,8 @@ abstract class DeligatedAuthenticator
         // Check for input.
         if ($this->request->isPost()) {
             $email = $this->request->input('email', 'email');
-            $firstName = $this->request->input('firstName');
-            $lastName = $this->request->input('lastName');
+            $firstName = $this->request->input('firstName', 'name');
+            $lastName = $this->request->input('lastName', 'name');
 
             $response = $this->processRegister($deligatedUser, $email, $firstName, $lastName);
             if ($response instanceof Response) {
@@ -171,7 +171,7 @@ abstract class DeligatedAuthenticator
         }
 
         // First name
-        if ($firstName = $this->request->input('firstName')) {
+        if ($firstName = $this->request->input('firstName', 'name')) {
             $page->set('firstName', $firstName);
         } else if ($firstName = $deligatedUser->getFirstname()) {
             $page->set('firstName', $firstName);
