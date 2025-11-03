@@ -77,4 +77,12 @@ class MapperFactory
     {
         return self::getInstance()->getMapper('rateLimitMapper', '\CatLab\Accounts\Mappers\RateLimitMapper');
     }
+
+    /**
+     * @return \CatLab\Accounts\Mappers\LockMapper
+     */
+    public static function getLockMapper()
+    {
+        return self::getInstance()->getMapper('lockMapper', '\CatLab\Accounts\Mappers\LockMapper');
+    }
 }

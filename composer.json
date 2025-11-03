@@ -7,7 +7,7 @@
   "license": "MIT",
 
   "require": {
-    "php": ">=5.5.0",
+    "php": ">=7.4",
     "catlabinteractive/neuron": ">=2.0.3",
 	"catlabinteractive/mailer": ">=1.0.6",
     "ircmaxell/password-compat" : "*",

@@ -5,6 +5,7 @@ namespace CatLab\Accounts\Authenticators\Base;
 use CatLab\Accounts\Mappers\UserMapper;
 use CatLab\Accounts\Models\DeligatedUser;
 use CatLab\Accounts\MapperFactory;
+use CatLab\Accounts\Models\Lock;
 use CatLab\Accounts\Models\User;
 use Neuron\Core\Template;
 use Neuron\Exceptions\ExpectedType;
@@ -118,7 +119,6 @@ abstract class DeligatedAuthenticator
 
     public function register()
     {
-
         $this->initialize();
 
         $deligatedUser = $this->getDeligatedUser();
@@ -126,12 +126,17 @@ abstract class DeligatedAuthenticator
             return Response::redirect(URLBuilder::getURL($this->module->getRoutePath() . '/login/' . $this->getToken()));
         }
 
+        // Get a lock.
+        $lock = Lock::create('acc:reg:delegated' . $deligatedUser->getId());
+
         if ($deligatedUser->getUser()) {
+            $lock->release();
             return $this->module->login($this->request, $deligatedUser->getUser());
         }
 
         // Check for linking request
         if ($this->request->input('link')) {
+            $lock->release();
             return $this->linkExitingAccount($deligatedUser);
         }
 
@@ -148,12 +153,22 @@ abstract class DeligatedAuthenticator
             $firstName = $this->request->input('firstName', 'name');
             $lastName = $this->request->input('lastName', 'name');
 
-            $response = $this->processRegister($deligatedUser, $email, $firstName, $lastName);
+            try {
+                $response = $this->processRegister($deligatedUser, $email, $firstName, $lastName);
+                $lock->release();
+            } catch (\Exception $e) {
+                $lock->release();
+                throw $e;
+            }
+
             if ($response instanceof Response) {
                 return $response;
             } else if (is_string($response)) {
                 $page->set('error', $response);
             }
+        } else {
+            // simple form; release lock.
+            $lock->release();
         }
 
         // Name
