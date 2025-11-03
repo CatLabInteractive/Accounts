@@ -127,7 +127,7 @@ abstract class DeligatedAuthenticator
         }
 
         // Get a lock.
-        $lock = Lock::create('acc:reg:delegated' . $deligatedUser->getId());
+        $lock = Lock::create('acc:reg:delegated:' . $deligatedUser->getId());
 
         if ($deligatedUser->getUser()) {
             $lock->release();
