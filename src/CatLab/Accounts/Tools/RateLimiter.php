@@ -11,7 +11,7 @@ class RateLimiter
      * @param $key
      * @param $max
      * @param $ttl
-     * @return false|void
+     * @return boolean
      */
     public function attempt($key, $max, $ttl)
     {

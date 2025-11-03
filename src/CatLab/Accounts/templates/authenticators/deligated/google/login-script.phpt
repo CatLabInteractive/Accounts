@@ -1,6 +1,7 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 
+	var googleLoginFormSubmitted = false;
 	window.onload = function () {
 		google.accounts.id.initialize({
 			client_id: '<?php echo $clientId; ?>',
@@ -12,6 +13,11 @@
                     // An error happened!
                     return;
                 }
+
+				// already submitting? ignore.
+				if (googleLoginFormSubmitted) {
+					return;
+				}
 
                 //var accessToken = response.access_token;
                 var credential = response.credential;
@@ -37,6 +43,7 @@
 				token.type = 'hidden';
 
                 form.submit();
+				googleLoginFormSubmitted = true;
 
             }
 		});
