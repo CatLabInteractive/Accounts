@@ -45,13 +45,18 @@ abstract class DeligatedAuthenticator
 
     }
 
+    protected function getDelegatedUserId()
+    {
+        return $this->request->getSession()->get('deligated-user-id');
+    }
+
     /**
      * @return DeligatedUser|null
      * @throws \Neuron\Exceptions\DataNotSet
      */
     protected function getDeligatedUser()
     {
-        $id = $this->request->getSession()->get('deligated-user-id');
+        $id = $this->getDelegatedUserId();
 
         if (!$id) {
             return null;
@@ -121,13 +126,14 @@ abstract class DeligatedAuthenticator
     {
         $this->initialize();
 
+        // Get a lock.
+        $lock = Lock::create('acc:reg:delegated:' . $this->getDelegatedUserId());
+
         $deligatedUser = $this->getDeligatedUser();
         if (!$deligatedUser) {
+            $lock->release();
             return Response::redirect(URLBuilder::getURL($this->module->getRoutePath() . '/login/' . $this->getToken()));
         }
-
-        // Get a lock.
-        $lock = Lock::create('acc:reg:delegated:' . $deligatedUser->getId());
 
         if ($deligatedUser->getUser()) {
             $lock->release();
