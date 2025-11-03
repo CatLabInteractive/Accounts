@@ -3,7 +3,7 @@
 
 namespace CatLab\Accounts\Mappers;
 
-use Accounts\Models\Lock;
+use CatLab\Accounts\Models\Lock;
 use Neuron\DB\Database;
 use Neuron\DB\Query;
 use Neuron\Exceptions\DbException;
