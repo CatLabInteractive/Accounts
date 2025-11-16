@@ -18,9 +18,9 @@ class LockMapper
      * @param $name
      * @return Lock|null
      */
-    public function create($name)
+    public function create($name, $timeoutSeconds)
     {
-        $attempts = 50;
+        $attempts = $timeoutSeconds * 10;
 
         while ($attempts > 0) {
             try {
@@ -42,7 +42,7 @@ class LockMapper
             } catch (DbException $e) {
                 Database::getInstance()->rollback();;
                 $attempts --;
-                usleep(100000); // 1/10th of  a second
+                usleep(100000); // 1/10th of a second
             }
         }
 

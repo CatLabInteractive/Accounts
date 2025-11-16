@@ -18,7 +18,7 @@ class Lock
 
     public static function create($name, $timeout = 5)
     {
-        return MapperFactory::getLockMapper()->create($name);
+        return MapperFactory::getLockMapper()->create($name, $timeout);
     }
 
     /**
