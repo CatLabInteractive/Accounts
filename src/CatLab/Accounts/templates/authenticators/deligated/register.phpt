@@ -3,7 +3,7 @@
 	$this->textdomain ('catlab.accounts');
 ?>
 
-<form method="post" action="<?php echo $action; ?>" role="form">
+<form id="register-form" method="post" action="<?php echo $action; ?>" role="form">
 
 	<?php if (isset ($name)) { ?>
 		<h2><?php echo sprintf ($this->gettext ('Welcome, %s'), $name); ?></h2>
@@ -38,7 +38,7 @@
 		<p class="help-block"><?php echo $this->gettext ('Don\'t worry, it\'s our little secret. We won\'t share your email address with anyone.'); ?></p>
 	</div>
 
-	<button type="submit" class="btn btn-default"><?php echo $this->gettext ('Register'); ?></button>
+	<button id="submit-button" type="submit" class="btn btn-default"><?php echo $this->gettext ('Register'); ?></button>
 
 	<?php if (isset ($connect)) { ?>
 		<p>
@@ -46,3 +46,34 @@
 		</p>
 	<?php } ?>
 </form>
+
+<script>
+    (function () {
+        var form = document.getElementById('register-form');
+        if (!form) return;
+
+        var btn = document.getElementById('submit-button');
+        var submitted = false;
+
+        form.addEventListener('submit', function (e) {
+            if (submitted) {
+                // prevent further submissions
+                e.preventDefault();
+                return;
+            }
+            submitted = true;
+
+            if (btn) {
+                try {
+                    btn.disabled = true;
+                    btn.setAttribute('aria-disabled', 'true');
+                    // append a simple indicator
+                    btn.dataset.originalText = btn.innerHTML;
+                    btn.innerHTML = btn.innerHTML + ' \u2026';
+                } catch (err) {
+                    // ignore if DOM manipulation fails
+                }
+            }
+        }, false);
+    })();
+</script>

@@ -127,9 +127,9 @@ abstract class DeligatedAuthenticator
         $this->initialize();
 
         // Get a lock.
-        $lock = Lock::create('acc:reg:delegated:' . $this->getDelegatedUserId());
+        $lock = Lock::create('acc:reg:delegated:' . $this->getDelegatedUserId(), 15);
         if (!$lock) {
-            return Response::error('Could not obtain lock, please try again later.', Response::STATUS_CONFLICT);
+            return Response::error('Could not obtain lock, please try again later.', 409);
         }
 
         $deligatedUser = $this->getDeligatedUser();
