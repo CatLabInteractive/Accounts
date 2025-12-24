@@ -90,7 +90,7 @@ abstract class OpenIDAuthenticator
 
 		// No auth request means we can't begin OpenID.
 		if (!$auth_request) {
-			displayError("Authentication error; not a valid OpenID.");
+            return Response::error("Authentication error; not a valid OpenID.");
 		}
 
 		$sreg_request = \Auth_OpenID_SRegRequest::build(
@@ -124,7 +124,7 @@ abstract class OpenIDAuthenticator
 			// If the redirect URL can't be built, display an error
 			// message.
 			if (\Auth_OpenID::isFailure($redirect_url)) {
-				displayError("Could not redirect to server: " . $redirect_url->message);
+                return Response::error("Could not redirect to server: " . $redirect_url->message);
 			} else {
 				// Send redirect.
 				//header("Location: ".$redirect_url);
@@ -139,7 +139,7 @@ abstract class OpenIDAuthenticator
 			// Display an error if the form markup couldn't be generated;
 			// otherwise, render the HTML.
 			if (\Auth_OpenID::isFailure($form_html)) {
-				displayError("Could not redirect to server: " . $form_html->message);
+                return Response::error("Could not redirect to server: " . $form_html->message);
 			} else {
 				print $form_html;
 			}
